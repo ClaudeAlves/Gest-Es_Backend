@@ -1,0 +1,853 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'vue' ]
+2 info using npm@3.9.5
+3 info using node@v6.2.2
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData vue
+8 silly fetchNamedPackageData vue
+9 silly mapToRegistry name vue
+10 silly mapToRegistry using default registry
+11 silly mapToRegistry registry https://registry.npmjs.org/
+12 silly mapToRegistry data Result {
+12 silly mapToRegistry   raw: 'vue',
+12 silly mapToRegistry   scope: null,
+12 silly mapToRegistry   name: 'vue',
+12 silly mapToRegistry   rawSpec: '',
+12 silly mapToRegistry   spec: 'latest',
+12 silly mapToRegistry   type: 'tag' }
+13 silly mapToRegistry uri https://registry.npmjs.org/vue
+14 verbose request uri https://registry.npmjs.org/vue
+15 verbose request no auth needed
+16 info attempt registry request try #1 at 11:05:00
+17 verbose request id f22844c4ed60fe4e
+18 verbose etag W/"a7f5a0e998b363e8c6f778ed7db49951"
+19 verbose lastModified Sat, 23 Apr 2022 03:16:08 GMT
+20 http request GET https://registry.npmjs.org/vue
+21 http 304 https://registry.npmjs.org/vue
+22 verbose headers { date: 'Fri, 29 Apr 2022 09:05:00 GMT',
+22 verbose headers   connection: 'keep-alive',
+22 verbose headers   'cf-ray': '7036df9c6f8023c7-ZRH',
+22 verbose headers   age: '3',
+22 verbose headers   'cache-control': 'public, max-age=300',
+22 verbose headers   etag: '"a7f5a0e998b363e8c6f778ed7db49951"',
+22 verbose headers   'last-modified': 'Sat, 23 Apr 2022 03:16:08 GMT',
+22 verbose headers   vary: 'Accept-Encoding',
+22 verbose headers   'cf-cache-status': 'HIT',
+22 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+22 verbose headers   'x-amz-replication-status': 'COMPLETED',
+22 verbose headers   server: 'cloudflare' }
+23 silly get cb [ 304,
+23 silly get   { date: 'Fri, 29 Apr 2022 09:05:00 GMT',
+23 silly get     connection: 'keep-alive',
+23 silly get     'cf-ray': '7036df9c6f8023c7-ZRH',
+23 silly get     age: '3',
+23 silly get     'cache-control': 'public, max-age=300',
+23 silly get     etag: '"a7f5a0e998b363e8c6f778ed7db49951"',
+23 silly get     'last-modified': 'Sat, 23 Apr 2022 03:16:08 GMT',
+23 silly get     vary: 'Accept-Encoding',
+23 silly get     'cf-cache-status': 'HIT',
+23 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+23 silly get     'x-amz-replication-status': 'COMPLETED',
+23 silly get     server: 'cloudflare' } ]
+24 verbose etag https://registry.npmjs.org/vue from cache
+25 verbose get saving vue to C:\Users\claud\AppData\Roaming\npm-cache\registry.npmjs.org\vue\.cache.json
+26 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+27 silly install normalizeTree
+28 silly loadCurrentTree Finishing
+29 silly loadIdealTree Starting
+30 silly install loadIdealTree
+31 silly cloneCurrentTree Starting
+32 silly install cloneCurrentTreeToIdealTree
+33 silly cloneCurrentTree Finishing
+34 silly loadShrinkwrap Starting
+35 silly install loadShrinkwrap
+36 silly loadShrinkwrap Finishing
+37 silly loadAllDepsIntoIdealTree Starting
+38 silly install loadAllDepsIntoIdealTree
+39 silly resolveWithNewModule vue@3.2.33 checking installable status
+40 silly cache add args [ 'vue', null ]
+41 verbose cache add spec vue
+42 silly cache add parsed spec Result {
+42 silly cache add   raw: 'vue',
+42 silly cache add   scope: null,
+42 silly cache add   name: 'vue',
+42 silly cache add   rawSpec: '',
+42 silly cache add   spec: 'latest',
+42 silly cache add   type: 'tag' }
+43 silly addNamed vue@latest
+44 verbose addNamed "latest" is being treated as a dist-tag for vue
+45 info addNameTag [ 'vue', 'latest' ]
+46 silly mapToRegistry name vue
+47 silly mapToRegistry using default registry
+48 silly mapToRegistry registry https://registry.npmjs.org/
+49 silly mapToRegistry data Result {
+49 silly mapToRegistry   raw: 'vue',
+49 silly mapToRegistry   scope: null,
+49 silly mapToRegistry   name: 'vue',
+49 silly mapToRegistry   rawSpec: '',
+49 silly mapToRegistry   spec: 'latest',
+49 silly mapToRegistry   type: 'tag' }
+50 silly mapToRegistry uri https://registry.npmjs.org/vue
+51 verbose addNameTag registry:https://registry.npmjs.org/vue not in flight; fetching
+52 verbose get https://registry.npmjs.org/vue not expired, no request
+53 silly addNameTag next cb for vue with tag latest
+54 silly addNamed vue@3.2.33
+55 verbose addNamed "3.2.33" is a plain semver version for vue
+56 silly cache afterAdd vue@3.2.33
+57 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\vue\3.2.33\package\package.json not in flight; writing
+58 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+59 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\vue\3.2.33\package\package.json written
+60 silly fetchNamedPackageData @vue/shared
+61 silly mapToRegistry name @vue/shared
+62 silly mapToRegistry scope (from package name) @vue
+63 verbose mapToRegistry no registry URL found in name for scope @vue
+64 silly mapToRegistry using default registry
+65 silly mapToRegistry registry https://registry.npmjs.org/
+66 silly mapToRegistry data Result {
+66 silly mapToRegistry   raw: '@vue/shared',
+66 silly mapToRegistry   scope: '@vue',
+66 silly mapToRegistry   name: '@vue/shared',
+66 silly mapToRegistry   rawSpec: '',
+66 silly mapToRegistry   spec: 'latest',
+66 silly mapToRegistry   type: 'tag' }
+67 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fshared
+68 silly fetchNamedPackageData @vue/compiler-dom
+69 silly mapToRegistry name @vue/compiler-dom
+70 silly mapToRegistry scope (from package name) @vue
+71 verbose mapToRegistry no registry URL found in name for scope @vue
+72 silly mapToRegistry using default registry
+73 silly mapToRegistry registry https://registry.npmjs.org/
+74 silly mapToRegistry data Result {
+74 silly mapToRegistry   raw: '@vue/compiler-dom',
+74 silly mapToRegistry   scope: '@vue',
+74 silly mapToRegistry   name: '@vue/compiler-dom',
+74 silly mapToRegistry   rawSpec: '',
+74 silly mapToRegistry   spec: 'latest',
+74 silly mapToRegistry   type: 'tag' }
+75 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fcompiler-dom
+76 silly fetchNamedPackageData @vue/runtime-dom
+77 silly mapToRegistry name @vue/runtime-dom
+78 silly mapToRegistry scope (from package name) @vue
+79 verbose mapToRegistry no registry URL found in name for scope @vue
+80 silly mapToRegistry using default registry
+81 silly mapToRegistry registry https://registry.npmjs.org/
+82 silly mapToRegistry data Result {
+82 silly mapToRegistry   raw: '@vue/runtime-dom',
+82 silly mapToRegistry   scope: '@vue',
+82 silly mapToRegistry   name: '@vue/runtime-dom',
+82 silly mapToRegistry   rawSpec: '',
+82 silly mapToRegistry   spec: 'latest',
+82 silly mapToRegistry   type: 'tag' }
+83 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fruntime-dom
+84 silly fetchNamedPackageData @vue/compiler-sfc
+85 silly mapToRegistry name @vue/compiler-sfc
+86 silly mapToRegistry scope (from package name) @vue
+87 verbose mapToRegistry no registry URL found in name for scope @vue
+88 silly mapToRegistry using default registry
+89 silly mapToRegistry registry https://registry.npmjs.org/
+90 silly mapToRegistry data Result {
+90 silly mapToRegistry   raw: '@vue/compiler-sfc',
+90 silly mapToRegistry   scope: '@vue',
+90 silly mapToRegistry   name: '@vue/compiler-sfc',
+90 silly mapToRegistry   rawSpec: '',
+90 silly mapToRegistry   spec: 'latest',
+90 silly mapToRegistry   type: 'tag' }
+91 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fcompiler-sfc
+92 silly fetchNamedPackageData @vue/server-renderer
+93 silly mapToRegistry name @vue/server-renderer
+94 silly mapToRegistry scope (from package name) @vue
+95 verbose mapToRegistry no registry URL found in name for scope @vue
+96 silly mapToRegistry using default registry
+97 silly mapToRegistry registry https://registry.npmjs.org/
+98 silly mapToRegistry data Result {
+98 silly mapToRegistry   raw: '@vue/server-renderer',
+98 silly mapToRegistry   scope: '@vue',
+98 silly mapToRegistry   name: '@vue/server-renderer',
+98 silly mapToRegistry   rawSpec: '',
+98 silly mapToRegistry   spec: 'latest',
+98 silly mapToRegistry   type: 'tag' }
+99 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fserver-renderer
+100 verbose request uri https://registry.npmjs.org/@vue%2fcompiler-dom
+101 verbose request no auth needed
+102 info attempt registry request try #1 at 11:05:01
+103 verbose etag W/"0e267a31585e4ca4fc88ac119266aebb"
+104 verbose lastModified Thu, 14 Apr 2022 10:14:41 GMT
+105 http request GET https://registry.npmjs.org/@vue%2fcompiler-dom
+106 verbose request uri https://registry.npmjs.org/@vue%2fshared
+107 verbose request no auth needed
+108 info attempt registry request try #1 at 11:05:01
+109 verbose etag W/"a41d6e6355ceed3d75e98721ddaa0e22"
+110 verbose lastModified Thu, 14 Apr 2022 10:14:54 GMT
+111 http request GET https://registry.npmjs.org/@vue%2fshared
+112 verbose request uri https://registry.npmjs.org/@vue%2fcompiler-sfc
+113 verbose request no auth needed
+114 info attempt registry request try #1 at 11:05:01
+115 verbose etag W/"681af48bd8c111510f85e5d520080b49"
+116 verbose lastModified Thu, 14 Apr 2022 10:14:43 GMT
+117 http request GET https://registry.npmjs.org/@vue%2fcompiler-sfc
+118 verbose request uri https://registry.npmjs.org/@vue%2fruntime-dom
+119 verbose request no auth needed
+120 info attempt registry request try #1 at 11:05:01
+121 verbose etag W/"eef838587588cf179bce0f1c53e7c4e0"
+122 verbose lastModified Thu, 14 Apr 2022 10:14:51 GMT
+123 http request GET https://registry.npmjs.org/@vue%2fruntime-dom
+124 verbose request uri https://registry.npmjs.org/@vue%2fserver-renderer
+125 verbose request no auth needed
+126 info attempt registry request try #1 at 11:05:01
+127 verbose etag W/"d70d004a4fbb933c5ffb5ef8464c0477"
+128 verbose lastModified Thu, 14 Apr 2022 10:14:52 GMT
+129 http request GET https://registry.npmjs.org/@vue%2fserver-renderer
+130 http 304 https://registry.npmjs.org/@vue%2fcompiler-dom
+131 verbose headers { date: 'Fri, 29 Apr 2022 09:05:01 GMT',
+131 verbose headers   connection: 'keep-alive',
+131 verbose headers   'cf-ray': '7036df9e19ff23c7-ZRH',
+131 verbose headers   age: '251',
+131 verbose headers   'cache-control': 'public, max-age=300',
+131 verbose headers   etag: '"0e267a31585e4ca4fc88ac119266aebb"',
+131 verbose headers   'last-modified': 'Thu, 14 Apr 2022 10:14:41 GMT',
+131 verbose headers   vary: 'Accept-Encoding',
+131 verbose headers   'cf-cache-status': 'HIT',
+131 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+131 verbose headers   'x-amz-replication-status': 'COMPLETED',
+131 verbose headers   server: 'cloudflare' }
+132 silly get cb [ 304,
+132 silly get   { date: 'Fri, 29 Apr 2022 09:05:01 GMT',
+132 silly get     connection: 'keep-alive',
+132 silly get     'cf-ray': '7036df9e19ff23c7-ZRH',
+132 silly get     age: '251',
+132 silly get     'cache-control': 'public, max-age=300',
+132 silly get     etag: '"0e267a31585e4ca4fc88ac119266aebb"',
+132 silly get     'last-modified': 'Thu, 14 Apr 2022 10:14:41 GMT',
+132 silly get     vary: 'Accept-Encoding',
+132 silly get     'cf-cache-status': 'HIT',
+132 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+132 silly get     'x-amz-replication-status': 'COMPLETED',
+132 silly get     server: 'cloudflare' } ]
+133 verbose etag https://registry.npmjs.org/@vue%2fcompiler-dom from cache
+134 verbose get saving @vue/compiler-dom to C:\Users\claud\AppData\Roaming\npm-cache\registry.npmjs.org\_40vue_252fcompiler-dom\.cache.json
+135 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+136 silly resolveWithNewModule @vue/compiler-dom@3.2.33 checking installable status
+137 silly cache add args [ '@vue/compiler-dom@3.2.33', null ]
+138 verbose cache add spec @vue/compiler-dom@3.2.33
+139 silly cache add parsed spec Result {
+139 silly cache add   raw: '@vue/compiler-dom@3.2.33',
+139 silly cache add   scope: '@vue',
+139 silly cache add   name: '@vue/compiler-dom',
+139 silly cache add   rawSpec: '3.2.33',
+139 silly cache add   spec: '3.2.33',
+139 silly cache add   type: 'version' }
+140 silly addNamed @vue/compiler-dom@3.2.33
+141 verbose addNamed "3.2.33" is a plain semver version for @vue/compiler-dom
+142 silly mapToRegistry name @vue/compiler-dom
+143 silly mapToRegistry scope (from package name) @vue
+144 verbose mapToRegistry no registry URL found in name for scope @vue
+145 silly mapToRegistry using default registry
+146 silly mapToRegistry registry https://registry.npmjs.org/
+147 silly mapToRegistry data Result {
+147 silly mapToRegistry   raw: '@vue/compiler-dom',
+147 silly mapToRegistry   scope: '@vue',
+147 silly mapToRegistry   name: '@vue/compiler-dom',
+147 silly mapToRegistry   rawSpec: '',
+147 silly mapToRegistry   spec: 'latest',
+147 silly mapToRegistry   type: 'tag' }
+148 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fcompiler-dom
+149 verbose addNameVersion registry:https://registry.npmjs.org/@vue%2fcompiler-dom not in flight; fetching
+150 verbose get https://registry.npmjs.org/@vue%2fcompiler-dom not expired, no request
+151 silly cache afterAdd @vue/compiler-dom@3.2.33
+152 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\@vue\compiler-dom\3.2.33\package\package.json not in flight; writing
+153 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+154 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\@vue\compiler-dom\3.2.33\package\package.json written
+155 http 304 https://registry.npmjs.org/@vue%2fshared
+156 verbose headers { date: 'Fri, 29 Apr 2022 09:05:01 GMT',
+156 verbose headers   connection: 'keep-alive',
+156 verbose headers   'cf-ray': '7036df9e7af123f7-ZRH',
+156 verbose headers   age: '251',
+156 verbose headers   'cache-control': 'public, max-age=300',
+156 verbose headers   etag: '"a41d6e6355ceed3d75e98721ddaa0e22"',
+156 verbose headers   'last-modified': 'Thu, 14 Apr 2022 10:14:54 GMT',
+156 verbose headers   vary: 'Accept-Encoding',
+156 verbose headers   'cf-cache-status': 'HIT',
+156 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+156 verbose headers   'x-amz-replication-status': 'COMPLETED',
+156 verbose headers   server: 'cloudflare' }
+157 silly get cb [ 304,
+157 silly get   { date: 'Fri, 29 Apr 2022 09:05:01 GMT',
+157 silly get     connection: 'keep-alive',
+157 silly get     'cf-ray': '7036df9e7af123f7-ZRH',
+157 silly get     age: '251',
+157 silly get     'cache-control': 'public, max-age=300',
+157 silly get     etag: '"a41d6e6355ceed3d75e98721ddaa0e22"',
+157 silly get     'last-modified': 'Thu, 14 Apr 2022 10:14:54 GMT',
+157 silly get     vary: 'Accept-Encoding',
+157 silly get     'cf-cache-status': 'HIT',
+157 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+157 silly get     'x-amz-replication-status': 'COMPLETED',
+157 silly get     server: 'cloudflare' } ]
+158 verbose etag https://registry.npmjs.org/@vue%2fshared from cache
+159 verbose get saving @vue/shared to C:\Users\claud\AppData\Roaming\npm-cache\registry.npmjs.org\_40vue_252fshared\.cache.json
+160 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+161 silly resolveWithNewModule @vue/shared@3.2.33 checking installable status
+162 silly cache add args [ '@vue/shared@3.2.33', null ]
+163 verbose cache add spec @vue/shared@3.2.33
+164 silly cache add parsed spec Result {
+164 silly cache add   raw: '@vue/shared@3.2.33',
+164 silly cache add   scope: '@vue',
+164 silly cache add   name: '@vue/shared',
+164 silly cache add   rawSpec: '3.2.33',
+164 silly cache add   spec: '3.2.33',
+164 silly cache add   type: 'version' }
+165 silly addNamed @vue/shared@3.2.33
+166 verbose addNamed "3.2.33" is a plain semver version for @vue/shared
+167 silly mapToRegistry name @vue/shared
+168 silly mapToRegistry scope (from package name) @vue
+169 verbose mapToRegistry no registry URL found in name for scope @vue
+170 silly mapToRegistry using default registry
+171 silly mapToRegistry registry https://registry.npmjs.org/
+172 silly mapToRegistry data Result {
+172 silly mapToRegistry   raw: '@vue/shared',
+172 silly mapToRegistry   scope: '@vue',
+172 silly mapToRegistry   name: '@vue/shared',
+172 silly mapToRegistry   rawSpec: '',
+172 silly mapToRegistry   spec: 'latest',
+172 silly mapToRegistry   type: 'tag' }
+173 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fshared
+174 verbose addNameVersion registry:https://registry.npmjs.org/@vue%2fshared not in flight; fetching
+175 verbose get https://registry.npmjs.org/@vue%2fshared not expired, no request
+176 silly cache afterAdd @vue/shared@3.2.33
+177 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\@vue\shared\3.2.33\package\package.json not in flight; writing
+178 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+179 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\@vue\shared\3.2.33\package\package.json written
+180 http 304 https://registry.npmjs.org/@vue%2fserver-renderer
+181 verbose headers { date: 'Fri, 29 Apr 2022 09:05:01 GMT',
+181 verbose headers   connection: 'keep-alive',
+181 verbose headers   'cf-ray': '7036df9e8f222355-ZRH',
+181 verbose headers   age: '179',
+181 verbose headers   'cache-control': 'public, max-age=300',
+181 verbose headers   etag: '"d70d004a4fbb933c5ffb5ef8464c0477"',
+181 verbose headers   'last-modified': 'Thu, 14 Apr 2022 10:14:52 GMT',
+181 verbose headers   vary: 'Accept-Encoding',
+181 verbose headers   'cf-cache-status': 'HIT',
+181 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+181 verbose headers   'x-amz-replication-status': 'COMPLETED',
+181 verbose headers   server: 'cloudflare' }
+182 silly get cb [ 304,
+182 silly get   { date: 'Fri, 29 Apr 2022 09:05:01 GMT',
+182 silly get     connection: 'keep-alive',
+182 silly get     'cf-ray': '7036df9e8f222355-ZRH',
+182 silly get     age: '179',
+182 silly get     'cache-control': 'public, max-age=300',
+182 silly get     etag: '"d70d004a4fbb933c5ffb5ef8464c0477"',
+182 silly get     'last-modified': 'Thu, 14 Apr 2022 10:14:52 GMT',
+182 silly get     vary: 'Accept-Encoding',
+182 silly get     'cf-cache-status': 'HIT',
+182 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+182 silly get     'x-amz-replication-status': 'COMPLETED',
+182 silly get     server: 'cloudflare' } ]
+183 verbose etag https://registry.npmjs.org/@vue%2fserver-renderer from cache
+184 verbose get saving @vue/server-renderer to C:\Users\claud\AppData\Roaming\npm-cache\registry.npmjs.org\_40vue_252fserver-renderer\.cache.json
+185 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+186 silly resolveWithNewModule @vue/server-renderer@3.2.33 checking installable status
+187 silly cache add args [ '@vue/server-renderer@3.2.33', null ]
+188 verbose cache add spec @vue/server-renderer@3.2.33
+189 silly cache add parsed spec Result {
+189 silly cache add   raw: '@vue/server-renderer@3.2.33',
+189 silly cache add   scope: '@vue',
+189 silly cache add   name: '@vue/server-renderer',
+189 silly cache add   rawSpec: '3.2.33',
+189 silly cache add   spec: '3.2.33',
+189 silly cache add   type: 'version' }
+190 silly addNamed @vue/server-renderer@3.2.33
+191 verbose addNamed "3.2.33" is a plain semver version for @vue/server-renderer
+192 silly mapToRegistry name @vue/server-renderer
+193 silly mapToRegistry scope (from package name) @vue
+194 verbose mapToRegistry no registry URL found in name for scope @vue
+195 silly mapToRegistry using default registry
+196 silly mapToRegistry registry https://registry.npmjs.org/
+197 silly mapToRegistry data Result {
+197 silly mapToRegistry   raw: '@vue/server-renderer',
+197 silly mapToRegistry   scope: '@vue',
+197 silly mapToRegistry   name: '@vue/server-renderer',
+197 silly mapToRegistry   rawSpec: '',
+197 silly mapToRegistry   spec: 'latest',
+197 silly mapToRegistry   type: 'tag' }
+198 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fserver-renderer
+199 verbose addNameVersion registry:https://registry.npmjs.org/@vue%2fserver-renderer not in flight; fetching
+200 http 304 https://registry.npmjs.org/@vue%2fruntime-dom
+201 verbose headers { date: 'Fri, 29 Apr 2022 09:05:01 GMT',
+201 verbose headers   connection: 'keep-alive',
+201 verbose headers   'cf-ray': '7036df9e7eb501f8-ZRH',
+201 verbose headers   age: '178',
+201 verbose headers   'cache-control': 'public, max-age=300',
+201 verbose headers   etag: '"eef838587588cf179bce0f1c53e7c4e0"',
+201 verbose headers   'last-modified': 'Thu, 14 Apr 2022 10:14:51 GMT',
+201 verbose headers   vary: 'Accept-Encoding',
+201 verbose headers   'cf-cache-status': 'HIT',
+201 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+201 verbose headers   'x-amz-replication-status': 'COMPLETED',
+201 verbose headers   server: 'cloudflare' }
+202 silly get cb [ 304,
+202 silly get   { date: 'Fri, 29 Apr 2022 09:05:01 GMT',
+202 silly get     connection: 'keep-alive',
+202 silly get     'cf-ray': '7036df9e7eb501f8-ZRH',
+202 silly get     age: '178',
+202 silly get     'cache-control': 'public, max-age=300',
+202 silly get     etag: '"eef838587588cf179bce0f1c53e7c4e0"',
+202 silly get     'last-modified': 'Thu, 14 Apr 2022 10:14:51 GMT',
+202 silly get     vary: 'Accept-Encoding',
+202 silly get     'cf-cache-status': 'HIT',
+202 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+202 silly get     'x-amz-replication-status': 'COMPLETED',
+202 silly get     server: 'cloudflare' } ]
+203 verbose etag https://registry.npmjs.org/@vue%2fruntime-dom from cache
+204 verbose get saving @vue/runtime-dom to C:\Users\claud\AppData\Roaming\npm-cache\registry.npmjs.org\_40vue_252fruntime-dom\.cache.json
+205 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+206 verbose get https://registry.npmjs.org/@vue%2fserver-renderer not expired, no request
+207 silly cache afterAdd @vue/server-renderer@3.2.33
+208 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\@vue\server-renderer\3.2.33\package\package.json not in flight; writing
+209 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+210 silly resolveWithNewModule @vue/runtime-dom@3.2.33 checking installable status
+211 silly cache add args [ '@vue/runtime-dom@3.2.33', null ]
+212 verbose cache add spec @vue/runtime-dom@3.2.33
+213 silly cache add parsed spec Result {
+213 silly cache add   raw: '@vue/runtime-dom@3.2.33',
+213 silly cache add   scope: '@vue',
+213 silly cache add   name: '@vue/runtime-dom',
+213 silly cache add   rawSpec: '3.2.33',
+213 silly cache add   spec: '3.2.33',
+213 silly cache add   type: 'version' }
+214 silly addNamed @vue/runtime-dom@3.2.33
+215 verbose addNamed "3.2.33" is a plain semver version for @vue/runtime-dom
+216 silly mapToRegistry name @vue/runtime-dom
+217 silly mapToRegistry scope (from package name) @vue
+218 verbose mapToRegistry no registry URL found in name for scope @vue
+219 silly mapToRegistry using default registry
+220 silly mapToRegistry registry https://registry.npmjs.org/
+221 silly mapToRegistry data Result {
+221 silly mapToRegistry   raw: '@vue/runtime-dom',
+221 silly mapToRegistry   scope: '@vue',
+221 silly mapToRegistry   name: '@vue/runtime-dom',
+221 silly mapToRegistry   rawSpec: '',
+221 silly mapToRegistry   spec: 'latest',
+221 silly mapToRegistry   type: 'tag' }
+222 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fruntime-dom
+223 verbose addNameVersion registry:https://registry.npmjs.org/@vue%2fruntime-dom not in flight; fetching
+224 verbose get https://registry.npmjs.org/@vue%2fruntime-dom not expired, no request
+225 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\@vue\server-renderer\3.2.33\package\package.json written
+226 silly cache afterAdd @vue/runtime-dom@3.2.33
+227 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\@vue\runtime-dom\3.2.33\package\package.json not in flight; writing
+228 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+229 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\@vue\runtime-dom\3.2.33\package\package.json written
+230 http 304 https://registry.npmjs.org/@vue%2fcompiler-sfc
+231 verbose headers { date: 'Fri, 29 Apr 2022 09:05:02 GMT',
+231 verbose headers   connection: 'keep-alive',
+231 verbose headers   'cf-ray': '7036df9e7a5523af-ZRH',
+231 verbose headers   'cache-control': 'public, max-age=300',
+231 verbose headers   etag: '"681af48bd8c111510f85e5d520080b49"',
+231 verbose headers   'last-modified': 'Thu, 14 Apr 2022 10:14:43 GMT',
+231 verbose headers   vary: 'Accept-Encoding',
+231 verbose headers   'cf-cache-status': 'REVALIDATED',
+231 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+231 verbose headers   'x-amz-replication-status': 'PENDING',
+231 verbose headers   server: 'cloudflare' }
+232 silly get cb [ 304,
+232 silly get   { date: 'Fri, 29 Apr 2022 09:05:02 GMT',
+232 silly get     connection: 'keep-alive',
+232 silly get     'cf-ray': '7036df9e7a5523af-ZRH',
+232 silly get     'cache-control': 'public, max-age=300',
+232 silly get     etag: '"681af48bd8c111510f85e5d520080b49"',
+232 silly get     'last-modified': 'Thu, 14 Apr 2022 10:14:43 GMT',
+232 silly get     vary: 'Accept-Encoding',
+232 silly get     'cf-cache-status': 'REVALIDATED',
+232 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+232 silly get     'x-amz-replication-status': 'PENDING',
+232 silly get     server: 'cloudflare' } ]
+233 verbose etag https://registry.npmjs.org/@vue%2fcompiler-sfc from cache
+234 verbose get saving @vue/compiler-sfc to C:\Users\claud\AppData\Roaming\npm-cache\registry.npmjs.org\_40vue_252fcompiler-sfc\.cache.json
+235 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+236 silly resolveWithNewModule @vue/compiler-sfc@3.2.33 checking installable status
+237 silly cache add args [ '@vue/compiler-sfc@3.2.33', null ]
+238 verbose cache add spec @vue/compiler-sfc@3.2.33
+239 silly cache add parsed spec Result {
+239 silly cache add   raw: '@vue/compiler-sfc@3.2.33',
+239 silly cache add   scope: '@vue',
+239 silly cache add   name: '@vue/compiler-sfc',
+239 silly cache add   rawSpec: '3.2.33',
+239 silly cache add   spec: '3.2.33',
+239 silly cache add   type: 'version' }
+240 silly addNamed @vue/compiler-sfc@3.2.33
+241 verbose addNamed "3.2.33" is a plain semver version for @vue/compiler-sfc
+242 silly mapToRegistry name @vue/compiler-sfc
+243 silly mapToRegistry scope (from package name) @vue
+244 verbose mapToRegistry no registry URL found in name for scope @vue
+245 silly mapToRegistry using default registry
+246 silly mapToRegistry registry https://registry.npmjs.org/
+247 silly mapToRegistry data Result {
+247 silly mapToRegistry   raw: '@vue/compiler-sfc',
+247 silly mapToRegistry   scope: '@vue',
+247 silly mapToRegistry   name: '@vue/compiler-sfc',
+247 silly mapToRegistry   rawSpec: '',
+247 silly mapToRegistry   spec: 'latest',
+247 silly mapToRegistry   type: 'tag' }
+248 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fcompiler-sfc
+249 verbose addNameVersion registry:https://registry.npmjs.org/@vue%2fcompiler-sfc not in flight; fetching
+250 verbose get https://registry.npmjs.org/@vue%2fcompiler-sfc not expired, no request
+251 silly cache afterAdd @vue/compiler-sfc@3.2.33
+252 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\@vue\compiler-sfc\3.2.33\package\package.json not in flight; writing
+253 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+254 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\@vue\compiler-sfc\3.2.33\package\package.json written
+255 silly fetchNamedPackageData @vue/compiler-core
+256 silly mapToRegistry name @vue/compiler-core
+257 silly mapToRegistry scope (from package name) @vue
+258 verbose mapToRegistry no registry URL found in name for scope @vue
+259 silly mapToRegistry using default registry
+260 silly mapToRegistry registry https://registry.npmjs.org/
+261 silly mapToRegistry data Result {
+261 silly mapToRegistry   raw: '@vue/compiler-core',
+261 silly mapToRegistry   scope: '@vue',
+261 silly mapToRegistry   name: '@vue/compiler-core',
+261 silly mapToRegistry   rawSpec: '',
+261 silly mapToRegistry   spec: 'latest',
+261 silly mapToRegistry   type: 'tag' }
+262 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fcompiler-core
+263 verbose request uri https://registry.npmjs.org/@vue%2fcompiler-core
+264 verbose request no auth needed
+265 info attempt registry request try #1 at 11:05:02
+266 verbose etag W/"309f43f6512220914d94e5a6408b6876"
+267 verbose lastModified Thu, 14 Apr 2022 10:14:39 GMT
+268 http request GET https://registry.npmjs.org/@vue%2fcompiler-core
+269 http 304 https://registry.npmjs.org/@vue%2fcompiler-core
+270 verbose headers { date: 'Fri, 29 Apr 2022 09:05:02 GMT',
+270 verbose headers   connection: 'keep-alive',
+270 verbose headers   'cf-ray': '7036dfa7f9ae23c7-ZRH',
+270 verbose headers   age: '252',
+270 verbose headers   'cache-control': 'public, max-age=300',
+270 verbose headers   etag: '"309f43f6512220914d94e5a6408b6876"',
+270 verbose headers   'last-modified': 'Thu, 14 Apr 2022 10:14:39 GMT',
+270 verbose headers   vary: 'Accept-Encoding',
+270 verbose headers   'cf-cache-status': 'HIT',
+270 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+270 verbose headers   'x-amz-replication-status': 'COMPLETED',
+270 verbose headers   server: 'cloudflare' }
+271 silly get cb [ 304,
+271 silly get   { date: 'Fri, 29 Apr 2022 09:05:02 GMT',
+271 silly get     connection: 'keep-alive',
+271 silly get     'cf-ray': '7036dfa7f9ae23c7-ZRH',
+271 silly get     age: '252',
+271 silly get     'cache-control': 'public, max-age=300',
+271 silly get     etag: '"309f43f6512220914d94e5a6408b6876"',
+271 silly get     'last-modified': 'Thu, 14 Apr 2022 10:14:39 GMT',
+271 silly get     vary: 'Accept-Encoding',
+271 silly get     'cf-cache-status': 'HIT',
+271 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+271 silly get     'x-amz-replication-status': 'COMPLETED',
+271 silly get     server: 'cloudflare' } ]
+272 verbose etag https://registry.npmjs.org/@vue%2fcompiler-core from cache
+273 verbose get saving @vue/compiler-core to C:\Users\claud\AppData\Roaming\npm-cache\registry.npmjs.org\_40vue_252fcompiler-core\.cache.json
+274 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+275 silly resolveWithNewModule @vue/compiler-core@3.2.33 checking installable status
+276 silly cache add args [ '@vue/compiler-core@3.2.33', null ]
+277 verbose cache add spec @vue/compiler-core@3.2.33
+278 silly cache add parsed spec Result {
+278 silly cache add   raw: '@vue/compiler-core@3.2.33',
+278 silly cache add   scope: '@vue',
+278 silly cache add   name: '@vue/compiler-core',
+278 silly cache add   rawSpec: '3.2.33',
+278 silly cache add   spec: '3.2.33',
+278 silly cache add   type: 'version' }
+279 silly addNamed @vue/compiler-core@3.2.33
+280 verbose addNamed "3.2.33" is a plain semver version for @vue/compiler-core
+281 silly mapToRegistry name @vue/compiler-core
+282 silly mapToRegistry scope (from package name) @vue
+283 verbose mapToRegistry no registry URL found in name for scope @vue
+284 silly mapToRegistry using default registry
+285 silly mapToRegistry registry https://registry.npmjs.org/
+286 silly mapToRegistry data Result {
+286 silly mapToRegistry   raw: '@vue/compiler-core',
+286 silly mapToRegistry   scope: '@vue',
+286 silly mapToRegistry   name: '@vue/compiler-core',
+286 silly mapToRegistry   rawSpec: '',
+286 silly mapToRegistry   spec: 'latest',
+286 silly mapToRegistry   type: 'tag' }
+287 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fcompiler-core
+288 verbose addNameVersion registry:https://registry.npmjs.org/@vue%2fcompiler-core not in flight; fetching
+289 verbose get https://registry.npmjs.org/@vue%2fcompiler-core not expired, no request
+290 silly cache afterAdd @vue/compiler-core@3.2.33
+291 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\@vue\compiler-core\3.2.33\package\package.json not in flight; writing
+292 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+293 verbose afterAdd C:\Users\claud\AppData\Roaming\npm-cache\@vue\compiler-core\3.2.33\package\package.json written
+294 silly fetchNamedPackageData @babel/parser
+295 silly mapToRegistry name @babel/parser
+296 silly mapToRegistry scope (from package name) @babel
+297 verbose mapToRegistry no registry URL found in name for scope @babel
+298 silly mapToRegistry using default registry
+299 silly mapToRegistry registry https://registry.npmjs.org/
+300 silly mapToRegistry data Result {
+300 silly mapToRegistry   raw: '@babel/parser',
+300 silly mapToRegistry   scope: '@babel',
+300 silly mapToRegistry   name: '@babel/parser',
+300 silly mapToRegistry   rawSpec: '',
+300 silly mapToRegistry   spec: 'latest',
+300 silly mapToRegistry   type: 'tag' }
+301 silly mapToRegistry uri https://registry.npmjs.org/@babel%2fparser
+302 silly fetchNamedPackageData estree-walker
+303 silly mapToRegistry name estree-walker
+304 silly mapToRegistry using default registry
+305 silly mapToRegistry registry https://registry.npmjs.org/
+306 silly mapToRegistry data Result {
+306 silly mapToRegistry   raw: 'estree-walker',
+306 silly mapToRegistry   scope: null,
+306 silly mapToRegistry   name: 'estree-walker',
+306 silly mapToRegistry   rawSpec: '',
+306 silly mapToRegistry   spec: 'latest',
+306 silly mapToRegistry   type: 'tag' }
+307 silly mapToRegistry uri https://registry.npmjs.org/estree-walker
+308 silly fetchNamedPackageData source-map
+309 silly mapToRegistry name source-map
+310 silly mapToRegistry using default registry
+311 silly mapToRegistry registry https://registry.npmjs.org/
+312 silly mapToRegistry data Result {
+312 silly mapToRegistry   raw: 'source-map',
+312 silly mapToRegistry   scope: null,
+312 silly mapToRegistry   name: 'source-map',
+312 silly mapToRegistry   rawSpec: '',
+312 silly mapToRegistry   spec: 'latest',
+312 silly mapToRegistry   type: 'tag' }
+313 silly mapToRegistry uri https://registry.npmjs.org/source-map
+314 verbose request uri https://registry.npmjs.org/estree-walker
+315 verbose request no auth needed
+316 info attempt registry request try #1 at 11:05:02
+317 verbose etag W/"1702eb35a540d6bf9e169d5fb71a90c0"
+318 verbose lastModified Mon, 20 Dec 2021 15:54:56 GMT
+319 http request GET https://registry.npmjs.org/estree-walker
+320 verbose request uri https://registry.npmjs.org/source-map
+321 verbose request no auth needed
+322 info attempt registry request try #1 at 11:05:02
+323 verbose etag W/"c1024dff6e66ea256fbd8430cfe82f84"
+324 verbose lastModified Wed, 09 Feb 2022 23:46:00 GMT
+325 http request GET https://registry.npmjs.org/source-map
+326 verbose request uri https://registry.npmjs.org/@babel%2fparser
+327 verbose request no auth needed
+328 info attempt registry request try #1 at 11:05:02
+329 verbose etag W/"853b4b10188784988eaa052e396b73d8"
+330 verbose lastModified Wed, 06 Apr 2022 15:55:23 GMT
+331 http request GET https://registry.npmjs.org/@babel%2fparser
+332 http 304 https://registry.npmjs.org/source-map
+333 verbose headers { date: 'Fri, 29 Apr 2022 09:05:02 GMT',
+333 verbose headers   connection: 'keep-alive',
+333 verbose headers   'cf-ray': '7036dfa8bd392355-ZRH',
+333 verbose headers   age: '122',
+333 verbose headers   'cache-control': 'public, max-age=300',
+333 verbose headers   etag: '"c1024dff6e66ea256fbd8430cfe82f84"',
+333 verbose headers   'last-modified': 'Wed, 09 Feb 2022 23:46:00 GMT',
+333 verbose headers   vary: 'Accept-Encoding',
+333 verbose headers   'cf-cache-status': 'HIT',
+333 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+333 verbose headers   'x-amz-replication-status': 'COMPLETED',
+333 verbose headers   server: 'cloudflare' }
+334 silly get cb [ 304,
+334 silly get   { date: 'Fri, 29 Apr 2022 09:05:02 GMT',
+334 silly get     connection: 'keep-alive',
+334 silly get     'cf-ray': '7036dfa8bd392355-ZRH',
+334 silly get     age: '122',
+334 silly get     'cache-control': 'public, max-age=300',
+334 silly get     etag: '"c1024dff6e66ea256fbd8430cfe82f84"',
+334 silly get     'last-modified': 'Wed, 09 Feb 2022 23:46:00 GMT',
+334 silly get     vary: 'Accept-Encoding',
+334 silly get     'cf-cache-status': 'HIT',
+334 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+334 silly get     'x-amz-replication-status': 'COMPLETED',
+334 silly get     server: 'cloudflare' } ]
+335 verbose etag https://registry.npmjs.org/source-map from cache
+336 verbose get saving source-map to C:\Users\claud\AppData\Roaming\npm-cache\registry.npmjs.org\source-map\.cache.json
+337 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+338 http 304 https://registry.npmjs.org/estree-walker
+339 verbose headers { date: 'Fri, 29 Apr 2022 09:05:02 GMT',
+339 verbose headers   connection: 'keep-alive',
+339 verbose headers   'cf-ray': '7036dfa8bacb23f7-ZRH',
+339 verbose headers   age: '241',
+339 verbose headers   'cache-control': 'public, max-age=300',
+339 verbose headers   etag: '"1702eb35a540d6bf9e169d5fb71a90c0"',
+339 verbose headers   'last-modified': 'Mon, 20 Dec 2021 15:54:56 GMT',
+339 verbose headers   vary: 'Accept-Encoding',
+339 verbose headers   'cf-cache-status': 'HIT',
+339 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+339 verbose headers   'x-amz-replication-status': 'COMPLETED',
+339 verbose headers   server: 'cloudflare' }
+340 silly get cb [ 304,
+340 silly get   { date: 'Fri, 29 Apr 2022 09:05:02 GMT',
+340 silly get     connection: 'keep-alive',
+340 silly get     'cf-ray': '7036dfa8bacb23f7-ZRH',
+340 silly get     age: '241',
+340 silly get     'cache-control': 'public, max-age=300',
+340 silly get     etag: '"1702eb35a540d6bf9e169d5fb71a90c0"',
+340 silly get     'last-modified': 'Mon, 20 Dec 2021 15:54:56 GMT',
+340 silly get     vary: 'Accept-Encoding',
+340 silly get     'cf-cache-status': 'HIT',
+340 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+340 silly get     'x-amz-replication-status': 'COMPLETED',
+340 silly get     server: 'cloudflare' } ]
+341 verbose etag https://registry.npmjs.org/estree-walker from cache
+342 verbose get saving estree-walker to C:\Users\claud\AppData\Roaming\npm-cache\registry.npmjs.org\estree-walker\.cache.json
+343 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+344 silly resolveWithNewModule source-map@0.6.1 checking installable status
+345 silly cache add args [ 'source-map@^0.6.1', null ]
+346 verbose cache add spec source-map@^0.6.1
+347 silly cache add parsed spec Result {
+347 silly cache add   raw: 'source-map@^0.6.1',
+347 silly cache add   scope: null,
+347 silly cache add   name: 'source-map',
+347 silly cache add   rawSpec: '^0.6.1',
+347 silly cache add   spec: '>=0.6.1 <0.7.0',
+347 silly cache add   type: 'range' }
+348 silly addNamed source-map@>=0.6.1 <0.7.0
+349 verbose addNamed ">=0.6.1 <0.7.0" is a valid semver range for source-map
+350 silly addNameRange { name: 'source-map', range: '>=0.6.1 <0.7.0', hasData: false }
+351 silly mapToRegistry name source-map
+352 silly mapToRegistry using default registry
+353 silly mapToRegistry registry https://registry.npmjs.org/
+354 silly mapToRegistry data Result {
+354 silly mapToRegistry   raw: 'source-map',
+354 silly mapToRegistry   scope: null,
+354 silly mapToRegistry   name: 'source-map',
+354 silly mapToRegistry   rawSpec: '',
+354 silly mapToRegistry   spec: 'latest',
+354 silly mapToRegistry   type: 'tag' }
+355 silly mapToRegistry uri https://registry.npmjs.org/source-map
+356 verbose addNameRange registry:https://registry.npmjs.org/source-map not in flight; fetching
+357 verbose get https://registry.npmjs.org/source-map not expired, no request
+358 silly addNameRange number 2 { name: 'source-map', range: '>=0.6.1 <0.7.0', hasData: true }
+359 silly addNameRange versions [ 'source-map',
+359 silly addNameRange   [ '0.0.0',
+359 silly addNameRange     '0.1.0',
+359 silly addNameRange     '0.1.1',
+359 silly addNameRange     '0.1.2',
+359 silly addNameRange     '0.1.3',
+359 silly addNameRange     '0.1.4',
+359 silly addNameRange     '0.1.5',
+359 silly addNameRange     '0.1.6',
+359 silly addNameRange     '0.1.7',
+359 silly addNameRange     '0.1.8',
+359 silly addNameRange     '0.1.9',
+359 silly addNameRange     '0.1.10',
+359 silly addNameRange     '0.1.11',
+359 silly addNameRange     '0.1.12',
+359 silly addNameRange     '0.1.13',
+359 silly addNameRange     '0.1.14',
+359 silly addNameRange     '0.1.15',
+359 silly addNameRange     '0.1.16',
+359 silly addNameRange     '0.1.17',
+359 silly addNameRange     '0.1.18',
+359 silly addNameRange     '0.1.19',
+359 silly addNameRange     '0.1.20',
+359 silly addNameRange     '0.1.21',
+359 silly addNameRange     '0.1.22',
+359 silly addNameRange     '0.1.23',
+359 silly addNameRange     '0.1.24',
+359 silly addNameRange     '0.1.25',
+359 silly addNameRange     '0.1.26',
+359 silly addNameRange     '0.1.27',
+359 silly addNameRange     '0.1.28',
+359 silly addNameRange     '0.1.29',
+359 silly addNameRange     '0.1.30',
+359 silly addNameRange     '0.1.31',
+359 silly addNameRange     '0.1.32',
+359 silly addNameRange     '0.1.33',
+359 silly addNameRange     '0.1.34',
+359 silly addNameRange     '0.1.35',
+359 silly addNameRange     '0.1.36',
+359 silly addNameRange     '0.1.37',
+359 silly addNameRange     '0.1.38',
+359 silly addNameRange     '0.1.39',
+359 silly addNameRange     '0.1.40',
+359 silly addNameRange     '0.1.41',
+359 silly addNameRange     '0.1.42',
+359 silly addNameRange     '0.1.43',
+359 silly addNameRange     '0.2.0',
+359 silly addNameRange     '0.3.0',
+359 silly addNameRange     '0.4.0',
+359 silly addNameRange     '0.4.1',
+359 silly addNameRange     '0.4.2',
+359 silly addNameRange     '0.4.3',
+359 silly addNameRange     '0.4.4',
+359 silly addNameRange     '0.5.0',
+359 silly addNameRange     '0.5.1',
+359 silly addNameRange     '0.5.2',
+359 silly addNameRange     '0.5.3',
+359 silly addNameRange     '0.5.4',
+359 silly addNameRange     '0.5.5',
+359 silly addNameRange     '0.5.6',
+359 silly addNameRange     '0.5.7',
+359 silly addNameRange     '0.6.0',
+359 silly addNameRange     '0.6.1',
+359 silly addNameRange     '0.7.0',
+359 silly addNameRange     '0.7.1',
+359 silly addNameRange     '0.7.2',
+359 silly addNameRange     '0.7.3',
+359 silly addNameRange     '0.8.0-beta.0' ] ]
+360 silly addNamed source-map@0.6.1
+361 verbose addNamed "0.6.1" is a plain semver version for source-map
+362 http 304 https://registry.npmjs.org/@babel%2fparser
+363 verbose headers { date: 'Fri, 29 Apr 2022 09:05:02 GMT',
+363 verbose headers   connection: 'keep-alive',
+363 verbose headers   'cf-ray': '7036dfa8cfad01f8-ZRH',
+363 verbose headers   age: '226',
+363 verbose headers   'cache-control': 'public, max-age=300',
+363 verbose headers   etag: '"853b4b10188784988eaa052e396b73d8"',
+363 verbose headers   'last-modified': 'Wed, 06 Apr 2022 15:55:23 GMT',
+363 verbose headers   vary: 'Accept-Encoding',
+363 verbose headers   'cf-cache-status': 'HIT',
+363 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+363 verbose headers   'x-amz-replication-status': 'COMPLETED',
+363 verbose headers   server: 'cloudflare' }
+364 silly get cb [ 304,
+364 silly get   { date: 'Fri, 29 Apr 2022 09:05:02 GMT',
+364 silly get     connection: 'keep-alive',
+364 silly get     'cf-ray': '7036dfa8cfad01f8-ZRH',
+364 silly get     age: '226',
+364 silly get     'cache-control': 'public, max-age=300',
+364 silly get     etag: '"853b4b10188784988eaa052e396b73d8"',
+364 silly get     'last-modified': 'Wed, 06 Apr 2022 15:55:23 GMT',
+364 silly get     vary: 'Accept-Encoding',
+364 silly get     'cf-cache-status': 'HIT',
+364 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+364 silly get     'x-amz-replication-status': 'COMPLETED',
+364 silly get     server: 'cloudflare' } ]
+365 verbose etag https://registry.npmjs.org/@babel%2fparser from cache
+366 verbose get saving @babel/parser to C:\Users\claud\AppData\Roaming\npm-cache\registry.npmjs.org\_40babel_252fparser\.cache.json
+367 verbose correctMkdir C:\Users\claud\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+368 verbose stack Error: Missing required argument #1
+368 verbose stack     at andLogAndFinish (C:\Program Files\nodejs\node_modules\npm\lib\fetch-package-metadata.js:31:3)
+368 verbose stack     at fetchPackageMetadata (C:\Program Files\nodejs\node_modules\npm\lib\fetch-package-metadata.js:51:22)
+368 verbose stack     at resolveWithNewModule (C:\Program Files\nodejs\node_modules\npm\lib\install\deps.js:490:12)
+368 verbose stack     at C:\Program Files\nodejs\node_modules\npm\lib\install\deps.js:491:7
+368 verbose stack     at C:\Program Files\nodejs\node_modules\npm\node_modules\iferr\index.js:13:50
+368 verbose stack     at C:\Program Files\nodejs\node_modules\npm\lib\fetch-package-metadata.js:37:12
+368 verbose stack     at addRequestedAndFinish (C:\Program Files\nodejs\node_modules\npm\lib\fetch-package-metadata.js:67:5)
+368 verbose stack     at returnAndAddMetadata (C:\Program Files\nodejs\node_modules\npm\lib\fetch-package-metadata.js:121:7)
+368 verbose stack     at pickVersionFromRegistryDocument (C:\Program Files\nodejs\node_modules\npm\lib\fetch-package-metadata.js:138:20)
+368 verbose stack     at C:\Program Files\nodejs\node_modules\npm\node_modules\iferr\index.js:13:50
+369 verbose cwd C:\Users\claud\Desktop\backend\src
+370 error Windows_NT 10.0.19043
+371 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "vue"
+372 error node v6.2.2
+373 error npm  v3.9.5
+374 error code EMISSINGARG
+375 error typeerror Error: Missing required argument #1
+375 error typeerror     at andLogAndFinish (C:\Program Files\nodejs\node_modules\npm\lib\fetch-package-metadata.js:31:3)
+375 error typeerror     at fetchPackageMetadata (C:\Program Files\nodejs\node_modules\npm\lib\fetch-package-metadata.js:51:22)
+375 error typeerror     at resolveWithNewModule (C:\Program Files\nodejs\node_modules\npm\lib\install\deps.js:490:12)
+375 error typeerror     at C:\Program Files\nodejs\node_modules\npm\lib\install\deps.js:491:7
+375 error typeerror     at C:\Program Files\nodejs\node_modules\npm\node_modules\iferr\index.js:13:50
+375 error typeerror     at C:\Program Files\nodejs\node_modules\npm\lib\fetch-package-metadata.js:37:12
+375 error typeerror     at addRequestedAndFinish (C:\Program Files\nodejs\node_modules\npm\lib\fetch-package-metadata.js:67:5)
+375 error typeerror     at returnAndAddMetadata (C:\Program Files\nodejs\node_modules\npm\lib\fetch-package-metadata.js:121:7)
+375 error typeerror     at pickVersionFromRegistryDocument (C:\Program Files\nodejs\node_modules\npm\lib\fetch-package-metadata.js:138:20)
+375 error typeerror     at C:\Program Files\nodejs\node_modules\npm\node_modules\iferr\index.js:13:50
+376 error typeerror This is an error with npm itself. Please report this error at:
+376 error typeerror     <http://github.com/npm/npm/issues>
+377 verbose exit [ 1, true ]

@@ -1,0 +1,412 @@
+openapi: '3.0.3'
+servers:
+  - description: Api Gest-ES
+    url: http://localhost:8081/
+info:
+  description: This api provides communication with a database for a TB project
+  version: "1.0.0"
+  title: Gest-ES Api
+  contact:
+    email: claude-andre.inacioalves@heig-vd.ch
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: authentication
+    description: Operation related to connection
+  - name: user
+    description: Operation related to user
+  - name: calendar
+    description: Operation related to the calendar
+  - name: test
+    description: Operation related to the tests
+  - name: mark
+    description: Operations related to the marks
+  - name: absence
+    description: Operations related to the absences
+
+security:
+  - JWTSecurity: []
+
+### PATHS BELOW ###
+
+## AUTHENTICATION ##
+paths:
+  /auth/register:
+    post:
+      tags:
+        - authentication
+      security: []   # No security
+      description: This public endpoint is used to register a new user.
+      summary: Register a new user.
+      operationId: register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDTO'
+      responses:
+        '201':
+          description: Register successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+
+        '400':
+          description: Username or Email Already taken.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+
+  /auth/login:
+    post:
+      tags:
+        - authentication
+      security: []   # No security
+      description: This public endpoint is used to login an existing user.
+      summary: Login
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestDTO'
+      responses:
+        '200':
+          description: Login successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginSuccessDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  /auth/logout:
+    post:
+      tags:
+        - authentication
+      description: This private endpoint is used to logout a logged user.
+      summary: Logout.
+      operationId: logout
+      responses:
+        '200':
+          description: Logout successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  ## USER RELATED ##
+  /admin/users:
+    get:
+      tags:
+        - User
+      description: This private endpoint is used to get all users.
+      summary: Get all users.
+      operationId: getUsers
+      responses:
+        '200':
+          description: Get users successful.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSimpleDTO'
+    delete:
+      tags:
+        - User
+      description: This private endpoint is used to remove all users.
+      summary: Delete all users.
+      operationId: deleteUsers
+      responses:
+        '200':
+          description: Users deletion successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  /users/{username}:
+    get:
+      tags:
+        - User
+      description: This private endpoint is used to get one user.
+      summary: Get a specific user.
+      operationId: getUser
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Get user successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+    put:
+      tags:
+        - User
+      description: This private endpoint is used to modify one user.
+      summary: Update a specific user.
+      operationId: updateUser
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/UserModificationDTO'
+      responses:
+        '200':
+          description: User update successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+    delete:
+      tags:
+        - User
+      description: This private endpoint is used to remove one user.
+      summary: Delete a specific user.
+      operationId: deleteUser
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: User deletion successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+
+  /calendar:
+    get:
+      tags:
+        - calendar
+      description: This endpoint is used to get the calendar of the authenticated user
+      summary: Get a specific user calendar.
+      operationId: getCalendarUser
+      responses:
+        '200':
+          description: Get users calendar successfull.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarDTO'
+
+  /calendar/{username}:
+    get:
+      tags:
+        - calendar
+      description: This endpoint is used to get the calendar of a user
+      summary: Get a specific user calendar.
+      operationId: getCalendar
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Get user calendar successfull.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarDTO'
+  /calendar/class/{className}:
+    get:
+      tags:
+        - calendar
+      description: This endpoint is used to get the calendar of a class
+      summary: Get a class calendar.
+      operationId: getClassCalendar
+      parameters:
+        - in: path
+          name: className
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Get class calendar successfull.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalendarDTO'
+  /marks/{studentUsername}:
+    get:
+      tags:
+        - mark
+      description: This endpoint is sused to get the marks of a student
+      summary: Get marks.
+      operationId: getStudentMarks
+      parameters:
+        - in: path
+          name: studentUsername
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Get student marks successfull.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+components:
+  # SECURITY
+  securitySchemes:
+    JWTSecurity:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    # API  MESSAGE
+    ApiMessageDTO:
+      title: ApiMessageDTO
+      type: object
+      properties:
+        code:
+          type: integer
+        type:
+          type: string
+        message:
+          type: string
+
+    # REGISTER
+    RegisterDTO:
+      title: RegisterDTO
+      type: object
+      properties:
+        username:
+          type: string
+          example: 'Polo'
+        email:
+          type: string
+          example: 'paul@mail.com'
+        password:
+          type: string
+          example: 'luap4321'
+        firstname:
+          type: string
+          example: 'Paul'
+        lastname:
+          type: string
+          example: 'Dupont'
+    # LOGIN REQUEST
+    LoginRequestDTO:
+      title: LoginRequestDTO
+      type: object
+      properties:
+        usernameOrEmail:
+          type: string
+          example: 'Polo'
+        password:
+          type: string
+          example: 'luap4321'
+    # LOGIN SUCCESS
+    LoginSuccessDTO:
+      title: LoginSuccessDTO
+      type: object
+      properties:
+        jwt:
+          type: string
+        username:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+    RoleDTO:
+      title: RoleDTO
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          nullable: true
+    UserDTO:
+      title: UserDTO
+      type: object
+      properties:
+        idUser:
+          type: integer
+        username:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleDTO'
+    UserModificationDTO:
+      title: UserModificationDTO
+      type: object
+      properties:
+        idUser:
+          type: integer
+        username:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        email:
+          type: string
+        password:
+          type: string
+    UserSimpleDTO:
+      title: UserModificationDTO
+      type: object
+      properties:
+        username:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        email:
+          type: string
+
+    # Calendar
+    CalendarDTO:
+      title: CalendarDTO
+      type: object
