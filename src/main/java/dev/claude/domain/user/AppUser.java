@@ -1,8 +1,14 @@
 package dev.claude.domain.user;
 
+import dev.claude.domain.organisation.StudentGroup;
+import dev.claude.domain.organisation.Subject;
+import dev.claude.domain.organisation.Module;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Set;
 
 @Data
@@ -39,5 +45,17 @@ public class AppUser {
     @ManyToMany(fetch = FetchType.EAGER)
     @Singular
     private Set<Role> roles;
+
+    @ManyToMany
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Collection<Subject> subjects;
+
+    @ManyToMany
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Collection<Module> modules;
+
+    @ManyToMany
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Collection<StudentGroup> studentGroups;
 
 }

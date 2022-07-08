@@ -1,11 +1,11 @@
 package dev.claude.domain.organisation;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Data
 @Getter
@@ -18,4 +18,17 @@ public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idModule;
+
+    private String name;
+
+    private String abbreviation;
+
+    private int number;
+
+    private int period_number;
+
+    private String description;
+
+    @OneToMany
+    private Collection<Subject> subjects;
 }

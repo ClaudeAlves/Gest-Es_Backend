@@ -1,7 +1,7 @@
 openapi: '3.0.3'
 servers:
   - description: Api Gest-ES
-    url: http://localhost:8081/
+    url: http://localhost:8081
 info:
   description: This api provides communication with a database for a TB project
   version: "1.0.0"
@@ -24,14 +24,16 @@ tags:
     description: Operations related to the marks
   - name: absence
     description: Operations related to the absences
-
+  - name: creation
+    description: Operations needed to create the courses/module/subjects
+  - name: organisation
+    description: Operations needed to organise entities.
 security:
   - JWTSecurity: []
 
-### PATHS BELOW ###
-
-## AUTHENTICATION ##
+### below paths ###
 paths:
+  ## authentication ##
   /auth/register:
     post:
       tags:
@@ -59,7 +61,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiMessageDTO'
-
   /auth/login:
     post:
       tags:
@@ -106,7 +107,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiMessageDTO'
-  ## USER RELATED ##
+  ## user endpoints ##
   /admin/users:
     get:
       tags:
@@ -199,7 +200,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiMessageDTO'
-
+  ## calendar endpoints ##
   /calendar:
     get:
       tags:
@@ -209,13 +210,12 @@ paths:
       operationId: getCalendarUser
       responses:
         '200':
-          description: Get users calendar successfull.
+          description: Get users calendar successfully.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CalendarDTO'
-
-  /calendar/{username}:
+  /calendar/user/{userId}:
     get:
       tags:
         - calendar
@@ -224,7 +224,7 @@ paths:
       operationId: getCalendar
       parameters:
         - in: path
-          name: username
+          name: userId
           schema:
             type: string
           required: true
@@ -235,7 +235,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CalendarDTO'
-  /calendar/class/{className}:
+  /calendar/class/{classId}:
     get:
       tags:
         - calendar
@@ -244,7 +244,7 @@ paths:
       operationId: getClassCalendar
       parameters:
         - in: path
-          name: className
+          name: classId
           schema:
             type: string
           required: true
@@ -255,37 +255,395 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CalendarDTO'
-  /marks/{studentUsername}:
+  ## evaluation endpoints ##
+  /marks/{idStudent}:
     get:
       tags:
         - mark
-      description: This endpoint is sused to get the marks of a student
+      description: This endpoint is used to get the marks of a student
       summary: Get marks.
       operationId: getStudentMarks
       parameters:
         - in: path
-          name: studentUsername
+          name: idStudent
           schema:
             type: string
           required: true
       responses:
         '200':
-          description: Get student marks successfull.
+          description: Get student marks successfully.
           content:
             application/json:
               schema:
                 type: array
                 items:
                   type: integer
+  /evluation/test:
+    post:
+      tags:
+        - test
+      description: This endpoint is used to create a test
+      summary: create test
+      operationId: createTest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseDTO'
+      responses:
+        '201':
+          description: Creation successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  /evaluation/tests/{idCourse}/student/{idStudent}:
+    get:
+      tags:
+        - test
+      description: Get the t
+      parameters:
+        - in: path
+          name: idCourse
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: idStudent
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Get student test successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+  ## organisation endpoints ##
+  /organisation/module/{idModule}/student/{idStudent}:
+    put:
+      tags:
+        - organisation
+      description: Subs a student to a module.
+      operationId: moduleToStudent
+      parameters:
+        - in: path
+          name: idModule
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: idStudent
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  /organisation/subject/{idSubject}/student/{idStudent}:
+    put:
+      tags:
+        - organisation
+      description: Subs a student to a subject.
+      operationId: subjectToStudent
+      parameters:
+        - in: path
+          name: idSubject
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: idStudent
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  /organisation/class/{idClass}/student/{idStudent}:
+    put:
+      tags:
+        - organisation
+      description: Subs a student to a class.
+      operationId: classToStudent
+      parameters:
+        - in: path
+          name: idClass
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: idStudent
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  /organisation/module/{idModule}/subject/{idSubject}:
+    put:
+      tags:
+        - organisation
+      description: Adds a subject to a module.
+      operationId: subjectToModule
+      parameters:
+        - in: path
+          name: idModule
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: idSubject
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  /organisation/subject/{idSubject}/course/{idCourse}:
+    put:
+      tags:
+        - organisation
+      description: Adds a subject to a course.
+      operationId: subjectToCourse
+      parameters:
+        - in: path
+          name: idSubject
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: idCourse
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  /organisation/course/{idCourse}/class/{idClass}:
+    put:
+      tags:
+        - organisation
+      description: Subs a class to a course.
+      operationId: courseToClass
+      parameters:
+        - in: path
+          name: idCourse
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: idClass
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  /organisation/course/{idCourse}/teacher/{idTeacher}:
+    put:
+      tags:
+        - organisation
+      description: Adds a teacher to a course.
+      operationId: teacherToCourse
+      parameters:
+        - in: path
+          name: idCourse
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: idTeacher
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  ## creation endpoints ##
+  /creation/course:
+    post:
+      tags:
+        - creation
+      description: This endpoint is used to create a course.
+      summary: create course.
+      operationId: createCourse
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseDTO'
+      responses:
+        '201':
+          description: Creation successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  /creation/module:
+    post:
+      tags:
+        - creation
+      description: This endpoint is used to create a module.
+      summary: create module.
+      operationId: createModule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModuleDTO'
+      responses:
+        '201':
+          description: Creation successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  /creation/subject:
+    post:
+      tags:
+        - creation
+      description: This endpoint is used to create a subject.
+      summary: create subject.
+      operationId: createSubject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectDTO'
+      responses:
+        '201':
+          description: Creation successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+  /creation/holiday:
+    post:
+      tags:
+        - creation
+      description: This endpoint is used to create a period of holiday.
+      summary: create holiday.
+      operationId: createHoliday
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HolidayDTO'
+      responses:
+        '201':
+          description: Creation successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiMessageDTO'
+## components/DTOs ##
 components:
-  # SECURITY
+  # Security
   securitySchemes:
     JWTSecurity:
       type: http
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    # API  MESSAGE
+    # API message
     ApiMessageDTO:
       title: ApiMessageDTO
       type: object
@@ -296,8 +654,7 @@ components:
           type: string
         message:
           type: string
-
-    # REGISTER
+    # Register
     RegisterDTO:
       title: RegisterDTO
       type: object
@@ -317,7 +674,7 @@ components:
         lastname:
           type: string
           example: 'Dupont'
-    # LOGIN REQUEST
+    # Login
     LoginRequestDTO:
       title: LoginRequestDTO
       type: object
@@ -328,7 +685,6 @@ components:
         password:
           type: string
           example: 'luap4321'
-    # LOGIN SUCCESS
     LoginSuccessDTO:
       title: LoginSuccessDTO
       type: object
@@ -341,6 +697,7 @@ components:
           type: array
           items:
             type: string
+    # User
     RoleDTO:
       title: RoleDTO
       type: object
@@ -391,7 +748,7 @@ components:
         password:
           type: string
     UserSimpleDTO:
-      title: UserModificationDTO
+      title: UserSimpleDTO
       type: object
       properties:
         username:
@@ -405,8 +762,100 @@ components:
           format: date
         email:
           type: string
-
+    # Organisation
+    CourseDTO:
+      title: CourseDTO
+      type: object
+      properties:
+        name:
+          type: string
+    ModuleDTO:
+      title: ModuleDTO
+      type: object
+      properties:
+        name:
+          type: string
+    SubjectDTO:
+      title: SubjectDTO
+      type: object
+      properties:
+        name:
+          type: string
     # Calendar
     CalendarDTO:
       title: CalendarDTO
       type: object
+      properties:
+        periods:
+          type: array
+          items:
+            $ref: '#/components/schemas/PeriodDTO'
+    HolidayDTO:
+      title: HolidayDTO
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: begin of the holiday
+          example: "2021-01-30T08:30:00Z"
+        end:
+          type: string
+          format: date-time
+          description: end of the holiday
+          example: "2021-01-30T08:30:00Z"
+        text:
+          type: string
+          description: description of the holiday
+    PeriodDTO:
+      title: PeriodDTO
+      type: object
+      properties:
+        id:
+          type: integer
+        tag:
+          type: string
+        start:
+          type: string
+          format: date-time
+          description: begin of the period
+          example: "2021-01-30T08:30:00Z"
+        end:
+          type: string
+          format: date-time
+          description: end of the period
+          example: "2021-01-30T08:30:00Z"
+        text:
+          type: string
+          description: description of the period
+    # Evaluation
+    TestDTO:
+      title: TestDTO
+      type: object
+      properties:
+        courseId:
+          type: integer
+        start:
+          type: string
+          format: date-time
+          description: begin of the period
+          example: "2021-01-30T08:30:00Z"
+        end:
+          type: string
+          format: date-time
+          description: end of the period
+          example: "2021-01-30T08:30:00Z"
+        text:
+          type: string
+          description: description of the period
+    MarkDTO:
+      title: MarkDTO
+      type: object
+      properties:
+        testId:
+          type: integer
+        studentId:
+          type: integer
+        value:
+          type: integer
+

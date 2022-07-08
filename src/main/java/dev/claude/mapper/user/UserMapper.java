@@ -1,4 +1,4 @@
-package dev.claude.mapper;
+package dev.claude.mapper.user;
 
 import dev.claude.domain.user.AppUser;
 import dev.claude.domain.user.Role;
@@ -6,6 +6,8 @@ import dev.claude.dto.LoginSuccessDTO;
 import dev.claude.dto.RegisterDTO;
 import dev.claude.dto.RoleDTO;
 import dev.claude.dto.UserDTO;
+import dev.claude.mapper.Mapper;
+import dev.claude.mapper.user.RoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

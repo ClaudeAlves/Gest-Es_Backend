@@ -35,11 +35,7 @@ import java.util.Optional;
 
 @Service @Slf4j
 public class UserService implements UserDetailsService {
-    /* ne marche pas?*/
-    /**
-     * Private static inner class to inject values from application.properties It is
-     * used to create an admin user.
-    */
+
     @Component
     private static class AdminUser {
         @Value("${backend.admin.username}")
@@ -52,18 +48,15 @@ public class UserService implements UserDetailsService {
         private String password;
 
         @Value("${backend.admin.firstname}")
-        private String firstname;
+        private String firstName;
 
         @Value("${backend.admin.lastname}")
-        private String lastname;
+        private String lastName;
     }
 
     @Autowired
     private AdminUser adminUser;
 
-    /**
-     * Used for Spring Security
-     */
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -101,7 +94,12 @@ public class UserService implements UserDetailsService {
         return user.toBuilder().role(role).build();
     }
 
-
+    /**
+     *
+     * @param username
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AppUser user = userRepository.findByUsername(username)
@@ -127,7 +125,6 @@ public class UserService implements UserDetailsService {
      * @throws InternalErrorException      If something bad happens.
      */
     public void register(AppUser user) throws EntityAlreadyExistException, InternalErrorException {
-        roleService.generateRolesToDatabase();
         if (userRepository.existsByUsername(user.getUsername())) {
             log.trace("Register username already exists {}", user.getUsername());
             throw new EntityAlreadyExistException("Username is already taken !");
@@ -163,6 +160,14 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     *
+     * @param usernameOrEmail
+     * @param password
+     * @return
+     * @throws WrongCredentialsException
+     * @throws InternalErrorException
+     */
     public String login(String usernameOrEmail, String password)
             throws WrongCredentialsException, InternalErrorException {
 
@@ -208,7 +213,6 @@ public class UserService implements UserDetailsService {
             throw new InternalErrorException(e.getMessage());
         }
     }
-
     /**
      * Returns the current user of the request from the DB.
      *
@@ -247,6 +251,42 @@ public class UserService implements UserDetailsService {
             throw new InternalErrorException();
         }
     }
+    /**
+     * Creates the main admin user with parameters from application.properties
+     */
+    public void createAdminUser() throws InternalErrorException {
+        try {
+            if (userRepository.existsByUsername(adminUser.username)) {
+                log.info("Existing admin user, with username: {} password: {}", adminUser.username,
+                        adminUser.password);
+
+            } else {
+                log.info("Creating admin user, with username: {} password: {}", adminUser.username,
+                        adminUser.password);
+
+                AppUser user = AppUser.builder()
+                        .username(adminUser.username)
+                        .email(adminUser.email)
+                        .password(encryptPassword(adminUser.password))
+                        .firstName(adminUser.firstName)
+                        .lastName(adminUser.lastName)
+                        .build();
+
+                user = addRole(user, EnumRole.ROLE_USER);
+                user = addRole(user, EnumRole.ROLE_ADMIN);
+                userRepository.save(user);
+
+            }
+
+        }
+        catch (Exception e) {
+            log.error("Internal Error, original exception message : {}", e.getMessage());
+            throw new InternalErrorException(e.getMessage());
+        }
+    }
+
+
+
 
 
 

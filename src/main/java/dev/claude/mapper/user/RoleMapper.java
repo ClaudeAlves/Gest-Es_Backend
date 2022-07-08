@@ -1,8 +1,9 @@
-package dev.claude.mapper;
+package dev.claude.mapper.user;
 
 import dev.claude.domain.user.Role;
 import dev.claude.domain.user.EnumRole;
 import dev.claude.dto.RoleDTO;
+import dev.claude.mapper.Mapper;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.stereotype.Component;
 

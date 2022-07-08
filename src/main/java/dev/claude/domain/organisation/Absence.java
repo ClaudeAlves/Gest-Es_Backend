@@ -1,11 +1,12 @@
 package dev.claude.domain.organisation;
 
+import dev.claude.domain.user.AppUser;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.swing.*;
 
 @Data
 @Getter
@@ -19,5 +20,12 @@ public class Absence {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idAbsence;
 
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private AppUser giver;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private AppUser student;
 
 }
