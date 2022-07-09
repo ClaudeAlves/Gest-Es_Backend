@@ -42,7 +42,7 @@ public class Period {
 
     @ManyToMany
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Collection<StudentGroup> students;
+    private Collection<AppUser> students;
 
 
 }

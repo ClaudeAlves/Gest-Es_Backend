@@ -8,6 +8,10 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.util.Collection;
 
+/**
+ * this class may be named "class" in the endpoints
+ * it represents a class/ a group of students
+ */
 @Data
 @Getter
 @Setter

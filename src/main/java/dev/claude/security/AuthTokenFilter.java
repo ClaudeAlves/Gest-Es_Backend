@@ -64,10 +64,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     }
 
     private boolean protectedEndpoint(HttpServletRequest request) {
-        return  request.getRequestURL().toString().contains("/logout") 		||
-                request.getRequestURL().toString().contains("/messages")    ||
-                request.getRequestURL().toString().contains("/marks") 	    ||
-                request.getRequestURL().toString().contains("/test") 	    ||
+        return  request.getRequestURL().toString().contains("/logout") 		    ||
+                request.getRequestURL().toString().contains("/messages")        ||
+                request.getRequestURL().toString().contains("/organisation")    ||
+                request.getRequestURL().toString().contains("/creation") 	    ||
+                request.getRequestURL().toString().contains("/evaluation") 	    ||
                 request.getRequestURL().toString().contains("/calendar");
     }
 

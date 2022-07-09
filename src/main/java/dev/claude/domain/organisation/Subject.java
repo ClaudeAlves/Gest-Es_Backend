@@ -23,7 +23,7 @@ public class Subject {
 
     private String abbreviation;
 
-    @ManyToMany
+    @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Collection<Module> modules;
+    private Module module;
 }
