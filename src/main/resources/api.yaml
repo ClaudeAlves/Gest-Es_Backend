@@ -699,6 +699,8 @@ components:
         lastname:
           type: string
           example: 'Dupont'
+        role:
+          type: string
     # Login
     LoginRequestDTO:
       title: LoginRequestDTO
@@ -855,12 +857,10 @@ components:
           type: string
           format: date-time
           description: begin of the holiday
-          example: "2021-01-30T08:30:00Z"
         end:
           type: string
           format: date-time
           description: end of the holiday
-          example: "2021-01-30T08:30:00Z"
         text:
           type: string
           description: description of the holiday

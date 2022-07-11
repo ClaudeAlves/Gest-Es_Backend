@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
 
 @Data
@@ -23,9 +24,9 @@ public class Course {
 
     private String name;
 
-    private Date start;
+    private LocalDate start;
 
-    private Date end;
+    private LocalDate end;
 
     /**
      * This is used to create the periods of a course over it's duration.
@@ -43,7 +44,7 @@ public class Course {
 
     @ManyToMany
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Collection<AppUser> Students;
+    private Collection<StudentGroup> StudentGroups;
 
     @ManyToOne
     private AppUser Teacher;

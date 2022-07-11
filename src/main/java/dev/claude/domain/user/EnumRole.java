@@ -21,4 +21,5 @@ public enum EnumRole {
         throw new InternalErrorException("This role does not exist");
     }
 
+
 }

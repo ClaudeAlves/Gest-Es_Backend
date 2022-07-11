@@ -1,13 +1,10 @@
-package dev.claude.mapper.organisation;
+package dev.claude.mapper.calendar;
 
 import dev.claude.domain.calendar.Holiday;
-import dev.claude.domain.organisation.Course;
-import dev.claude.dto.CourseDTO;
 import dev.claude.dto.HolidayDTO;
 import dev.claude.mapper.Mapper;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.time.OffsetTime;
 
 @Component
@@ -15,15 +12,15 @@ public class HolidayMapper extends Mapper<Holiday, HolidayDTO, HolidayDTO> {
     @Override
     public Holiday toModel(HolidayDTO dtoObject) {
         return Holiday.builder()
-                .start(Date.valueOf(dtoObject.getStart().toLocalDate()))
-                .end(Date.valueOf(dtoObject.getEnd().toLocalDate()))
+                .start(dtoObject.getStart().toLocalDate())
+                .end(dtoObject.getEnd().toLocalDate())
                 .build();
     }
     @Override
     public HolidayDTO toDto(Holiday modelObject) {
         HolidayDTO holidayDTO = new HolidayDTO();
-        holidayDTO.setStart(modelObject.getStart().toLocalDate().atTime(OffsetTime.now()));
-        holidayDTO.setEnd(modelObject.getEnd().toLocalDate().atTime(OffsetTime.now()));
+        holidayDTO.setStart(modelObject.getStart().atTime(OffsetTime.now()));
+        holidayDTO.setEnd(modelObject.getEnd().atTime(OffsetTime.now()));
         return holidayDTO;
     }
 

@@ -1,5 +1,6 @@
 package dev.claude.domain.organisation;
 
+import dev.claude.domain.calendar.Period;
 import dev.claude.domain.user.AppUser;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -28,4 +29,7 @@ public class Absence {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private AppUser student;
 
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Period period;
 }

@@ -24,14 +24,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.sql.Date;
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Service
 public class CreationService {
-    private TimeUtils timeUtils;
+    @Autowired
+    TimeUtils timeUtils;
     @Autowired
     private ModuleRepository moduleRepository;
     @Autowired
@@ -48,6 +48,8 @@ public class CreationService {
     private PeriodRepository periodRepository;
     @Autowired
     private StudentGroupRepository studentGroupRepository;
+    @Autowired
+    CalendarService calendarService;
     public void createNewModule(Module module) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optUser = userRepository.findByUsername(username);
@@ -81,9 +83,9 @@ public class CreationService {
                 // user is an admin
                 if(subjectRepository.existsByName(subject.getName())) {
                     throw new EntityAlreadyExistException("Subject name is already taken !");
-                } else if(subjectRepository.existsByAbbreviation(subject.getAbbreviation()))
+                } else if(subjectRepository.existsByAbbreviation(subject.getAbbreviation())) {
                     throw new EntityAlreadyExistException("Subject abbreviation is already taken !");
-                try {
+                } try {
                     subjectRepository.save(subject);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -149,29 +151,21 @@ public class CreationService {
         }
     }
     public void createPeriodsForCourse(Course course) {
-        for(Integer periodOfTheWeek : course.getPeriodsOfTheWeek()) {
-            convertToLocalDateViaSqlDate(course.getStart()).datesUntil(convertToLocalDateViaSqlDate(course.getEnd())).forEach(date -> {
-                if (timeUtils.getDayOfTheWeekFromPeriodOfTheWeek(periodOfTheWeek) == timeUtils.intGetDayOfTheWeek(date)) {
-                    Date start = timeUtils.getStartFromPeriod(periodOfTheWeek, date);
-                    Date end = timeUtils.getEndFromPeriod(periodOfTheWeek, date);
+        for(Integer periodOfTheWeek : course.getPeriodsOfTheWeek()) { // for every period of the week from a course
+            course.getStart().datesUntil(course.getEnd()).forEach(date -> { // iterate over every date during the course
+                if (timeUtils.getDayOfTheWeekFromPeriodOfTheWeek(periodOfTheWeek) == date.getDayOfWeek().getValue() // if the day of the week matches the day from the period
+                        && calendarService.isInHolidays(date)) { // and this day isn't in the holidays
+                    LocalDateTime start = timeUtils.getStartFromPeriod(periodOfTheWeek, date); //then we build the period at the right time of the day
+                    LocalDateTime end = timeUtils.getEndFromPeriod(periodOfTheWeek, date);
                     Period period = Period.builder()
                             .start(start)
                             .end(end)
-                            .subject(course.getSubject())
-                            .module(course.getSubject().getModule())
-                            .students(course.getStudents())
-                            .teacher(course.getTeacher())
+                            .course(course)
                             .build();
                     periodRepository.save(period);
                 }
             });
         }
-        // TODO creation of the periods of a course over the time the course is given checking holidays
     }
-    public LocalDate convertToLocalDateViaSqlDate(Date dateToConvert){
-        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
-    }
-    private void creationOverTime(Integer periodNumber, LocalDate start, LocalDate end) {
 
-    }
 }

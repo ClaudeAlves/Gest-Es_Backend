@@ -3,6 +3,7 @@ package dev.claude.controller;
 
 import dev.claude.api.AuthenticationApi;
 import dev.claude.domain.user.AppUser;
+import dev.claude.domain.user.EnumRole;
 import dev.claude.dto.ApiMessageDTO;
 import dev.claude.dto.LoginRequestDTO;
 import dev.claude.dto.LoginSuccessDTO;
@@ -33,6 +34,16 @@ public class AuthenticationController implements AuthenticationApi {
     public ResponseEntity<ApiMessageDTO> register(@Valid RegisterDTO registerDTO) {
         try {
             AppUser user = userMapper.toModel(registerDTO);
+            try {
+                if(EnumRole.getRole(registerDTO.getRole()) != EnumRole.ROLE_USER
+                    && EnumRole.getRole(registerDTO.getRole()) != EnumRole.ROLE_ADMIN) {
+                    // here we want to register a user that's not only a basic user
+                    // and is not an admin, so we add the role to the user
+                    user = userService.addRole(user, EnumRole.getRole(registerDTO.getRole()));
+                }
+            } catch (Exception e) {
+                throw new WrongCredentialsException("Role does not exist");
+            }
             userService.register(user);
         } catch (NullPointerException e) {
             throw new IncompleteBodyException();

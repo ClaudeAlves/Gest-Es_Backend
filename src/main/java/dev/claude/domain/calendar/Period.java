@@ -1,5 +1,6 @@
 package dev.claude.domain.calendar;
 
+import dev.claude.domain.organisation.Course;
 import dev.claude.domain.organisation.StudentGroup;
 import dev.claude.domain.organisation.Subject;
 import dev.claude.domain.user.AppUser;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Data
@@ -24,25 +26,17 @@ public class Period {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idPeriod;
 
-    private Date start;
+    private String tag;
 
-    private Date end;
+    private String text;
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Subject subject;
+    private LocalDateTime start;
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Module module;
+    private LocalDateTime  end;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private AppUser teacher;
-
-    @ManyToMany
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Collection<AppUser> students;
+    private Course course;
 
 
 }

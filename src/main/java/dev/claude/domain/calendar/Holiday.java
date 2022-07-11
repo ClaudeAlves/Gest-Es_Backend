@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  * This entity is used to skip adding periods during holidays when populating the calendar with the
@@ -24,7 +24,7 @@ public class Holiday {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idHoliday;
 
-    private Date start;
+    private LocalDate  start;
 
-    private Date end;
+    private LocalDate end;
 }

@@ -13,8 +13,8 @@ public class CourseMapper extends Mapper<Course, CourseDTO, CourseDTO> {
     public Course toModel(CourseDTO dtoObject) {
         return Course.builder()
                 .name(dtoObject.getName())
-                .start(Date.valueOf(dtoObject.getStart()))
-                .end(Date.valueOf(dtoObject.getEnd()))
+                .start(dtoObject.getStart())
+                .end(dtoObject.getEnd())
                 .periodsOfTheWeek(dtoObject.getPeriodsOfTheWeek())
                 .build();
     }
@@ -23,8 +23,8 @@ public class CourseMapper extends Mapper<Course, CourseDTO, CourseDTO> {
     public CourseDTO toDto(Course modelObject) {
         CourseDTO courseDTO = new CourseDTO();
         courseDTO.setName(modelObject.getName());
-        courseDTO.setStart(modelObject.getStart().toLocalDate());
-        courseDTO.setEnd(modelObject.getEnd().toLocalDate());
+        courseDTO.setStart(modelObject.getStart());
+        courseDTO.setEnd(modelObject.getEnd());
         courseDTO.setPeriodsOfTheWeek(modelObject.getPeriodsOfTheWeek().stream().toList());
         return courseDTO;
     }

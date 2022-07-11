@@ -1,15 +1,12 @@
 package dev.claude.domain.evalutation;
 
-import dev.claude.domain.calendar.Period;
 import dev.claude.domain.organisation.Course;
-import dev.claude.domain.user.AppUser;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.util.Collection;
+import java.time.LocalDateTime;
 
 @Data
 @Getter
@@ -25,9 +22,9 @@ public class Test {
 
     private int number;
 
-    private Date start;
+    private LocalDateTime start;
 
-    private Date end;
+    private LocalDateTime  end;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
