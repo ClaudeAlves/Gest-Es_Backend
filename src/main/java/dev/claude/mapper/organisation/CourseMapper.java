@@ -5,7 +5,6 @@ import dev.claude.dto.CourseDTO;
 import dev.claude.mapper.Mapper;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 
 @Component
 public class CourseMapper extends Mapper<Course, CourseDTO, CourseDTO> {

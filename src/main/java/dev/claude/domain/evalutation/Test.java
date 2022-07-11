@@ -22,6 +22,8 @@ public class Test {
 
     private int number;
 
+    private String text;
+
     private LocalDateTime start;
 
     private LocalDateTime  end;

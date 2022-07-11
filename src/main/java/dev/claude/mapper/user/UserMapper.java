@@ -40,7 +40,7 @@ public class UserMapper extends Mapper<AppUser, UserDTO, UserDTO> {
     @Override
     public UserDTO toDto(AppUser modelObject) {
         UserDTO userDTO = new UserDTO();
-        userDTO.setIdUser((int)modelObject.getIdUser());
+        userDTO.setIdUser(modelObject.getIdUser());
         userDTO.setUsername(modelObject.getUsername());
         userDTO.setFirstname(modelObject.getFirstName());
         userDTO.setLastname(modelObject.getLastName());

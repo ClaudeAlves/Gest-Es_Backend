@@ -8,8 +8,8 @@ import java.util.List;
 
 @Repository
 public interface PeriodRepository extends JpaRepository<Period, Long> {
-        public List<Period> findAllByCourse_StudentGroups_Students_IdUser(long idStudent);
-        public List<Period> findAllByCourse_Teacher_IdUser(long isTeacher);
-        public List<Period> findAllByCourse_StudentGroups_IdStudentGroup(long idStudentGroup);
+        List<Period> findAllByCourse_StudentGroups_Students_IdUser(long idStudent);
+        List<Period> findAllByCourse_Teacher_IdUser(long isTeacher);
+        List<Period> findAllByCourse_StudentGroups_IdStudentGroup(long idStudentGroup);
 
 }

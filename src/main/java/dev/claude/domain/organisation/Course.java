@@ -44,8 +44,8 @@ public class Course {
 
     @ManyToMany
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Collection<StudentGroup> StudentGroups;
+    private Collection<StudentGroup> studentGroups;
 
     @ManyToOne
-    private AppUser Teacher;
+    private AppUser teacher;
 }

@@ -2,9 +2,10 @@ package dev.claude.utils;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 import java.time.*;
-
+@Component
 public class TimeUtils {
     private static final String[] StartCorrespondences =
             {"08:00", "09:00", "10:00", "11:00", "13:30", "14:30", "15:30", "16:30"};

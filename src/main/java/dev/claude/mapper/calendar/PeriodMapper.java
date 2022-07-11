@@ -25,7 +25,7 @@ public class PeriodMapper extends Mapper<Period, PeriodDTO, PeriodDTO> {
         PeriodDTO periodDTO = new PeriodDTO();
         periodDTO.end(ZonedDateTime.of(modelObject.getEnd(), zoneId).toOffsetDateTime());
         periodDTO.start(ZonedDateTime.of(modelObject.getStart(), zoneId).toOffsetDateTime());
-        periodDTO.id(Math.toIntExact(modelObject.getIdPeriod()));
+        periodDTO.id(modelObject.getIdPeriod());
         periodDTO.tag(modelObject.getTag());
         periodDTO.text(modelObject.getText());
 

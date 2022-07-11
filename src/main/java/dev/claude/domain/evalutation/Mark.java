@@ -17,7 +17,9 @@ import javax.persistence.*;
 public class Mark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idMark;
+    private Long idMark;
+
+    private Double value;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)

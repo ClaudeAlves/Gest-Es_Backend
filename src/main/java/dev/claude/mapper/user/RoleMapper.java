@@ -36,7 +36,7 @@ public class RoleMapper extends Mapper<Role, RoleDTO, RoleDTO> {
     @Override
     public RoleDTO toDto(Role modelObject) {
         RoleDTO roleDTO = new RoleDTO();
-        roleDTO.setId((int)modelObject.getId());
+        roleDTO.setId(modelObject.getId());
         roleDTO.setName(JsonNullable.of(modelObject.getName().name()));
         return null;
     }

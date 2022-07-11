@@ -15,7 +15,7 @@ public class OrganisationController implements OrganisationApi {
     @Autowired
     private OrganisationService organisationService;
     @Override
-    public ResponseEntity<ApiMessageDTO> classToStudent(String idClass, String idStudent) {
+    public ResponseEntity<ApiMessageDTO> classToStudent(Long idClass, Long idStudent) {
         try {
             organisationService.linkClassAndStudent(idClass, idStudent);
         } catch (Exception e) {
@@ -24,7 +24,7 @@ public class OrganisationController implements OrganisationApi {
         return ResponseEntity.ok(ApiHelper.ok("Addition successful"));
     }
     @Override
-    public ResponseEntity<ApiMessageDTO> courseToClass(String idCourse, String idClass) {
+    public ResponseEntity<ApiMessageDTO> courseToClass(Long idCourse, Long idClass) {
         try {
             organisationService.linkCourseAndClass(idCourse, idClass);
         } catch (Exception e) {
@@ -33,7 +33,7 @@ public class OrganisationController implements OrganisationApi {
         return ResponseEntity.ok(ApiHelper.ok("Addition successful"));
     }
     @Override
-    public ResponseEntity<ApiMessageDTO> moduleToStudent(String idModule, String idStudent) {
+    public ResponseEntity<ApiMessageDTO> moduleToStudent(Long idModule, Long idStudent) {
         try {
             organisationService.linkModuleAndStudent(idModule, idStudent);
         } catch (Exception e) {
@@ -42,7 +42,7 @@ public class OrganisationController implements OrganisationApi {
         return ResponseEntity.ok(ApiHelper.ok("Addition successful"));
     }
     @Override
-    public ResponseEntity<ApiMessageDTO> subjectToCourse(String idSubject, String idCourse) {
+    public ResponseEntity<ApiMessageDTO> subjectToCourse(Long idSubject, Long idCourse) {
         try {
             organisationService.linkSubjectAndCourse(idSubject, idCourse);
         } catch (Exception e) {
@@ -51,7 +51,7 @@ public class OrganisationController implements OrganisationApi {
         return ResponseEntity.ok(ApiHelper.ok("Addition successful"));
     }
     @Override
-    public ResponseEntity<ApiMessageDTO> subjectToModule(String idModule, String idSubject) {
+    public ResponseEntity<ApiMessageDTO> subjectToModule(Long idModule, Long idSubject) {
         try {
             organisationService.linkSubjectAndModule(idSubject, idModule);
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class OrganisationController implements OrganisationApi {
         return ResponseEntity.ok(ApiHelper.ok("Addition successful"));
     }
     @Override
-    public ResponseEntity<ApiMessageDTO> subjectToStudent(String idSubject, String idStudent) {
+    public ResponseEntity<ApiMessageDTO> subjectToStudent(Long idSubject, Long idStudent) {
         try {
             organisationService.linkSubjectAndStudent(idSubject, idStudent);
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class OrganisationController implements OrganisationApi {
         return ResponseEntity.ok(ApiHelper.ok("Addition successful"));
     }
     @Override
-    public ResponseEntity<ApiMessageDTO> teacherToCourse(String idCourse, String idTeacher) {
+    public ResponseEntity<ApiMessageDTO> teacherToCourse(Long idCourse, Long idTeacher) {
         try {
             organisationService.linkTeacherAndCourse(idCourse, idTeacher);
         } catch (Exception e) {

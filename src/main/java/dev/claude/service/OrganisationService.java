@@ -30,15 +30,15 @@ public class OrganisationService {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    public void linkClassAndStudent(String idClass, String idStudent) {
-        if(studentGroupRepository.existsById(Long.getLong(idClass))) {
+    public void linkClassAndStudent(Long idClass, Long idStudent) {
+        if(studentGroupRepository.existsById(idClass)) {
             // class exists
-            if (userRepository.existsById(Long.getLong(idStudent))) {
+            if (userRepository.existsById(idStudent)) {
                 // user exists
-                AppUser user = userRepository.getById(Long.getLong(idStudent));
+                AppUser user = userRepository.getById(idStudent);
                 if(user.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal()))) {
                     // user is a student
-                    StudentGroup studentGroup = studentGroupRepository.getById(Long.getLong(idClass));
+                    StudentGroup studentGroup = studentGroupRepository.getById(idClass);
                     user.getStudentGroups().add(studentGroup);
                     studentGroup.getStudents().add(user);
                     userRepository.save(user);
@@ -53,13 +53,13 @@ public class OrganisationService {
             throw new EntityDoesNotExistException("Class does not exist!");
         }
     }
-    public void linkCourseAndClass(String idCourse, String idClass) {
-        if(courseRepository.existsById(Long.getLong(idCourse))) {
+    public void linkCourseAndClass(Long idCourse, Long idClass) {
+        if(courseRepository.existsById(idCourse)) {
             // course exists
-            if(studentGroupRepository.existsById(Long.getLong(idClass))) {
+            if(studentGroupRepository.existsById(idClass)) {
                 // class exists
-                StudentGroup studentGroup = studentGroupRepository.getById(Long.getLong(idClass));
-                Course course = courseRepository.getById(Long.getLong(idCourse));
+                StudentGroup studentGroup = studentGroupRepository.getById(idClass);
+                Course course = courseRepository.getById(idCourse);
                 studentGroup.setCourse(course);
                 studentGroupRepository.save(studentGroup);
             } else {
@@ -69,15 +69,15 @@ public class OrganisationService {
             throw new EntityDoesNotExistException("Course does not exist!");
         }
     }
-    public void linkModuleAndStudent(String idModule, String idStudent) {
-        if(moduleRepository.existsById(Long.getLong(idModule))) {
+    public void linkModuleAndStudent(Long idModule, Long idStudent) {
+        if(moduleRepository.existsById(idModule)) {
             // module exists
-            if (userRepository.existsById(Long.getLong(idStudent))) {
+            if (userRepository.existsById(idStudent)) {
                 // user exists
-                AppUser user = userRepository.getById(Long.getLong(idStudent));
+                AppUser user = userRepository.getById(idStudent);
                 if(user.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal()))) {
                     // user is a student
-                    user.getModules().add(moduleRepository.getById(Long.getLong(idModule)));
+                    user.getModules().add(moduleRepository.getById(idModule));
                     userRepository.save(user);
                 } else {
                     throw new EntityDoesNotExistException("User isn't a student!");
@@ -89,13 +89,13 @@ public class OrganisationService {
             throw new EntityDoesNotExistException("Module does not exist!");
         }
     }
-    public void linkSubjectAndCourse(String idSubject, String idCourse) {
-        if(subjectRepository.existsById(Long.getLong(idSubject))) {
+    public void linkSubjectAndCourse(Long idSubject, Long idCourse) {
+        if(subjectRepository.existsById(idSubject)) {
             // subject exists
-            if(courseRepository.existsById(Long.getLong(idCourse))) {
+            if(courseRepository.existsById(idCourse)) {
                 // course exists
-                Course course = courseRepository.getById(Long.getLong(idCourse));
-                course.setSubject(subjectRepository.getById(Long.getLong(idSubject)));
+                Course course = courseRepository.getById(idCourse);
+                course.setSubject(subjectRepository.getById(idSubject));
                 courseRepository.save(course);
             } else {
                 throw new EntityDoesNotExistException("Course does not exist!");
@@ -104,13 +104,13 @@ public class OrganisationService {
             throw new EntityDoesNotExistException("Subject does not exist!");
         }
     }
-    public void linkSubjectAndModule(String idSubject, String idModule) {
-        if(subjectRepository.existsById(Long.getLong(idSubject))) {
+    public void linkSubjectAndModule(Long idSubject, Long idModule) {
+        if(subjectRepository.existsById(idSubject)) {
             // subject exists
-            if(moduleRepository.existsById(Long.getLong(idModule))) {
+            if(moduleRepository.existsById(idModule)) {
                 // module exists
-                Module module = moduleRepository.getById(Long.getLong(idModule));
-                module.getSubjects().add(subjectRepository.getById(Long.getLong(idSubject)));
+                Module module = moduleRepository.getById(idModule);
+                module.getSubjects().add(subjectRepository.getById(idSubject));
                 moduleRepository.save(module);
             } else {
                 throw new EntityDoesNotExistException("Module does not exist!");
@@ -119,15 +119,15 @@ public class OrganisationService {
             throw new EntityDoesNotExistException("Subject does not exist!");
         }
     }
-    public void linkSubjectAndStudent(String idSubject, String idStudent) {
-        if(subjectRepository.existsById(Long.getLong(idSubject))) {
+    public void linkSubjectAndStudent(Long idSubject, Long idStudent) {
+        if(subjectRepository.existsById(idSubject)) {
             // subject exists
-            if(userRepository.existsById(Long.getLong(idStudent))) {
+            if(userRepository.existsById(idStudent)) {
                 // user exists
-                AppUser user = userRepository.getById(Long.getLong(idStudent));
+                AppUser user = userRepository.getById(idStudent);
                 if(user.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal()))) {
                     // user is a student
-                    user.getSubjects().add(subjectRepository.getById(Long.getLong(idSubject)));
+                    user.getSubjects().add(subjectRepository.getById(idSubject));
                     userRepository.save(user);
                 } else {
                     throw new EntityDoesNotExistException("User isn't a student!");
@@ -139,15 +139,15 @@ public class OrganisationService {
             throw new EntityDoesNotExistException("Subject does not exist!");
         }
     }
-    public void linkTeacherAndCourse(String idCourse, String idTeacher) {
-        if(courseRepository.existsById(Long.getLong(idCourse))) {
+    public void linkTeacherAndCourse(Long idCourse, Long idTeacher) {
+        if(courseRepository.existsById(idCourse)) {
             // course exists
-            if(userRepository.existsById(Long.getLong(idTeacher))) {
+            if(userRepository.existsById(idTeacher)) {
                 // user exists
-                AppUser user = userRepository.getById(Long.getLong(idTeacher));
+                AppUser user = userRepository.getById(idTeacher);
                 if(user.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_TEACHER.ordinal()))) {
                     // user is a teacher
-                    Course course = courseRepository.getById(Long.getLong(idCourse));
+                    Course course = courseRepository.getById(idCourse);
                     course.setTeacher(user);
                     courseRepository.save(course);
                 } else {

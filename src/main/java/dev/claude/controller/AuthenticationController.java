@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 
-@Api(tags = "Authentication", description = "All endpoints used for authentication and registration.")
+@Api(tags = "Authentication")
 @RestController
 @Slf4j
 public class AuthenticationController implements AuthenticationApi {
