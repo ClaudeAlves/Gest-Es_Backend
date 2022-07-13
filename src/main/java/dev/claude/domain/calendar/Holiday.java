@@ -24,6 +24,8 @@ public class Holiday {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idHoliday;
 
+    private String description;
+
     private LocalDate  start;
 
     private LocalDate end;

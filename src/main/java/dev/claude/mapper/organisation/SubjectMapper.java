@@ -11,6 +11,7 @@ public class SubjectMapper extends Mapper<Subject, SubjectDTO, SubjectDTO> {
     public Subject toModel(SubjectDTO dtoObject) {
         return Subject.builder()
                 .name(dtoObject.getName())
+                .abbreviation(dtoObject.getAbbreviation())
                 .build();
     }
 
@@ -18,6 +19,7 @@ public class SubjectMapper extends Mapper<Subject, SubjectDTO, SubjectDTO> {
     public SubjectDTO toDto(Subject modelObject) {
         SubjectDTO subjectDTO = new SubjectDTO();
         subjectDTO.name(modelObject.getName());
+        subjectDTO.abbreviation(modelObject.getAbbreviation());
         return subjectDTO;
     }
 

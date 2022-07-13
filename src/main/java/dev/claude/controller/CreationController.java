@@ -11,13 +11,16 @@ import dev.claude.mapper.calendar.HolidayMapper;
 import dev.claude.mapper.organisation.*;
 import dev.claude.service.CreationService;
 import dev.claude.service.exception.IncompleteBodyException;
+import dev.claude.service.exception.InternalErrorException;
 import io.swagger.annotations.Api;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@Api(tags = "Creation")
+@Api(tags = "creation")
 @RestController
 public class CreationController implements CreationApi {
     @Autowired
@@ -39,7 +42,7 @@ public class CreationController implements CreationApi {
             creationService.createNewCourse(course);
             creationService.createPeriodsForCourse(course);
         } catch (Exception e) {
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
         }
         return ResponseEntity.ok(ApiHelper.created("Creation successful"));
     }
@@ -49,7 +52,7 @@ public class CreationController implements CreationApi {
             Module module = moduleMapper.toModel(moduleDTO);
             creationService.createNewModule(module);
         } catch (Exception e) {
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
         }
         return ResponseEntity.ok(ApiHelper.created("Creation successful"));
     }
@@ -59,7 +62,7 @@ public class CreationController implements CreationApi {
             Subject subject = subjectMapper.toModel(subjectDTO);
             creationService.createNewSubject(subject);
         } catch (Exception e) {
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
         }
         return ResponseEntity.ok(ApiHelper.created("Creation successful"));
     }
@@ -68,8 +71,9 @@ public class CreationController implements CreationApi {
         try {
             Holiday holiday = holidayMapper.toModel(holidayDTO);
             creationService.createNewHoliday(holiday);
+
         } catch (Exception e) {
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
         }
         return ResponseEntity.ok(ApiHelper.created("Creation successful"));
     }
@@ -79,7 +83,7 @@ public class CreationController implements CreationApi {
             StudentGroup studentGroup = studentGroupMapper.toModel(classDTO);
             creationService.createNewStudentGroup(studentGroup);
         } catch (Exception e) {
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
         }
         return ResponseEntity.ok(ApiHelper.created("Creation successful"));
     }

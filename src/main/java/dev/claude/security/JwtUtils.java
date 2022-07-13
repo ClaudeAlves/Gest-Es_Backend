@@ -60,7 +60,10 @@ public class JwtUtils {
     public String getTokenFromHeader(String header) {
         if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
             return header.substring(7);
+        } else if(StringUtils.hasText(header)) {
+            return header;
+        } else {
+            return null;
         }
-        return null;
     }
 }

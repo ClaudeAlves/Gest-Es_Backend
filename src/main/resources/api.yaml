@@ -109,7 +109,7 @@ paths:
   /admin/users:
     get:
       tags:
-        - User
+        - user
       description: This private endpoint is used to get all users.
       summary: Get all users.
       operationId: getUsers
@@ -124,7 +124,7 @@ paths:
                   $ref: '#/components/schemas/UserSimpleDTO'
     delete:
       tags:
-        - User
+        - user
       description: This private endpoint is used to remove all users.
       summary: Delete all users.
       operationId: deleteUsers
@@ -138,7 +138,7 @@ paths:
   /users/{username}:
     get:
       tags:
-        - User
+        - user
       description: This private endpoint is used to get one user.
       summary: Get a specific user.
       operationId: getUser
@@ -157,7 +157,7 @@ paths:
                 $ref: '#/components/schemas/UserDTO'
     put:
       tags:
-        - User
+        - user
       description: This private endpoint is used to modify one user.
       summary: Update a specific user.
       operationId: updateUser
@@ -181,7 +181,7 @@ paths:
                 $ref: '#/components/schemas/UserDTO'
     delete:
       tags:
-        - User
+        - user
       description: This private endpoint is used to remove one user.
       summary: Delete a specific user.
       operationId: deleteUser
@@ -198,6 +198,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiMessageDTO'
+  /teacher/students/{idCourse}:
+    get:
+      tags:
+        - user
+      description: This endpoint serves the teachers to get the students ids of a specific course.
+      summary: Get students ids from course.
+      operationId: getStudentIdsFromCourse
+      parameters:
+        - in: path
+          name: idCourse
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Get students id successful.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+  /user/courses:
+    get:
+      tags:
+        - user
+      description: This endpoint serves the teachers to get the ids of his courses.
+      summary: Get ids of courses.
+      operationId: getCoursesIds
+      responses:
+        '200':
+          description: Get courses ids successful.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
   ## calendar endpoints ##
   /calendar:
     get:
@@ -256,7 +294,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CalendarDTO'
   ## evaluation endpoints ##
-  /evluation/test:
+  /evaluation/test:
     post:
       tags:
         - evaluation
@@ -833,12 +871,10 @@ components:
           type: string
           format: date
           description: start of the course
-          example: "2022-03-12"
         end:
           type: string
           format: date
           description: end of the course
-          example: "2022-06-12"
         periodsOfTheWeek:
           type: array
           items:
@@ -888,14 +924,12 @@ components:
       properties:
         start:
           type: string
-          format: date-time
+          format: date
           description: begin of the holiday
-          example: "2021-01-30T08:30:00Z"
         end:
           type: string
-          format: date-time
+          format: date
           description: end of the holiday
-          example: "2021-01-30T08:30:00Z"
         text:
           type: string
           description: description of the holiday
@@ -912,12 +946,10 @@ components:
           type: string
           format: date-time
           description: begin of the period
-          example: "2021-01-30T08:30:00Z"
         end:
           type: string
           format: date-time
           description: end of the period
-          example: "2021-01-30T08:30:00Z"
         text:
           type: string
           description: description of the period
@@ -933,12 +965,10 @@ components:
           type: string
           format: date-time
           description: begin of the period
-          example: "2021-01-30T08:30:00Z"
         end:
           type: string
           format: date-time
           description: end of the period
-          example: "2021-01-30T08:30:00Z"
         text:
           type: string
           description: description of the test

@@ -13,6 +13,8 @@ import dev.claude.repository.user.UserRepository;
 import dev.claude.service.exception.EntityDoesNotExistException;
 import dev.claude.service.exception.InternalErrorException;
 import dev.claude.service.exception.UnauthorizedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,8 @@ public class CalendarService {
     StudentGroupRepository studentGroupRepository;
     @Autowired
     HolidayRepository holidayRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(CalendarService.class);
 
     public List<Period> getSelfPeriods() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -61,12 +65,17 @@ public class CalendarService {
     }
     public boolean isInHolidays(LocalDate date) {
         for(Holiday holiday : holidayRepository.findAll()) {
+            logger.info("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOo");
+            logger.info(date.toString());
+            logger.info(holiday.toString());
             if((date.isAfter(holiday.getStart()) && date.isBefore(holiday.getEnd()))
             || date.equals(holiday.getEnd()) || date.equals(holiday.getStart())) {
-                return false;
+                logger.info("true THERE");
+                return true;
             }
         }
-        return true;
+        logger.info("false THERE");
+        return false;
     }
 
     private List<Period> getPeriodsFromUserId(long idUser, Optional<AppUser> optUser) {

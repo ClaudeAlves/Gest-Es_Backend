@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "Evaluation")
+@Api(tags = "evaluation")
 @RestController
 public class EvaluationController implements EvaluationApi {
     @Autowired

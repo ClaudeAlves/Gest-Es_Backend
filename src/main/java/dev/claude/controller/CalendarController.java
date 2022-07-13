@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(tags = "Calendar")
+@Api(tags = "calendar")
 @RestController
 public class CalendarController implements CalendarApi {
     @Autowired
