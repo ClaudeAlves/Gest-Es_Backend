@@ -32,7 +32,7 @@ public class StudentGroup {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Collection<AppUser> students;
 
-    @ManyToOne
+    @ManyToMany
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Course course;
+    private Collection<Course> courses;
 }

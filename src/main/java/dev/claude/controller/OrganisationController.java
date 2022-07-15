@@ -2,9 +2,12 @@ package dev.claude.controller;
 
 import dev.claude.api.OrganisationApi;
 import dev.claude.dto.ApiMessageDTO;
+import dev.claude.security.AuthTokenFilter;
 import dev.claude.service.OrganisationService;
 import dev.claude.service.exception.IncompleteBodyException;
 import io.swagger.annotations.Api;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrganisationController implements OrganisationApi {
     @Autowired
     private OrganisationService organisationService;
+
     @Override
     public ResponseEntity<ApiMessageDTO> classToStudent(Long idClass, Long idStudent) {
         try {

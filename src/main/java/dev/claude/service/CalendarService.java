@@ -7,14 +7,13 @@ import dev.claude.domain.user.AppUser;
 import dev.claude.domain.user.EnumRole;
 import dev.claude.repository.calendar.HolidayRepository;
 import dev.claude.repository.calendar.PeriodRepository;
+import dev.claude.repository.organisation.CourseRepository;
 import dev.claude.repository.organisation.StudentGroupRepository;
 import dev.claude.repository.user.RoleRepository;
 import dev.claude.repository.user.UserRepository;
 import dev.claude.service.exception.EntityDoesNotExistException;
 import dev.claude.service.exception.InternalErrorException;
 import dev.claude.service.exception.UnauthorizedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -35,8 +34,8 @@ public class CalendarService {
     StudentGroupRepository studentGroupRepository;
     @Autowired
     HolidayRepository holidayRepository;
-
-    private static final Logger logger = LoggerFactory.getLogger(CalendarService.class);
+    @Autowired
+    CourseRepository courseRepository;
 
     public List<Period> getSelfPeriods() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -47,15 +46,15 @@ public class CalendarService {
             throw new EntityDoesNotExistException("Context holder not found");
         }
     }
-    public List<Period> getPeriods(String userId) {
-        Optional<AppUser> optUser = userRepository.findById(Long.getLong(userId));
+    public List<Period> getPeriods(Long userId) {
+        Optional<AppUser> optUser = userRepository.findById(userId);
         if(optUser.isPresent()) {
-            return getPeriodsFromUserId(Long.getLong(userId), optUser);
+            return getPeriodsFromUserId(userId, optUser);
         } else {
             throw new EntityDoesNotExistException("User doesn't exist in DB");
         }
     }
-    public List<Period> getStudentGroupPeriods(long studentGroupId) {
+    public List<Period> getStudentGroupPeriods(Long studentGroupId) {
         Optional<StudentGroup> optGroup = studentGroupRepository.findById(studentGroupId);
         if(optGroup.isPresent()) {
             return periodRepository.findAllByCourse_StudentGroups_IdStudentGroup(studentGroupId);
@@ -65,25 +64,20 @@ public class CalendarService {
     }
     public boolean isInHolidays(LocalDate date) {
         for(Holiday holiday : holidayRepository.findAll()) {
-            logger.info("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOo");
-            logger.info(date.toString());
-            logger.info(holiday.toString());
             if((date.isAfter(holiday.getStart()) && date.isBefore(holiday.getEnd()))
             || date.equals(holiday.getEnd()) || date.equals(holiday.getStart())) {
-                logger.info("true THERE");
                 return true;
             }
         }
-        logger.info("false THERE");
         return false;
     }
 
-    private List<Period> getPeriodsFromUserId(long idUser, Optional<AppUser> optUser) {
+    private List<Period> getPeriodsFromUserId(Long idUser, Optional<AppUser> optUser) {
         List<Period> periods;
-        if(optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal()))) {
+        if(optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
             // user is a student
             periods =  periodRepository.findAllByCourse_StudentGroups_Students_IdUser(idUser);
-        } else if (optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_TEACHER.ordinal()))) {
+        } else if (optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_TEACHER.ordinal() + 1))) {
             // user is a teacher
             periods = periodRepository.findAllByCourse_Teacher_IdUser(idUser);
         } else {

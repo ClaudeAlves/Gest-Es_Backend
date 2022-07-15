@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
     boolean existsByName(String name);
+    List<Course> findAllByStudentGroups_IdStudentGroup(Long idStudentGroup);
     List<Course> findAllByStudentGroups_Students_IdUser(Long idStudent);
 }

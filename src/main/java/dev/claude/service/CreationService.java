@@ -21,8 +21,6 @@ import dev.claude.repository.user.UserRepository;
 import dev.claude.service.exception.EntityAlreadyExistException;
 import dev.claude.service.exception.InternalErrorException;
 import dev.claude.service.exception.UnauthorizedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +29,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 public class CreationService {
@@ -55,7 +52,6 @@ public class CreationService {
     private StudentGroupRepository studentGroupRepository;
     @Autowired
     CalendarService calendarService;
-    private static final Logger logger = LoggerFactory.getLogger(CreationService.class);
 
     public void createNewModule(Module module) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -129,7 +125,6 @@ public class CreationService {
         if(optUser.isPresent()) {
             if (optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_ADMIN.ordinal() + 1))) {
                 // user is an admin
-                logger.info("user is an admin");
                 try {
                     holidayRepository.save(holiday);
                 } catch (Exception e) {
@@ -159,10 +154,8 @@ public class CreationService {
         }
     }
     public void createPeriodsForCourse(Course course) {
-        logger.info(course.getPeriodsOfTheWeek().toString());
         for(Integer periodOfTheWeek : course.getPeriodsOfTheWeek()) { // for every period of the week from a course
             for (LocalDate date = course.getStart(); !course.getStart().isAfter(course.getEnd()) && !date.isAfter(course.getEnd()); date = date.plusDays(1)) { // iterate over every date during the course
-                logger.info(date.toString());
                 if (timeUtils.getDayOfTheWeekFromPeriodOfTheWeek(periodOfTheWeek) == date.getDayOfWeek().getValue() // if the day of the week matches the day from the period
                         && !calendarService.isInHolidays(date)) { // and this day isn't in the holidays
                     LocalDateTime start = timeUtils.getStartFromPeriod(periodOfTheWeek, date); //then we build the period at the right time of the day
@@ -172,7 +165,6 @@ public class CreationService {
                             .end(end)
                             .course(course)
                             .build();
-                    logger.info(period.toString());
                     periodRepository.save(period);
                 }
 

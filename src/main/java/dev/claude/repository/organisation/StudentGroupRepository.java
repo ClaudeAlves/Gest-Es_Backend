@@ -4,7 +4,11 @@ import dev.claude.domain.organisation.StudentGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface StudentGroupRepository extends JpaRepository<StudentGroup, Long> {
     boolean existsByName(String name);
+
+    List<StudentGroup> findAllByStudents_IdUser(Long id);
 }
