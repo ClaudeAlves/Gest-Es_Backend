@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface MarkRepository extends JpaRepository<Mark, Long> {
-    List<Mark> findAllByTest_Course_IdCourse(Long idCourse);
+    List<Mark> findAllByTest_Period_Course_IdCourse(Long idCourse);
 }

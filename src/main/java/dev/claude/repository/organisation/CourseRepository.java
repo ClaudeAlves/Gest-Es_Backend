@@ -10,5 +10,6 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<Course, Long> {
     boolean existsByName(String name);
     List<Course> findAllByStudentGroups_IdStudentGroup(Long idStudentGroup);
+    List<Course> findAllByTeacher_IdUser(Long idTeacher);
     List<Course> findAllByStudentGroups_Students_IdUser(Long idStudent);
 }

@@ -1,9 +1,13 @@
 package dev.claude.service;
 
+import dev.claude.domain.organisation.Course;
+import dev.claude.domain.organisation.StudentGroup;
 import dev.claude.domain.security.BlacklistTokenEntity;
 import dev.claude.domain.user.AppUser;
 import dev.claude.domain.user.EnumRole;
 import dev.claude.domain.user.Role;
+import dev.claude.repository.organisation.CourseRepository;
+import dev.claude.repository.organisation.StudentGroupRepository;
 import dev.claude.repository.user.RoleRepository;
 import dev.claude.repository.user.UserRepository;
 import dev.claude.security.JwtUtils;
@@ -12,10 +16,12 @@ import dev.claude.service.exception.*;
 import dev.claude.service.security.BlacklistTokenService;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -64,6 +70,10 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    CourseRepository courseRepository;
+    @Autowired
+    StudentGroupRepository studentGroupRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Autowired
     private JwtUtils jwtUtils;
@@ -79,6 +89,24 @@ public class UserService implements UserDetailsService {
         return passwordEncoder.encode(password);
     }
 
+    public void deleteUser(String username) {
+        Optional<AppUser> optUser = userRepository.findByUsername(username);
+        String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
+        if(optUser.isPresent() && optHolder.isPresent()) {
+            if(optHolder.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_ADMIN.ordinal() + 1))) {
+                // holder is admin
+                try {
+                    userRepository.delete(optUser.get());
+                } catch (Error e) {
+                    e.printStackTrace();
+                    throw new InternalErrorException(e.getMessage());
+                }
+            } else {
+                throw new UnauthorizedException("Can't delete user if not admin");
+            }
+        }
+    }
     /**
      * Adds a role (that is valid with the DB) to a User. This is the ONLY
      * ALLOWED WAY to add a role to an user. This does not save the user to DB !
@@ -124,7 +152,7 @@ public class UserService implements UserDetailsService {
      * @throws EntityAlreadyExistException if the username or email is taken
      * @throws InternalErrorException      If something bad happens.
      */
-    public void register(AppUser user) throws EntityAlreadyExistException, InternalErrorException {
+    public void register(@NotNull AppUser user) throws EntityAlreadyExistException, InternalErrorException {
         if (userRepository.existsByUsername(user.getUsername())) {
             log.trace("Register username already exists {}", user.getUsername());
             throw new EntityAlreadyExistException("Username is already taken !");
@@ -159,7 +187,35 @@ public class UserService implements UserDetailsService {
             }
         }
     }
+    public AppUser getUser(String username) {
+        Optional<AppUser> optUser = userRepository.findByUsername(username);
+        if( optUser.isPresent()) {
+            return optUser.get();
+        } else {
+            throw new EntityDoesNotExistException("user doesn't exist");
+        }
+    }
 
+    public AppUser updateUser(AppUser user) {
+        String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
+        if(optHolder.isPresent()) {
+            if(optHolder.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_ADMIN.ordinal() + 1))) {
+                // holder is admin
+                try {
+                    userRepository.save(user);
+                    return user;
+                } catch (Error e) {
+                    e.printStackTrace();
+                    throw new InternalErrorException(e.getMessage());
+                }
+            } else {
+                throw new UnauthorizedException("Can't update user if not admin");
+            }
+        } else {
+            throw new RuntimeException("No context Holder");
+        }
+    }
     /**
      *
      * @param usernameOrEmail
@@ -285,7 +341,52 @@ public class UserService implements UserDetailsService {
         }
     }
 
-
+    public List<Course> getCourses() {
+        String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
+        if(optHolder.isPresent()) {
+            AppUser currentUser = optHolder.get();
+            List<Course> courses;
+            if(currentUser.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
+                courses = courseRepository.findAllByStudentGroups_Students_IdUser(currentUser.getIdUser());
+            } else if(currentUser.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_TEACHER.ordinal() + 1))) {
+                courses = courseRepository.findAllByTeacher_IdUser(currentUser.getIdUser());
+            } else if(currentUser.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_ADMIN.ordinal() + 1))){
+                courses = courseRepository.findAll();
+            } else {
+                throw new UnauthorizedException("role can't have courses");
+            }
+            return courses;
+        } else {
+            throw new RuntimeException("No context Holder");
+        }
+    }
+    public List<StudentGroup> getStudentGroups() {
+        String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
+        if(optHolder.isPresent()) {
+            AppUser currentUser = optHolder.get();
+            List<StudentGroup> studentGroups;
+            if(currentUser.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
+                studentGroups = studentGroupRepository.findAllByStudents_IdUser(currentUser.getIdUser());
+            } else if(currentUser.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_TEACHER.ordinal() + 1))) {
+                studentGroups = studentGroupRepository.findAllByCourses_Teacher_IdUser(currentUser.getIdUser());
+            } else if(currentUser.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_ADMIN.ordinal() + 1))){
+                studentGroups = studentGroupRepository.findAll();
+            } else {
+                throw new UnauthorizedException("role can't have class");
+            }
+            return studentGroups;
+        } else {
+            throw new RuntimeException("No context Holder");
+        }
+    }
+    public List<AppUser> getStudentsFromCourseId(Long courseId) {
+        return userRepository.findAllByStudentGroups_Courses_IdCourse(courseId);
+    }
+    public List<StudentGroup> getClassFromCourse(Long idCourse) {
+        return studentGroupRepository.findAllByCourses_IdCourse(idCourse);
+    }
 
 
 

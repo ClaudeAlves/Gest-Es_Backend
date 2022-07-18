@@ -1,6 +1,8 @@
 package dev.claude.domain.evalutation;
 
+import dev.claude.domain.calendar.Period;
 import dev.claude.domain.organisation.Course;
+import dev.claude.domain.organisation.StudentGroup;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -24,11 +26,11 @@ public class Test {
 
     private String text;
 
-    private LocalDateTime start;
-
-    private LocalDateTime  end;
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Period period;
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Course course;
+    private StudentGroup studentGroup;
 }

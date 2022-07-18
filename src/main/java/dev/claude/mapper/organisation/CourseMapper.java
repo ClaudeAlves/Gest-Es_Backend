@@ -25,6 +25,7 @@ public class CourseMapper extends Mapper<Course, CourseDTO, CourseDTO> {
         courseDTO.setStart(modelObject.getStart());
         courseDTO.setEnd(modelObject.getEnd());
         courseDTO.setPeriodsOfTheWeek(modelObject.getPeriodsOfTheWeek().stream().toList());
+        courseDTO.setId(modelObject.getIdCourse());
         return courseDTO;
     }
 
@@ -32,4 +33,5 @@ public class CourseMapper extends Mapper<Course, CourseDTO, CourseDTO> {
     public Course toModelFromCreation(CourseDTO creationObject) {
         return null;
     }
+
 }

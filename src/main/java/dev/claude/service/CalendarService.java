@@ -14,6 +14,8 @@ import dev.claude.repository.user.UserRepository;
 import dev.claude.service.exception.EntityDoesNotExistException;
 import dev.claude.service.exception.InternalErrorException;
 import dev.claude.service.exception.UnauthorizedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,7 @@ public class CalendarService {
     HolidayRepository holidayRepository;
     @Autowired
     CourseRepository courseRepository;
+    private static final Logger logger = LoggerFactory.getLogger(CalendarService.class);
 
     public List<Period> getSelfPeriods() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -56,6 +59,7 @@ public class CalendarService {
     }
     public List<Period> getStudentGroupPeriods(Long studentGroupId) {
         Optional<StudentGroup> optGroup = studentGroupRepository.findById(studentGroupId);
+        logger.info(studentGroupId.toString());
         if(optGroup.isPresent()) {
             return periodRepository.findAllByCourse_StudentGroups_IdStudentGroup(studentGroupId);
         } else {

@@ -20,6 +20,7 @@ public class StudentGroupMapper extends Mapper<StudentGroup, ClassDTO, ClassDTO>
         ClassDTO classDTO = new ClassDTO();
         classDTO.setName(modelObject.getName());
         classDTO.setComment(modelObject.getComment());
+        classDTO.setId(modelObject.getIdStudentGroup());
         return classDTO;
     }
 

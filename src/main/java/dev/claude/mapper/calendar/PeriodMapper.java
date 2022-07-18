@@ -1,6 +1,7 @@
 package dev.claude.mapper.calendar;
 
 import dev.claude.domain.calendar.Period;
+import dev.claude.domain.evalutation.Test;
 import dev.claude.dto.PeriodDTO;
 import dev.claude.mapper.Mapper;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,6 @@ public class PeriodMapper extends Mapper<Period, PeriodDTO, PeriodDTO> {
     @Override
     public Period toModel(PeriodDTO dtoObject) {
         return Period.builder()
-                .idPeriod(dtoObject.getId())
                 .start(dtoObject.getStart().toLocalDateTime())
                 .end(dtoObject.getEnd().toLocalDateTime())
                 .build();
@@ -34,5 +34,17 @@ public class PeriodMapper extends Mapper<Period, PeriodDTO, PeriodDTO> {
     @Override
     public Period toModelFromCreation(PeriodDTO creationObject) {
         return null;
+    }
+
+    public PeriodDTO toDtoFromTest(Test test) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        PeriodDTO periodDTO = new PeriodDTO();
+        periodDTO.end(ZonedDateTime.of(test.getPeriod().getEnd(), zoneId).toOffsetDateTime());
+        periodDTO.start(ZonedDateTime.of(test.getPeriod().getStart(), zoneId).toOffsetDateTime());
+        periodDTO.id(test.getPeriod().getIdPeriod());
+        periodDTO.tag(test.getPeriod().getTag());
+        periodDTO.text(test.getText());
+
+        return periodDTO;
     }
 }

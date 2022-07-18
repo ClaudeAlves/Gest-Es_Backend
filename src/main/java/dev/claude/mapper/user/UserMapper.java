@@ -2,10 +2,7 @@ package dev.claude.mapper.user;
 
 import dev.claude.domain.user.AppUser;
 import dev.claude.domain.user.Role;
-import dev.claude.dto.LoginSuccessDTO;
-import dev.claude.dto.RegisterDTO;
-import dev.claude.dto.RoleDTO;
-import dev.claude.dto.UserDTO;
+import dev.claude.dto.*;
 import dev.claude.mapper.Mapper;
 import dev.claude.mapper.user.RoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,4 +78,24 @@ public class UserMapper extends Mapper<AppUser, UserDTO, UserDTO> {
         loginSuccessDTO.setRoles(roles);
         return loginSuccessDTO;
     }
+    public AppUser toModelFromModification(UserModificationDTO userModificationDTO) {
+        return AppUser.builder()
+                .idUser(userModificationDTO.getIdUser())
+                .username(userModificationDTO.getUsername())
+                .firstName(userModificationDTO.getFirstname())
+                .lastName(userModificationDTO.getLastname())
+                .email(userModificationDTO.getEmail())
+                .password(userModificationDTO.getPassword())
+                .build();
+    }
+    public UserSimpleDTO toUserSimpleDTO(AppUser appUser) {
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO();
+        userSimpleDTO.setEmail(appUser.getEmail());
+        userSimpleDTO.setFirstname(appUser.getFirstName());
+        userSimpleDTO.setLastname(appUser.getLastName());
+        userSimpleDTO.setUsername(appUser.getUsername());
+        userSimpleDTO.setId(appUser.getIdUser());
+        return userSimpleDTO;
+    }
+
 }

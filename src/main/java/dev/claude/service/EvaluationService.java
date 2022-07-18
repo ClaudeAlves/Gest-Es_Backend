@@ -1,18 +1,27 @@
 package dev.claude.service;
 
+import dev.claude.domain.calendar.Period;
 import dev.claude.domain.evalutation.Mark;
 import dev.claude.domain.evalutation.Test;
 import dev.claude.domain.organisation.Course;
+import dev.claude.domain.organisation.StudentGroup;
 import dev.claude.domain.user.AppUser;
+import dev.claude.domain.user.EnumRole;
 import dev.claude.dto.GradeDTO;
 import dev.claude.dto.TestDTO;
 import dev.claude.mapper.evaluation.TestMapper;
+import dev.claude.repository.calendar.PeriodRepository;
 import dev.claude.repository.evaluation.MarkRepository;
 import dev.claude.repository.evaluation.TestRepository;
 import dev.claude.repository.organisation.CourseRepository;
+import dev.claude.repository.organisation.StudentGroupRepository;
+import dev.claude.repository.user.RoleRepository;
 import dev.claude.repository.user.UserRepository;
 import dev.claude.service.exception.EntityDoesNotExistException;
+import dev.claude.service.exception.InternalErrorException;
+import dev.claude.service.exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -31,11 +40,33 @@ public class EvaluationService {
     TestMapper testMapper;
     @Autowired
     UserRepository userRepository;
-    public void createTest(Test test, Long idCourse) {
-        Optional<Course> optCourse = courseRepository.findById(idCourse);
+    @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    StudentGroupRepository studentGroupRepository;
+    @Autowired
+    PeriodRepository periodRepository;
+
+    public void createTest(Test test, TestDTO dto) {
+        Optional<Course> optCourse = courseRepository.findById(dto.getCourseId());
+        Optional<StudentGroup> optStudentGroup = studentGroupRepository.findById(dto.getClassId());
         if(optCourse.isPresent()) {
-            test.setCourse(optCourse.get());
-            testRepository.save(test);
+            if(optStudentGroup.isPresent()) {
+                Period testPeriod = Period.builder()
+                        .course(optCourse.get())
+                        .end(dto.getEnd().toLocalDateTime())
+                        .start(dto.getStart().toLocalDateTime())
+                        .text(dto.getText())
+                        .tag("test" + optCourse.get().getName())
+                        .build();
+                periodRepository.save(testPeriod);
+                test.setPeriod(testPeriod);
+                test.setNumber(testRepository.countAllByPeriod_Course_IdCourseAndStudentGroup_IdStudentGroup(dto.getCourseId(), dto.getClassId()));
+                test.setStudentGroup(optStudentGroup.get());
+                testRepository.save(test);
+            } else {
+                throw new EntityDoesNotExistException("Class doesn't exist");
+            }
         } else {
             throw new EntityDoesNotExistException("Course doesn't exist");
         }
@@ -46,7 +77,7 @@ public class EvaluationService {
         for(Course course : courses) {
             Double grade = 0D;
             double testNumber = 0D;
-            for(Mark mark : markRepository.findAllByTest_Course_IdCourse(course.getIdCourse())) {
+            for(Mark mark : markRepository.findAllByTest_Period_Course_IdCourse(course.getIdCourse())) {
                 grade += mark.getValue();
                 testNumber++;
             }
@@ -61,7 +92,7 @@ public class EvaluationService {
         List<TestDTO> tests = new LinkedList<>();
         Optional<Course> optCourse = courseRepository.findById(idCourse);
         if (optCourse.isPresent()) {
-            for(Test test : testRepository.findAllByCourse_StudentGroups_Students_IdUser(idStudent)) {
+            for(Test test : testRepository.findAllByPeriod_Course_StudentGroups_Students_IdUser(idStudent)) {
                 tests.add(testMapper.toDto(test));
             }
         } else {
@@ -80,6 +111,51 @@ public class EvaluationService {
             mark.setStudent(optStudent.get());
             mark.setTest(optTest.get());
             markRepository.save(mark);
+        }
+    }
+    public List<Test> getSelfTests() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optUser = userRepository.findByUsername(username);
+        if(optUser.isPresent()) {
+            return getTestsFromUserId(optUser.get().getIdUser(), optUser);
+        } else {
+            throw new EntityDoesNotExistException("Context holder not found");
+        }
+    }
+    public List<Test> getTests(Long idUser) {
+        Optional<AppUser> optUser = userRepository.findById(idUser);
+        if(optUser.isPresent()) {
+            return getTestsFromUserId(idUser, optUser);
+        } else {
+            throw new EntityDoesNotExistException("User doesn't exist in DB");
+        }
+    }
+
+    public List<Test> getStudentGroupTests(Long idStudentGroup) {
+        Optional<StudentGroup> optGroup = studentGroupRepository.findById(idStudentGroup);
+        if(optGroup.isPresent()) {
+            return testRepository.findAllByPeriod_Course_StudentGroups_IdStudentGroup(idStudentGroup);
+        } else {
+            throw new EntityDoesNotExistException("Student group doesn't exist in DB");
+        }
+    }
+
+    private List<Test> getTestsFromUserId(Long idUser, Optional<AppUser> optUser) {
+        List<Test> tests;
+        if(optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
+            // user is a student
+            tests =  testRepository.findAllByPeriod_Course_StudentGroups_Students_IdUser(idUser);
+        } else if (optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_TEACHER.ordinal() + 1))) {
+            // user is a teacher
+            tests = testRepository.findAllByPeriod_Course_Teacher_IdUser(idUser);
+        } else {
+            throw new UnauthorizedException("Admin only users can't have tests");
+        }
+        try {
+            return tests;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new InternalErrorException(e.getMessage());
         }
     }
 }

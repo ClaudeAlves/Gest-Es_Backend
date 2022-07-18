@@ -6,6 +6,8 @@ import dev.claude.dto.CalendarDTO;
 import dev.claude.mapper.calendar.PeriodMapper;
 import dev.claude.service.CalendarService;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +20,8 @@ public class CalendarController implements CalendarApi {
     CalendarService calendarService;
     @Autowired
     PeriodMapper periodMapper;
+    private static final Logger logger = LoggerFactory.getLogger(CalendarController.class);
+
 
     @Override
     public ResponseEntity<CalendarDTO> getCalendar(Long userId) {
@@ -39,6 +43,7 @@ public class CalendarController implements CalendarApi {
     public ResponseEntity<CalendarDTO> getClassCalendar(Long classId) {
         CalendarDTO calendarDTO = new CalendarDTO();
         for(Period period : calendarService.getStudentGroupPeriods(classId)) {
+            logger.info(classId.toString() + period.getTag());
             calendarDTO.addPeriodsItem(periodMapper.toDto(period));
         }
         return ResponseEntity.ok(calendarDTO);
