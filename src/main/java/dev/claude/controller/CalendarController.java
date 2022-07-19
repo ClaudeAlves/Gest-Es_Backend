@@ -43,7 +43,6 @@ public class CalendarController implements CalendarApi {
     public ResponseEntity<CalendarDTO> getClassCalendar(Long classId) {
         CalendarDTO calendarDTO = new CalendarDTO();
         for(Period period : calendarService.getStudentGroupPeriods(classId)) {
-            logger.info(classId.toString() + period.getTag());
             calendarDTO.addPeriodsItem(periodMapper.toDto(period));
         }
         return ResponseEntity.ok(calendarDTO);

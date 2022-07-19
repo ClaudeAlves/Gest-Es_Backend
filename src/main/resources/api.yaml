@@ -1066,9 +1066,6 @@ components:
       title: TestDTO
       type: object
       properties:
-        classId:
-          type: integer
-          format: int64
         courseId:
           type: integer
           format: int64

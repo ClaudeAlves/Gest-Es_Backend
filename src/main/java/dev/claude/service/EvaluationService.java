@@ -49,24 +49,18 @@ public class EvaluationService {
 
     public void createTest(Test test, TestDTO dto) {
         Optional<Course> optCourse = courseRepository.findById(dto.getCourseId());
-        Optional<StudentGroup> optStudentGroup = studentGroupRepository.findById(dto.getClassId());
         if(optCourse.isPresent()) {
-            if(optStudentGroup.isPresent()) {
-                Period testPeriod = Period.builder()
-                        .course(optCourse.get())
-                        .end(dto.getEnd().toLocalDateTime())
-                        .start(dto.getStart().toLocalDateTime())
-                        .text(dto.getText())
-                        .tag("test" + optCourse.get().getName())
-                        .build();
-                periodRepository.save(testPeriod);
-                test.setPeriod(testPeriod);
-                test.setNumber(testRepository.countAllByPeriod_Course_IdCourseAndStudentGroup_IdStudentGroup(dto.getCourseId(), dto.getClassId()));
-                test.setStudentGroup(optStudentGroup.get());
-                testRepository.save(test);
-            } else {
-                throw new EntityDoesNotExistException("Class doesn't exist");
-            }
+            Period testPeriod = Period.builder()
+                    .course(optCourse.get())
+                    .end(dto.getEnd().toLocalDateTime())
+                    .start(dto.getStart().toLocalDateTime())
+                    .text(dto.getText())
+                    .tag("test " + optCourse.get().getName())
+                    .build();
+            periodRepository.save(testPeriod);
+            test.setPeriod(testPeriod);
+            test.setNumber(testRepository.countAllByPeriod_Course_IdCourse(dto.getCourseId()));
+            testRepository.save(test);
         } else {
             throw new EntityDoesNotExistException("Course doesn't exist");
         }

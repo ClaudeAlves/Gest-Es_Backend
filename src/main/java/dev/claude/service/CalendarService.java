@@ -59,7 +59,6 @@ public class CalendarService {
     }
     public List<Period> getStudentGroupPeriods(Long studentGroupId) {
         Optional<StudentGroup> optGroup = studentGroupRepository.findById(studentGroupId);
-        logger.info(studentGroupId.toString());
         if(optGroup.isPresent()) {
             return periodRepository.findAllByCourse_StudentGroups_IdStudentGroup(studentGroupId);
         } else {

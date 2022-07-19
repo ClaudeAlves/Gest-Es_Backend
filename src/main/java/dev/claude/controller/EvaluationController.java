@@ -10,8 +10,11 @@ import dev.claude.mapper.evaluation.MarkMapper;
 import dev.claude.mapper.evaluation.TestMapper;
 import dev.claude.repository.calendar.PeriodRepository;
 import dev.claude.service.EvaluationService;
+import dev.claude.service.UserService;
 import dev.claude.service.exception.IncompleteBodyException;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +34,8 @@ public class EvaluationController implements EvaluationApi {
     MarkMapper markMapper;
     @Autowired
     PeriodMapper periodMapper;
+    private static final Logger logger = LoggerFactory.getLogger(EvaluationController.class);
+
 
     /**
      * POST /evluation/test : create test
