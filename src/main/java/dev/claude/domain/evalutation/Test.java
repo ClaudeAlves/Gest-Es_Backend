@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Getter
@@ -30,7 +31,7 @@ public class Test {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Period period;
 
-    @ManyToOne
+    @ManyToMany
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private StudentGroup studentGroup;
+    private List<StudentGroup> studentGroups;
 }

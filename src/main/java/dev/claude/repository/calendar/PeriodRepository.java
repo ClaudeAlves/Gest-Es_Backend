@@ -8,9 +8,9 @@ import java.util.List;
 
 @Repository
 public interface PeriodRepository extends JpaRepository<Period, Long> {
-        List<Period> findAllByCourse_StudentGroups_Students_IdUser(long idUser);
-        List<Period> findAllByCourse_Teacher_IdUser(long idUser);
-        List<Period> findAllByCourse_StudentGroups_IdStudentGroup(long idStudentGroup);
+        List<Period> findAllDistinctByCourse_StudentGroups_Students_IdUser(long idUser);
+        List<Period> findAllDistinctByCourse_Teacher_IdUser(long idUser);
+        List<Period> findAllDistinctByCourse_StudentGroups_IdStudentGroup(long idStudentGroup);
         List<Period> findAllByCourse_IdCourse(long idCourse);
 
         List<Period> findAllByCourse_IdCourse(Long idCourse);

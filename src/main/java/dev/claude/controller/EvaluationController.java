@@ -1,14 +1,14 @@
 package dev.claude.controller;
 
 import dev.claude.api.EvaluationApi;
-import dev.claude.domain.calendar.Period;
 import dev.claude.domain.evalutation.Mark;
 import dev.claude.domain.evalutation.Test;
+import dev.claude.domain.user.AppUser;
 import dev.claude.dto.*;
 import dev.claude.mapper.calendar.PeriodMapper;
 import dev.claude.mapper.evaluation.MarkMapper;
 import dev.claude.mapper.evaluation.TestMapper;
-import dev.claude.repository.calendar.PeriodRepository;
+import dev.claude.repository.evaluation.MarkRepository;
 import dev.claude.service.EvaluationService;
 import dev.claude.service.UserService;
 import dev.claude.service.exception.IncompleteBodyException;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Api(tags = "evaluation")
 @RestController
@@ -34,6 +35,10 @@ public class EvaluationController implements EvaluationApi {
     MarkMapper markMapper;
     @Autowired
     PeriodMapper periodMapper;
+    @Autowired
+    MarkRepository markRepository;
+    @Autowired
+    UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(EvaluationController.class);
 
 
@@ -113,25 +118,77 @@ public class EvaluationController implements EvaluationApi {
     @Override
     public ResponseEntity<List<PeriodDTO>> getTests(Long idUser) {
         List<PeriodDTO> testsDTO = new LinkedList<>();
-        for(Test test : evaluationService.getTests(idUser)) {
-            testsDTO.add(periodMapper.toDtoFromTest(test));
+        try {
+            for(Test test : evaluationService.getTests(idUser)) {
+                testsDTO.add(periodMapper.toDtoFromTest(test));
+            }
+        } catch (Exception e) {
+            throw new IncompleteBodyException();
         }
         return ResponseEntity.ok(testsDTO);
     }
     @Override
     public ResponseEntity<List<PeriodDTO>> getTestsUser() {
         List<PeriodDTO> testsDTO = new LinkedList<>();
-        for(Test test : evaluationService.getSelfTests()) {
-            testsDTO.add(periodMapper.toDtoFromTest(test));
+        try {
+            for(Test test : evaluationService.getSelfTests()) {
+                testsDTO.add(periodMapper.toDtoFromTest(test));
+            }
+        } catch (Exception e) {
+            throw new IncompleteBodyException();
         }
         return ResponseEntity.ok(testsDTO);
     }
     @Override
     public ResponseEntity<List<PeriodDTO>> getClassTests(Long idClass) {
         List<PeriodDTO> testsDTO = new LinkedList<>();
-        for(Test test : evaluationService.getStudentGroupTests(idClass)) {
-            testsDTO.add(periodMapper.toDtoFromTest(test));
+        try {
+            for(Test test : evaluationService.getStudentGroupTests(idClass)) {
+                testsDTO.add(periodMapper.toDtoFromTest(test));
+            }
+        } catch (Exception e) {
+            throw new IncompleteBodyException();
         }
         return ResponseEntity.ok(testsDTO);
+    }
+
+    /**
+     * GET /evalutation/tests/info
+     * Get the tests informations for the user.
+     *
+     * @return Get tests infos successfully. (status code 200)
+     */
+    @Override
+    public ResponseEntity<List<TestInfoDTO>> getTestsInfoUser() {
+        List<TestInfoDTO> testInfoDTOS = new LinkedList<>();
+        try {
+            for(Test test : evaluationService.getSelfTests()) {
+                TestInfoDTO testInfoDTO = new TestInfoDTO();
+                List<TestInfoDTOStudents> testInfoDTOStudents = new LinkedList<>();
+                for(AppUser student : userService.getStudentsFromTest(test.getIdTest())) {
+                    Optional<Mark> mark = markRepository.findByTestAndAndStudent(test, student);
+                    TestInfoDTOStudents studentDTO = new TestInfoDTOStudents();
+                    studentDTO.setName(student.getUsername());
+                    studentDTO.setId(student.getIdUser());
+                    if(mark.isPresent()) {
+                        studentDTO.setTestValue(mark.get().getValue());
+                    } else {
+                        studentDTO.setTestValue(null);
+                    }
+                    testInfoDTOStudents.add(studentDTO);
+
+                }
+                testInfoDTO.setStudents(testInfoDTOStudents);
+                testInfoDTO.setCourseId(test.getPeriod().getCourse().getIdCourse());
+                testInfoDTO.setTestName(test.getPeriod().getTag());
+                testInfoDTO.setTestId(test.getIdTest());
+                testInfoDTO.setText(test.getText());
+                testInfoDTOS.add(testInfoDTO);
+            }
+        } catch (Exception e) {
+            throw new IncompleteBodyException();
+
+        }
+        return ResponseEntity.ok(testInfoDTOS);
     }
 }

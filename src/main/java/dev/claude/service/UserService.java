@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -382,10 +381,49 @@ public class UserService implements UserDetailsService {
         }
     }
     public List<AppUser> getStudentsFromCourseId(Long courseId) {
-        return userRepository.findAllByStudentGroups_Courses_IdCourse(courseId);
+        String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
+        if(optHolder.isPresent()) {
+            if(!optHolder.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
+                return userRepository.findAllByStudentGroups_Courses_IdCourse(courseId);
+            } else {
+                throw new UnauthorizedException("Student not allowed");
+            }
+        } else {
+            throw new RuntimeException("No context Holder");
+        }
+
     }
     public List<StudentGroup> getClassFromCourse(Long idCourse) {
-        return studentGroupRepository.findAllByCourses_IdCourse(idCourse);
+        String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
+        if(optHolder.isPresent()) {
+            if(!optHolder.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
+                return studentGroupRepository.findAllByCourses_IdCourse(idCourse);
+            } else {
+                throw new UnauthorizedException("Student not allowed");
+            }
+        } else {
+            throw new RuntimeException("No context Holder");
+        }
+
+    }
+    public List<AppUser> getStudentsFromTest(Long idTest) {
+        String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
+        logger.info("53");
+        if(optHolder.isPresent()) {
+            logger.info("54");
+            if(!optHolder.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
+                logger.info(idTest.toString());
+                return userRepository.findAllByStudentGroups_Tests_IdTest(idTest);
+            } else {
+                throw new UnauthorizedException("Students not allowed");
+            }
+        } else {
+            throw new RuntimeException("No context Holder");
+        }
+
     }
 
 

@@ -1,5 +1,6 @@
 package dev.claude.service;
 
+import dev.claude.controller.EvaluationController;
 import dev.claude.domain.calendar.Period;
 import dev.claude.domain.evalutation.Mark;
 import dev.claude.domain.evalutation.Test;
@@ -20,6 +21,8 @@ import dev.claude.repository.user.UserRepository;
 import dev.claude.service.exception.EntityDoesNotExistException;
 import dev.claude.service.exception.InternalErrorException;
 import dev.claude.service.exception.UnauthorizedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -47,20 +50,32 @@ public class EvaluationService {
     @Autowired
     PeriodRepository periodRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(EvaluationService.class);
+
     public void createTest(Test test, TestDTO dto) {
         Optional<Course> optCourse = courseRepository.findById(dto.getCourseId());
         if(optCourse.isPresent()) {
+            Integer testNumber = testRepository.countAllByPeriod_Course_IdCourse(dto.getCourseId()) + 1;
             Period testPeriod = Period.builder()
                     .course(optCourse.get())
                     .end(dto.getEnd().toLocalDateTime())
                     .start(dto.getStart().toLocalDateTime())
                     .text(dto.getText())
-                    .tag("test " + optCourse.get().getName())
+                    .tag("test "+ testNumber + " pour " + optCourse.get().getName())
                     .build();
             periodRepository.save(testPeriod);
             test.setPeriod(testPeriod);
-            test.setNumber(testRepository.countAllByPeriod_Course_IdCourse(dto.getCourseId()));
+            test.setNumber(testNumber);
+            test.setStudentGroups(new LinkedList<>());
+            for (StudentGroup studentGroup : studentGroupRepository.findAllByCourses_IdCourse(dto.getCourseId())) {
+                // here we link every class(student group) to the new test created
+                test.getStudentGroups().add(studentGroup);
+            }
             testRepository.save(test);
+            for(StudentGroup studentGroup : test.getStudentGroups()) {
+                studentGroup.getTests().add(test);
+                studentGroupRepository.save(studentGroup);
+            }
         } else {
             throw new EntityDoesNotExistException("Course doesn't exist");
         }
@@ -109,10 +124,17 @@ public class EvaluationService {
     }
     public List<Test> getSelfTests() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        logger.info(username);
         Optional<AppUser> optUser = userRepository.findByUsername(username);
         if(optUser.isPresent()) {
-            return getTestsFromUserId(optUser.get().getIdUser(), optUser);
+            if (!optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
+                // user is not a student
+                return getTestsFromUserId(optUser.get().getIdUser(), optUser);
+            } else {
+                throw new EntityDoesNotExistException("Student can't get tests");
+            }
         } else {
+            logger.info("PAS DE CONTEXT HOLDER????");
             throw new EntityDoesNotExistException("Context holder not found");
         }
     }
@@ -136,14 +158,14 @@ public class EvaluationService {
 
     private List<Test> getTestsFromUserId(Long idUser, Optional<AppUser> optUser) {
         List<Test> tests;
-        if(optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
-            // user is a student
-            tests =  testRepository.findAllByPeriod_Course_StudentGroups_Students_IdUser(idUser);
+        if(optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_ADMIN.ordinal() + 1))) {
+            // user is an admin he gets all the tests
+            tests =  testRepository.findAll();
         } else if (optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_TEACHER.ordinal() + 1))) {
             // user is a teacher
             tests = testRepository.findAllByPeriod_Course_Teacher_IdUser(idUser);
         } else {
-            throw new UnauthorizedException("Admin only users can't have tests");
+            throw new UnauthorizedException("Students can't access tests");
         }
         try {
             return tests;

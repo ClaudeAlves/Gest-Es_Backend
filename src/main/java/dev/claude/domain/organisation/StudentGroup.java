@@ -1,5 +1,6 @@
 package dev.claude.domain.organisation;
 
+import dev.claude.domain.evalutation.Test;
 import dev.claude.domain.user.AppUser;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -7,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * this class may be named "class" in the endpoints
@@ -35,4 +37,8 @@ public class StudentGroup {
     @ManyToMany
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Collection<Course> courses;
+
+    @ManyToMany
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Test> tests;
 }

@@ -60,7 +60,7 @@ public class CalendarService {
     public List<Period> getStudentGroupPeriods(Long studentGroupId) {
         Optional<StudentGroup> optGroup = studentGroupRepository.findById(studentGroupId);
         if(optGroup.isPresent()) {
-            return periodRepository.findAllByCourse_StudentGroups_IdStudentGroup(studentGroupId);
+            return periodRepository.findAllDistinctByCourse_StudentGroups_IdStudentGroup(studentGroupId);
         } else {
             throw new EntityDoesNotExistException("Student group doesn't exist in DB");
         }
@@ -79,10 +79,10 @@ public class CalendarService {
         List<Period> periods;
         if(optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
             // user is a student
-            periods =  periodRepository.findAllByCourse_StudentGroups_Students_IdUser(idUser);
+            periods =  periodRepository.findAllDistinctByCourse_StudentGroups_Students_IdUser(idUser);
         } else if (optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_TEACHER.ordinal() + 1))) {
             // user is a teacher
-            periods = periodRepository.findAllByCourse_Teacher_IdUser(idUser);
+            periods = periodRepository.findAllDistinctByCourse_Teacher_IdUser(idUser);
         } else {
             throw new UnauthorizedException("Admin only users can't have a calendar");
         }
