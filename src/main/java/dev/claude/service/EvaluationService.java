@@ -116,11 +116,17 @@ public class EvaluationService {
             throw new EntityDoesNotExistException("Student doesn't exist");
         } else if (optTest.isEmpty()){
             throw new EntityDoesNotExistException("Test doesn't exist");
+        } else if(markRepository.existsByTest_IdTestAndStudent_IdUser(idTest, idStudent)) {
+            Double oldValue = mark.getValue();
+            mark = markRepository.findByTest_IdTestAndStudent_IdUser(idTest, idStudent);
+            mark.setValue(oldValue);
+            markRepository.save(mark);
         } else {
             mark.setStudent(optStudent.get());
             mark.setTest(optTest.get());
             markRepository.save(mark);
         }
+
     }
     public List<Test> getSelfTests() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

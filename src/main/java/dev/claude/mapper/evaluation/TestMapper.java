@@ -22,6 +22,7 @@ public class TestMapper extends Mapper<Test, TestDTO, TestDTO> {
     public Test toModel(TestDTO dtoObject) {
         return Test.builder()
                 .text(dtoObject.getText())
+                .weighting(dtoObject.getWeighting())
                 .build();
     }
 

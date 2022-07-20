@@ -354,7 +354,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiMessageDTO'
   /evaluation/mark:
-    post:
+    put:
       tags:
         - evaluation
       description: This endpoint is used to set a mark for a student on a specific test.
@@ -1095,6 +1095,9 @@ components:
         text:
           type: string
           description: description of the test
+        weighting:
+          type: number
+          format: double
     TestInfoDTO:
       title: TestInfoDTO
       type: object
@@ -1104,6 +1107,9 @@ components:
           format: int64
         testName:
           type: string
+        weighting:
+          type: number
+          format: double
         courseId:
           type: integer
           format: int64

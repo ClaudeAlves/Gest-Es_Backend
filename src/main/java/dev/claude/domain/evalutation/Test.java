@@ -25,6 +25,8 @@ public class Test {
 
     private int number;
 
+    private double weighting;
+
     private String text;
 
     @ManyToOne

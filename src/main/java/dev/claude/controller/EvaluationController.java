@@ -166,7 +166,7 @@ public class EvaluationController implements EvaluationApi {
                 TestInfoDTO testInfoDTO = new TestInfoDTO();
                 List<TestInfoDTOStudents> testInfoDTOStudents = new LinkedList<>();
                 for(AppUser student : userService.getStudentsFromTest(test.getIdTest())) {
-                    Optional<Mark> mark = markRepository.findByTestAndAndStudent(test, student);
+                    Optional<Mark> mark = markRepository.findByTestAndStudent(test, student);
                     TestInfoDTOStudents studentDTO = new TestInfoDTOStudents();
                     studentDTO.setName(student.getUsername());
                     studentDTO.setId(student.getIdUser());
@@ -178,6 +178,7 @@ public class EvaluationController implements EvaluationApi {
                     testInfoDTOStudents.add(studentDTO);
 
                 }
+                testInfoDTO.setWeighting(test.getWeighting());
                 testInfoDTO.setStudents(testInfoDTOStudents);
                 testInfoDTO.setCourseId(test.getPeriod().getCourse().getIdCourse());
                 testInfoDTO.setTestName(test.getPeriod().getTag());

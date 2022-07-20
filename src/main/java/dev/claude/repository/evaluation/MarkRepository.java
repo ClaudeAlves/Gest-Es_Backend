@@ -14,5 +14,7 @@ import java.util.Optional;
 public interface MarkRepository extends JpaRepository<Mark, Long> {
     List<Mark> findAllByTest_Period_Course_IdCourse(Long idCourse);
 
-    Optional<Mark> findByTestAndAndStudent(Test test, AppUser student);
+    boolean existsByTest_IdTestAndStudent_IdUser(Long idTest, Long idUser);
+    Mark findByTest_IdTestAndStudent_IdUser(Long idTest, Long idUser);
+    Optional<Mark> findByTestAndStudent(Test test, AppUser student);
 }
