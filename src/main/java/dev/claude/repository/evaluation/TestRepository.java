@@ -12,6 +12,7 @@ import java.util.List;
 public interface TestRepository extends JpaRepository<Test, Long> {
     List<Test> findAllByPeriod_Course_StudentGroups_Students_IdUser(Long idStudent);
 
+    List<Test> findAllByPeriod_Course_IdCourse(Long idCourse);
     Integer countAllByPeriod_Course_IdCourse(Long idCourse);
     List<Test> findAllByPeriod_Course_StudentGroups_IdStudentGroup(Long id);
 

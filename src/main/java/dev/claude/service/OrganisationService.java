@@ -153,6 +153,8 @@ public class OrganisationService {
                 if(!module.getSubjects().contains(subject)) {
                     // not already linked subject -> module
                     module.getSubjects().add(subject);
+                    subject.setModule(module);
+                    subjectRepository.save(subject);
                     moduleRepository.save(module);
                 }
             } else {

@@ -347,7 +347,7 @@ public class UserService implements UserDetailsService {
             AppUser currentUser = optHolder.get();
             List<Course> courses;
             if(currentUser.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
-                courses = courseRepository.findAllByStudentGroups_Students_IdUser(currentUser.getIdUser());
+                courses = courseRepository.findAllDistinctByStudentGroups_Students_IdUser(currentUser.getIdUser());
             } else if(currentUser.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_TEACHER.ordinal() + 1))) {
                 courses = courseRepository.findAllByTeacher_IdUser(currentUser.getIdUser());
             } else if(currentUser.getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_ADMIN.ordinal() + 1))){

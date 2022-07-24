@@ -1,6 +1,7 @@
 package dev.claude.mapper.organisation;
 
 import dev.claude.dto.ModuleDTO;
+import dev.claude.dto.SimpleModuleDTO;
 import dev.claude.mapper.Mapper;
 import dev.claude.domain.organisation.Module;
 import org.springframework.stereotype.Component;
@@ -32,5 +33,14 @@ public class ModuleMapper extends Mapper<Module, ModuleDTO, ModuleDTO> {
     @Override
     public Module toModelFromCreation(ModuleDTO creationObject) {
         return null;
+    }
+
+    public SimpleModuleDTO toSimpleDto(Module module) {
+        SimpleModuleDTO dto = new SimpleModuleDTO();
+
+        dto.setName(module.getName());
+        dto.setId(module.getIdModule());
+
+        return dto;
     }
 }

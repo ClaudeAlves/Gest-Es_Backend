@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<AppUser, Long> {
     boolean existsByUsername(String username);
     List<AppUser> findAllByStudentGroups_Tests_IdTest(Long idTest);
     List<AppUser> findAllByStudentGroups_Courses_IdCourse(Long idCourse);
+    List<AppUser> findAllByStudentGroups_Courses_Subject_Module_IdModule(Long idModule);
+    List<AppUser> findAllByStudentGroups_IdStudentGroup(Long idStudentGroup);
 }

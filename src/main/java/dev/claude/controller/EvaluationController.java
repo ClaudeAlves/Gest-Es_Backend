@@ -1,21 +1,27 @@
 package dev.claude.controller;
 
+import dev.claude.api.ApiUtil;
 import dev.claude.api.EvaluationApi;
 import dev.claude.domain.evalutation.Mark;
 import dev.claude.domain.evalutation.Test;
+import dev.claude.domain.organisation.Module;
 import dev.claude.domain.user.AppUser;
 import dev.claude.dto.*;
 import dev.claude.mapper.calendar.PeriodMapper;
 import dev.claude.mapper.evaluation.MarkMapper;
 import dev.claude.mapper.evaluation.TestMapper;
+import dev.claude.mapper.organisation.ModuleMapper;
 import dev.claude.repository.evaluation.MarkRepository;
 import dev.claude.service.EvaluationService;
 import dev.claude.service.UserService;
 import dev.claude.service.exception.IncompleteBodyException;
+import dev.claude.service.exception.InternalErrorException;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,8 +45,9 @@ public class EvaluationController implements EvaluationApi {
     MarkRepository markRepository;
     @Autowired
     UserService userService;
+    @Autowired
+    ModuleMapper moduleMapper;
     private static final Logger logger = LoggerFactory.getLogger(EvaluationController.class);
-
 
     /**
      * POST /evluation/test : create test
@@ -54,13 +61,10 @@ public class EvaluationController implements EvaluationApi {
         try {
             evaluationService.createTest(testMapper.toModel(testDTO), testDTO);
         } catch (Exception e) {
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
         }
         return ResponseEntity.ok(ApiHelper.created("Creation successful"));
-
     }
-
-
     /**
      * GET /evaluation/grades/{idStudent}
      * Get the grades of a student.
@@ -74,7 +78,7 @@ public class EvaluationController implements EvaluationApi {
         try {
             grades = evaluationService.getGradesFromStudentId(idStudent);
         } catch (Exception e){
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
         }
         return ResponseEntity.ok(grades);
     }
@@ -94,7 +98,7 @@ public class EvaluationController implements EvaluationApi {
         try {
             tests = evaluationService.getCourseTestsFromStudentId(idCourse, idStudent);
         } catch (Exception e) {
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
         }
         return ResponseEntity.ok(tests);
     }
@@ -111,7 +115,7 @@ public class EvaluationController implements EvaluationApi {
             Mark mark = markMapper.toModel(markDTO);
             evaluationService.noteStudent(mark, markDTO.getStudentId(), markDTO.getTestId());
         } catch (Exception e) {
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
         }
         return ResponseEntity.ok(ApiHelper.created("Creation successful"));
     }
@@ -123,7 +127,7 @@ public class EvaluationController implements EvaluationApi {
                 testsDTO.add(periodMapper.toDtoFromTest(test));
             }
         } catch (Exception e) {
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
         }
         return ResponseEntity.ok(testsDTO);
     }
@@ -135,7 +139,7 @@ public class EvaluationController implements EvaluationApi {
                 testsDTO.add(periodMapper.toDtoFromTest(test));
             }
         } catch (Exception e) {
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
         }
         return ResponseEntity.ok(testsDTO);
     }
@@ -147,7 +151,7 @@ public class EvaluationController implements EvaluationApi {
                 testsDTO.add(periodMapper.toDtoFromTest(test));
             }
         } catch (Exception e) {
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
         }
         return ResponseEntity.ok(testsDTO);
     }
@@ -160,36 +164,119 @@ public class EvaluationController implements EvaluationApi {
      */
     @Override
     public ResponseEntity<List<TestInfoDTO>> getTestsInfoUser() {
-        List<TestInfoDTO> testInfoDTOS = new LinkedList<>();
+        List<TestInfoDTO> testInfoDTOS;
         try {
-            for(Test test : evaluationService.getSelfTests()) {
-                TestInfoDTO testInfoDTO = new TestInfoDTO();
-                List<TestInfoDTOStudents> testInfoDTOStudents = new LinkedList<>();
-                for(AppUser student : userService.getStudentsFromTest(test.getIdTest())) {
-                    Optional<Mark> mark = markRepository.findByTestAndStudent(test, student);
-                    TestInfoDTOStudents studentDTO = new TestInfoDTOStudents();
-                    studentDTO.setName(student.getUsername());
-                    studentDTO.setId(student.getIdUser());
-                    if(mark.isPresent()) {
-                        studentDTO.setTestValue(mark.get().getValue());
-                    } else {
-                        studentDTO.setTestValue(null);
-                    }
-                    testInfoDTOStudents.add(studentDTO);
-
-                }
-                testInfoDTO.setWeighting(test.getWeighting());
-                testInfoDTO.setStudents(testInfoDTOStudents);
-                testInfoDTO.setCourseId(test.getPeriod().getCourse().getIdCourse());
-                testInfoDTO.setTestName(test.getPeriod().getTag());
-                testInfoDTO.setTestId(test.getIdTest());
-                testInfoDTO.setText(test.getText());
-                testInfoDTOS.add(testInfoDTO);
-            }
+            testInfoDTOS = evaluationService.getTestsInfoUsers();
         } catch (Exception e) {
-            throw new IncompleteBodyException();
+            throw new InternalErrorException(e.getMessage());
 
         }
         return ResponseEntity.ok(testInfoDTOS);
+    }
+    /**
+     * GET /evaluation/module/{idModule}/classes/{idClass}
+     * Get the marks and infos for each tests in a module.
+     *
+     * @param idModule  (required)
+     * @param idClass  (required)
+     * @return Get infos successfully. (status code 200)
+     */
+    @Override
+    public ResponseEntity<ModuleMarkInfos> getModuleInfosByClass(Long idModule, Long idClass) {
+        ModuleMarkInfos moduleInfos;
+        try {
+            moduleInfos = evaluationService.getModuleInfosByClass(idModule, idClass);
+        } catch (Exception e) {
+            throw new InternalErrorException(e.getMessage());
+        }
+        return ResponseEntity.ok(moduleInfos);
+    }
+    /**
+     * GET /evaluation/modules/classes/{idClass}
+     * Get the modules names and id for selection.
+     *
+     * @param idClass  (required)
+     * @return Get modules successfully. (status code 200)
+     */
+    @Override
+    public ResponseEntity<List<SimpleModuleDTO>> getModulesByClass(Long idClass) {
+        List<SimpleModuleDTO> moduleDTOS = new LinkedList<>();
+        try {
+            for (Module module : evaluationService.getModulesByClass(idClass)) {
+                moduleDTOS.add(moduleMapper.toSimpleDto(module));
+            }
+        } catch (Exception e) {
+            throw new InternalErrorException(e.getMessage());
+        }
+        return ResponseEntity.ok(moduleDTOS);
+    }
+    /**
+     * GET /evaluation/grades/classes/{idClass}
+     * Get the grades and infos for each module for a class.
+     *
+     * @param idClass  (required)
+     * @return Get infos successfully. (status code 200)
+     */
+    @Override
+    public ResponseEntity<GradeSynthesis> getSynthesisFromClass(Long idClass) {
+        GradeSynthesis gradeSynthesis;
+        try {
+            gradeSynthesis = evaluationService.getSynthesisByClass(idClass);
+        } catch (Exception e) {
+            throw new InternalErrorException(e.getMessage());
+        }
+        return ResponseEntity.ok(gradeSynthesis);
+    }
+    /**
+     * GET /evaluation/grades
+     * Get the grades and infos for each module for the student using this endpoint.
+     *
+     * @return Get infos successfully. (status code 200)
+     */
+    @Override
+    public ResponseEntity<GradeSynthesis> getSelfSynthesis() {
+        GradeSynthesis gradeSynthesis;
+        try {
+            gradeSynthesis = evaluationService.getSelfSynthesis();
+        } catch (Exception e) {
+            throw new InternalErrorException(e.getMessage());
+        }
+        return ResponseEntity.ok(gradeSynthesis);
+    }
+
+    /**
+     * GET /evaluation/module/{idModule}
+     * Get the marks and infos for each tests in a module for the student using this endpoint.
+     *
+     * @param idModule  (required)
+     * @return Get infos successfully. (status code 200)
+     */
+    @Override
+    public ResponseEntity<ModuleMarkInfos> getSelfModuleInfos(Long idModule) {
+        ModuleMarkInfos moduleInfos;
+        try {
+            moduleInfos = evaluationService.getSelfModuleInfos(idModule);
+        } catch (Exception e) {
+            throw new InternalErrorException(e.getMessage());
+        }
+        return ResponseEntity.ok(moduleInfos);
+    }
+    /**
+     * GET /evaluation/modules
+     * Get the modules names and id of the current student for selection.
+     *
+     * @return Get modules successfully. (status code 200)
+     */
+    public ResponseEntity<List<SimpleModuleDTO>> getSelfModules() {
+        List<SimpleModuleDTO> moduleDTOS = new LinkedList<>();
+        try {
+            for (Module module : evaluationService.getSelfModules()) {
+                moduleDTOS.add(moduleMapper.toSimpleDto(module));
+            }
+        } catch (Exception e) {
+            throw new InternalErrorException(e.getMessage());
+        }
+        return ResponseEntity.ok(moduleDTOS);
+
     }
 }

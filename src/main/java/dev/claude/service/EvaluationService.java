@@ -1,20 +1,20 @@
 package dev.claude.service;
 
-import dev.claude.controller.EvaluationController;
 import dev.claude.domain.calendar.Period;
 import dev.claude.domain.evalutation.Mark;
 import dev.claude.domain.evalutation.Test;
 import dev.claude.domain.organisation.Course;
+import dev.claude.domain.organisation.Module;
 import dev.claude.domain.organisation.StudentGroup;
 import dev.claude.domain.user.AppUser;
 import dev.claude.domain.user.EnumRole;
-import dev.claude.dto.GradeDTO;
-import dev.claude.dto.TestDTO;
+import dev.claude.dto.*;
 import dev.claude.mapper.evaluation.TestMapper;
 import dev.claude.repository.calendar.PeriodRepository;
 import dev.claude.repository.evaluation.MarkRepository;
 import dev.claude.repository.evaluation.TestRepository;
 import dev.claude.repository.organisation.CourseRepository;
+import dev.claude.repository.organisation.ModuleRepository;
 import dev.claude.repository.organisation.StudentGroupRepository;
 import dev.claude.repository.user.RoleRepository;
 import dev.claude.repository.user.UserRepository;
@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -49,13 +50,16 @@ public class EvaluationService {
     StudentGroupRepository studentGroupRepository;
     @Autowired
     PeriodRepository periodRepository;
-
+    @Autowired
+    ModuleRepository moduleRepository;
+    @Autowired
+    UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(EvaluationService.class);
 
     public void createTest(Test test, TestDTO dto) {
         Optional<Course> optCourse = courseRepository.findById(dto.getCourseId());
         if(optCourse.isPresent()) {
-            Integer testNumber = testRepository.countAllByPeriod_Course_IdCourse(dto.getCourseId()) + 1;
+            int testNumber = testRepository.countAllByPeriod_Course_IdCourse(dto.getCourseId()) + 1;
             Period testPeriod = Period.builder()
                     .course(optCourse.get())
                     .end(dto.getEnd().toLocalDateTime())
@@ -81,7 +85,7 @@ public class EvaluationService {
         }
     }
     public List<GradeDTO> getGradesFromStudentId(Long idStudent) {
-        List<Course> courses = courseRepository.findAllByStudentGroups_Students_IdUser(idStudent);
+        List<Course> courses = courseRepository.findAllDistinctByStudentGroups_Students_IdUser(idStudent);
         List<GradeDTO> grades = new LinkedList<>();
         for(Course course : courses) {
             Double grade = 0D;
@@ -130,7 +134,6 @@ public class EvaluationService {
     }
     public List<Test> getSelfTests() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        logger.info(username);
         Optional<AppUser> optUser = userRepository.findByUsername(username);
         if(optUser.isPresent()) {
             if (!optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
@@ -140,7 +143,6 @@ public class EvaluationService {
                 throw new EntityDoesNotExistException("Student can't get tests");
             }
         } else {
-            logger.info("PAS DE CONTEXT HOLDER????");
             throw new EntityDoesNotExistException("Context holder not found");
         }
     }
@@ -161,13 +163,12 @@ public class EvaluationService {
             throw new EntityDoesNotExistException("Student group doesn't exist in DB");
         }
     }
-
     private List<Test> getTestsFromUserId(Long idUser, Optional<AppUser> optUser) {
         List<Test> tests;
-        if(optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_ADMIN.ordinal() + 1))) {
+        if (optUser.isPresent() && optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_ADMIN.ordinal() + 1))) {
             // user is an admin he gets all the tests
             tests =  testRepository.findAll();
-        } else if (optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_TEACHER.ordinal() + 1))) {
+        } else if (optUser.isPresent() && optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_TEACHER.ordinal() + 1))) {
             // user is a teacher
             tests = testRepository.findAllByPeriod_Course_Teacher_IdUser(idUser);
         } else {
@@ -179,5 +180,326 @@ public class EvaluationService {
             e.printStackTrace();
             throw new InternalErrorException(e.getMessage());
         }
+    }
+    public List<TestInfoDTO> getTestsInfoUsers() {
+        List<TestInfoDTO> testInfoDTOS = new LinkedList<>();
+        for(Test test : getSelfTests()) {
+            TestInfoDTO testInfoDTO = new TestInfoDTO();
+            List<TestInfoDTOStudents> testInfoDTOStudents = new LinkedList<>();
+            for(AppUser student : userService.getStudentsFromTest(test.getIdTest())) {
+                Optional<Mark> mark = markRepository.findByTestAndStudent(test, student);
+                TestInfoDTOStudents studentDTO = new TestInfoDTOStudents();
+                studentDTO.setName(student.getUsername());
+                studentDTO.setId(student.getIdUser());
+                if(mark.isPresent()) {
+                    studentDTO.setTestValue(mark.get().getValue());
+                } else {
+                    studentDTO.setTestValue(null);
+                }
+                testInfoDTOStudents.add(studentDTO);
+
+            }
+            testInfoDTO.setWeighting(test.getWeighting());
+            testInfoDTO.setStudents(testInfoDTOStudents);
+            testInfoDTO.setCourseId(test.getPeriod().getCourse().getIdCourse());
+            testInfoDTO.setTestName(test.getPeriod().getTag());
+            testInfoDTO.setTestId(test.getIdTest());
+            testInfoDTO.setText(test.getText());
+            testInfoDTOS.add(testInfoDTO);
+        }
+        return testInfoDTOS;
+    }
+    public ModuleMarkInfos getModuleInfosByClass(Long idModule, Long idStudentGroup) {
+        ModuleMarkInfos moduleInfos = new ModuleMarkInfos();
+        List<ModuleMarkInfosMarks> marksInfos = new LinkedList<>();
+        List<ModuleMarkInfosTests> testsInfos = new LinkedList<>();
+        List<ModuleMarkInfosSubjects> subjectsInfos = new LinkedList<>();
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optUser = userRepository.findByUsername(username);
+        if(optUser.isPresent()) {
+            if(!optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
+                // user is not a student
+                if (moduleRepository.existsById(idModule) && studentGroupRepository.existsById(idStudentGroup)) {
+
+                    Module module = moduleRepository.getById(idModule);
+                    moduleInfos.setModuleId(module.getIdModule());
+                    moduleInfos.setModuleName(module.getName());
+
+                    List<Course> courses = courseRepository.findAllBySubject_Module_IdModuleAndStudentGroups_IdStudentGroup(idModule, idStudentGroup);
+                    List<AppUser> students = userRepository.findAllByStudentGroups_IdStudentGroup(idStudentGroup);
+
+                    for (AppUser student : students) {
+                        ModuleMarkInfosMarks markInfoToAdd = new ModuleMarkInfosMarks();
+                        markInfoToAdd.setStudentName(student.getUsername());
+                        markInfoToAdd.setMarks(new LinkedList<>());
+                        List<Mark> moduleMarks = markRepository.findAllDistinctByTest_Period_Course_Subject_Module_IdModuleAndStudent_IdUser(idModule, student.getIdUser());
+                        setModuleMean(marksInfos, markInfoToAdd, moduleMarks);
+
+                    }
+                    for (Course course : courses) {
+                        ModuleMarkInfosSubjects subjectToAdd = new ModuleMarkInfosSubjects();
+                        subjectToAdd.setSubjectName(course.getSubject().getName());
+                        Integer numberOfMarks = 0;
+                        for (Test test : testRepository.findAllByPeriod_Course_IdCourse(course.getIdCourse())) {
+                            ModuleMarkInfosTests testInfoToAdd = new ModuleMarkInfosTests();
+                            testInfoToAdd.setTestName(test.getPeriod().getTag());
+                            testInfoToAdd.setDate(test.getPeriod().getStart().getDayOfMonth() + " " + test.getPeriod().getStart().getMonth().toString());
+                            testsInfos.add(testInfoToAdd);
+                            numberOfMarks++;
+                            for (AppUser student : students) {
+                                if(markRepository.existsByTestAndStudent(test, student)) {
+                                    for (ModuleMarkInfosMarks item : marksInfos) {
+                                        if(item.getStudentName().equals(student.getUsername())) {
+                                            marksInfos.set(marksInfos.indexOf(item), item.addMarksItem(markRepository.findByTestAndStudent(test, student).get().getValue()));
+                                        }
+                                    }
+                                } else {
+                                    for (ModuleMarkInfosMarks item : marksInfos) {
+                                        if(item.getStudentName().equals(student.getUsername())) {
+                                            marksInfos.set(marksInfos.indexOf(item), item.addMarksItem(null));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        subjectToAdd.setMarksNumber(numberOfMarks);
+                        subjectsInfos.add(subjectToAdd);
+                    }
+                    moduleInfos.setMarks(marksInfos);
+                    moduleInfos.setSubjects(subjectsInfos);
+                    moduleInfos.setTests(testsInfos);
+                } else {
+                    throw new EntityDoesNotExistException("Module or class doesn't exist");
+                }
+            } else {
+                throw new UnauthorizedException("Students can't access other students infos");
+            }
+        } else {
+            throw new EntityDoesNotExistException("Context holder not found");
+        }
+        return moduleInfos;
+    }
+    public List<Module> getModulesByClass(Long idClass) {
+        List<Module> modules = new LinkedList<>();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optUser = userRepository.findByUsername(username);
+        if(optUser.isPresent()) {
+            if(studentGroupRepository.existsById(idClass)) {
+                StudentGroup studentGroup = studentGroupRepository.getById(idClass);
+                for( Course course : studentGroup.getCourses()) {
+                    modules.add(course.getSubject().getModule());
+                }
+            } else {
+                throw new EntityDoesNotExistException("Class not found");
+            }
+        } else {
+            throw new EntityDoesNotExistException("Context holder not found");
+        }
+        return modules;
+    }
+    public List<Module> getSelfModules() {
+        List<Module> modules = new LinkedList<>();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optUser = userRepository.findByUsername(username);
+        if(optUser.isPresent()) {
+            if(optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
+                List<Course> courses = courseRepository.findAllDistinctByStudentGroups_Students_IdUser(optUser.get().getIdUser());
+                for( Course course : courses) {
+                    modules.add(course.getSubject().getModule());
+                }
+            } else {
+                throw new UnauthorizedException("Only students allowed for this");
+            }
+        } else {
+            throw new EntityDoesNotExistException("Context holder not found");
+        }
+        return modules;
+    }
+    public GradeSynthesis getSynthesisByClass(Long idStudentGroup) {
+        GradeSynthesis gradeSynthesis = new GradeSynthesis();
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optUser = userRepository.findByUsername(username);
+        if(optUser.isPresent()) {
+            if (!optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
+                if (studentGroupRepository.existsById(idStudentGroup)) {
+                    List<AppUser> students = userRepository.findAllByStudentGroups_IdStudentGroup(idStudentGroup);
+                    StudentGroup studentGroup = studentGroupRepository.getById(idStudentGroup);
+                    List<Module> modules = new LinkedList<>();
+                    studentGroup.getCourses().forEach(course -> {
+                        if (!modules.contains(course.getSubject().getModule())) {
+                            modules.add(course.getSubject().getModule());
+                        }
+                    });
+                    for (Module module : modules) {
+                        gradeSynthesis.addModulesItem(module.getName());
+                    }
+                    for (AppUser student : students) {
+                        GradeSynthesisStudentMarks studentMarks = new GradeSynthesisStudentMarks();
+                        studentMarks.setStudentName(student.getUsername());
+                        double globalMean = 0.;
+                        double modulesNotMarked = 0;
+                        for(Module module : modules) {
+                            List<Mark> moduleMarks = markRepository.findAllDistinctByTest_Period_Course_Subject_Module_IdModuleAndStudent_IdUser(module.getIdModule(), student.getIdUser());
+                            double meanToAdd = getGlobalMean(studentMarks, globalMean, moduleMarks);
+                            if (meanToAdd == globalMean) {
+                                modulesNotMarked++;
+                            }
+                            globalMean = meanToAdd;
+                        }
+                        studentMarks.setGlobalMean(globalMean/(modules.size()-modulesNotMarked));
+                        gradeSynthesis.addStudentMarksItem(studentMarks);
+                    }
+                } else {
+                    throw new EntityDoesNotExistException("Class doesn't exist");
+                }
+            } else {
+                throw new UnauthorizedException("Students can't access others students infos");
+            }
+        } else {
+            throw new EntityDoesNotExistException("Context holder not found");
+        }
+        return gradeSynthesis;
+    }
+    public ModuleMarkInfos getSelfModuleInfos(Long idModule) {
+        ModuleMarkInfos moduleInfos = new ModuleMarkInfos();
+        List<ModuleMarkInfosMarks> marksInfos = new LinkedList<>();
+        List<ModuleMarkInfosTests> testsInfos = new LinkedList<>();
+        List<ModuleMarkInfosSubjects> subjectsInfos = new LinkedList<>();
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optUser = userRepository.findByUsername(username);
+        if(optUser.isPresent()) {
+            if(optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
+                // user is a student
+                if (moduleRepository.existsById(idModule)) {
+                    Module module = moduleRepository.getById(idModule);
+                    moduleInfos.setModuleId(module.getIdModule());
+                    moduleInfos.setModuleName(module.getName());
+
+                    ModuleMarkInfosMarks markInfoToAdd = new ModuleMarkInfosMarks();
+                    markInfoToAdd.setStudentName(optUser.get().getUsername());
+                    markInfoToAdd.setMarks(new LinkedList<>());
+                    List<Mark> moduleMarks = markRepository.findAllDistinctByTest_Period_Course_Subject_Module_IdModuleAndStudent_IdUser(idModule, optUser.get().getIdUser());
+                    List<Course> courses = courseRepository.findAllBySubject_Module_IdModuleAndStudentGroups_Students_IdUser(idModule, optUser.get().getIdUser());
+                    setModuleMean(marksInfos, markInfoToAdd, moduleMarks);
+                    for (Course course : courses) {
+                        ModuleMarkInfosSubjects subjectToAdd = new ModuleMarkInfosSubjects();
+                        subjectToAdd.setSubjectName(course.getSubject().getName());
+                        Integer numberOfMarks = 0;
+                        for (Test test : testRepository.findAllByPeriod_Course_IdCourse(course.getIdCourse())) {
+                            ModuleMarkInfosTests testInfoToAdd = new ModuleMarkInfosTests();
+                            testInfoToAdd.setTestName(test.getPeriod().getTag());
+                            testInfoToAdd.setDate(test.getPeriod().getStart().getDayOfMonth() + " " + test.getPeriod().getStart().getMonth().toString());
+                            testsInfos.add(testInfoToAdd);
+                            numberOfMarks++;
+
+                            if(markRepository.existsByTestAndStudent(test, optUser.get())) {
+                                for (ModuleMarkInfosMarks item : marksInfos) {
+                                    if(item.getStudentName().equals(optUser.get().getUsername())) {
+                                        marksInfos.set(marksInfos.indexOf(item), item.addMarksItem(markRepository.findByTestAndStudent(test, optUser.get()).get().getValue()));
+                                    }
+                                }
+                            } else {
+                                for (ModuleMarkInfosMarks item : marksInfos) {
+                                    if(item.getStudentName().equals(optUser.get().getUsername())) {
+                                        marksInfos.set(marksInfos.indexOf(item), item.addMarksItem(null));
+                                    }
+                                }
+                            }
+
+                        }
+                        subjectToAdd.setMarksNumber(numberOfMarks);
+                        subjectsInfos.add(subjectToAdd);
+                    }
+                    moduleInfos.setMarks(marksInfos);
+                    moduleInfos.setSubjects(subjectsInfos);
+                    moduleInfos.setTests(testsInfos);
+
+
+                } else {
+                    throw new EntityDoesNotExistException("Module doesn't exist");
+                }
+            } else {
+                throw new UnauthorizedException("Only students can have their students infos");
+            }
+        } else {
+            throw new EntityDoesNotExistException("Context holder not found");
+        }
+        return moduleInfos;
+    }
+    public GradeSynthesis getSelfSynthesis() {
+        GradeSynthesis gradeSynthesis = new GradeSynthesis();
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<AppUser> optUser = userRepository.findByUsername(username);
+        if(optUser.isPresent()) {
+           if (optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
+               // user is a student
+
+               optUser.get().getModules().forEach( module -> {
+                   gradeSynthesis.addModulesItem(module.getName());
+               });
+
+               GradeSynthesisStudentMarks studentMarks = new GradeSynthesisStudentMarks();
+               studentMarks.setStudentName(username);
+               double globalMean = 0.;
+               double modulesNotMarked = 0;
+               for(Module module : optUser.get().getModules()) {
+                   List<Mark> moduleMarks = markRepository.findAllDistinctByTest_Period_Course_Subject_Module_IdModuleAndStudent_IdUser(module.getIdModule(), optUser.get().getIdUser());
+                   double meanToAdd = getGlobalMean(studentMarks, globalMean, moduleMarks);
+                   logger.info("450 : " + meanToAdd);
+                   if ( meanToAdd == globalMean) {
+                       modulesNotMarked++;
+                   }
+                   globalMean = meanToAdd;
+               }
+               logger.info(globalMean + "/" + optUser.get().getModules().size() + "-" + modulesNotMarked);
+               studentMarks.setGlobalMean(globalMean/(optUser.get().getModules().size()-modulesNotMarked));
+               gradeSynthesis.addStudentMarksItem(studentMarks);
+           } else {
+               throw new UnauthorizedException("Only students can have their grades synthesis");
+           }
+        } else {
+            throw new EntityDoesNotExistException("Context holder not found");
+        }
+        return gradeSynthesis;
+    }
+    private void setModuleMean(List<ModuleMarkInfosMarks> marksInfos, ModuleMarkInfosMarks markInfoToAdd, List<Mark> moduleMarks) {
+        double mean = 0.;
+        int marksUnderMean = 0;
+        double coefs = 0.;
+        double div;
+        for (Mark mark : moduleMarks) {
+            mean += mark.getValue()*mark.getTest().getWeighting();
+            coefs += mark.getTest().getWeighting();
+            if (mark.getValue() < 4) {
+                marksUnderMean++;
+            }
+        }
+        markInfoToAdd.setModuleMean(Math.round(mean / coefs * 10) / 10.0);
+
+        markInfoToAdd.setMarksUnderMean(marksUnderMean + "/" + moduleMarks.size());
+        marksInfos.add(markInfoToAdd);
+    }
+    private double getGlobalMean(GradeSynthesisStudentMarks studentMarks, double globalMean, List<Mark> moduleMarks) {
+        GradeSynthesisMarks markToAdd = new GradeSynthesisMarks();
+        double mean = 0.;
+        Integer marksUnderMean = 0;
+        double coefs = 0.;
+        for (Mark mark : moduleMarks) {
+            mean += mark.getValue()*mark.getTest().getWeighting();
+            coefs += mark.getTest().getWeighting();
+            if (mark.getValue() < 4) {
+                marksUnderMean++;
+            }
+        }
+        mean = Math.round(mean / coefs * 10) / 10.0;
+        markToAdd.setMean(mean);
+        markToAdd.setMarksUnderMean(marksUnderMean + "/" + moduleMarks.size());
+        studentMarks.addMarksItem(markToAdd);
+        globalMean+=mean;
+        return globalMean;
     }
 }

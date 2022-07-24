@@ -376,7 +376,7 @@ paths:
     get:
       tags:
         - evaluation
-      description: Get the tests of a student for a specific course.
+      description: Get the marks of a student for a specific course.
       operationId: getStudentTests
       parameters:
         - in: path
@@ -400,6 +400,89 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/TestDTO"
+  /evaluation/module/{idModule}/classes/{idClass}:
+    get:
+      tags:
+        - evaluation
+      description: Get the marks and infos for each tests in a module.
+      operationId: getModuleInfosByClass
+      parameters:
+        - in: path
+          name: idModule
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - in: path
+          name: idClass
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: Get infos successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModuleMarkInfos'
+  /evaluation/module/{idModule}:
+    get:
+      tags:
+        - evaluation
+      description: Get the marks and infos for each tests in a module for the student using this endpoint.
+      operationId: getSelfModuleInfos
+      parameters:
+        - in: path
+          name: idModule
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: Get infos successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModuleMarkInfos'
+  /evaluation/modules/classes/{idClass}:
+    get:
+      tags:
+        - evaluation
+      description: Get the modules names and id for selection.
+      operationId: GetModulesByClass
+      parameters:
+        - in: path
+          name: idClass
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: Get modules successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SimpleModuleDTO'
+  /evaluation/modules:
+    get:
+      tags:
+        - evaluation
+      description: Get the modules names and id of the current student for selection.
+      operationId: GetSelfModules
+      responses:
+        '200':
+          description: Get modules successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SimpleModuleDTO'
   /evaluation/grades/{idStudent}:
     get:
       tags:
@@ -422,6 +505,39 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/GradeDTO'
+  /evaluation/grades/classes/{idClass}:
+    get:
+      tags:
+        - evaluation
+      description: Get the grades and infos for each module for a class.
+      operationId: getSynthesisFromClass
+      parameters:
+        - in: path
+          name: idClass
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        '200':
+          description: Get infos successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GradeSynthesis'
+  /evaluation/grades:
+    get:
+      tags:
+        - evaluation
+      description: Get the grades and infos for each module for the student using this endpoint.
+      operationId: getSelfSynthesis
+      responses:
+        '200':
+          description: Get infos successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GradeSynthesis'
   /evaluation/tests/classes/{idClass}:
     get:
       tags:
@@ -485,7 +601,7 @@ paths:
     get:
       tags:
         - evaluation
-      description: Get the tests informations for the user.
+      description: Get the tests information's for the user.
       operationId: getTestsInfoUser
       responses:
         '200':
@@ -1146,6 +1262,52 @@ components:
           format: double
           minimum: 1
           maximum: 6
+    ModuleMarkInfos:
+      title: ModuleMarkInfos
+      type: object
+      properties:
+        moduleName:
+          type: string
+        moduleId:
+          type: integer
+          format: int64
+        tests:
+          type: array
+          items:
+            type: object
+            properties:
+              testName:
+                type: string
+              date:
+                type: string
+        marks:
+          type: array
+          items:
+            type: object
+            properties:
+              studentName:
+                type: string
+              marks:
+                type: array
+                items:
+                  type: number
+                  format: double
+                  maximum: 6
+                  minimum: 1
+              moduleMean:
+                type: number
+                format: double
+              marksUnderMean:
+                type: string
+        subjects:
+          type: array
+          items:
+            type: object
+            properties:
+              subjectName:
+                type: string
+              marksNumber:
+                type: integer
     GradeDTO:
       title: GradeDTO
       type: object
@@ -1155,5 +1317,44 @@ components:
         value:
           type: number
           format: double
+    SimpleModuleDTO:
+      title: SimpleModuleDTO
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: integer
+          format: int64
+    GradeSynthesis:
+      title: GradeSynthesis
+      type: object
+      properties:
+        modules:
+          type: array
+          items:
+            type: string
+        studentMarks:
+          type: array
+          items:
+            type: object
+            properties:
+              studentName:
+                type: string
+              globalMean:
+                type: number
+                format: double
+              marks:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    mean:
+                      type: number
+                      format: double
+                    marksUnderMean:
+                      type: string
+
+
 
 
