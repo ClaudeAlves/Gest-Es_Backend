@@ -16,9 +16,14 @@ import org.springframework.util.StringUtils;
 @Component
 public class JwtUtils {
 
+    /**
+     * jwt secret to build tokens with algorithm HS512
+     */
     @Value("${backend.app.jwtSecret}")
     private String jwtSecret;
-
+    /**
+     * expiration time for the tokens
+     */
     @Value("${backend.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
@@ -60,6 +65,7 @@ public class JwtUtils {
     public String getTokenFromHeader(String header) {
         if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
             return header.substring(7);
+            // this condition is needed for swagger ui since it doesn't set bearer
         } else if(StringUtils.hasText(header)) {
             return header;
         } else {

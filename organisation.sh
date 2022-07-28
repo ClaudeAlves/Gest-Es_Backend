@@ -22,16 +22,16 @@ idSubject6FRAN=6
 idSubject7ANGL=7
 idSubject8MATH=8
 
-idCourse1FRAN1=1
-idCourse2FRAN2=2
-idCourse3BDON=3
-idCourse4ALGO=4
+idCourse1MATH1=1
+idCourse2ANGL1=2
+idCourse3FRAN1=3
+idCourse4FRAN2=4
+idCourse5BDON1=5
+idCourse6ALGO1=6
 
 idClass1=1
 idClass2=2
 idClass3=3
-idClass4=4
-idClass5=5
 
 echo -e "getting jwt token from an admin\n"
 
@@ -57,13 +57,17 @@ curl -X PUT "http://localhost:8081/organisation/module/${idModule2BRIT1}/subject
 
 echo -e "\nLink subject to their courses\n"
 
-curl -X PUT "http://localhost:8081/organisation/subject/$idSubject6FRAN/course/$idCourse1FRAN1" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/subject/$idSubject8MATH/course/$idCourse1MATH1" -H "accept: application/json" -H "Authorization: $jwt"
 
-curl -X PUT "http://localhost:8081/organisation/subject/$idSubject6FRAN/course/$idCourse2FRAN2" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/subject/$idSubject7ANGL/course/$idCourse2ANGL1" -H "accept: application/json" -H "Authorization: $jwt"
 
-curl -X PUT "http://localhost:8081/organisation/subject/$idSubject2BDON/course/$idCourse3BDON" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/subject/$idSubject6FRAN/course/$idCourse3FRAN1" -H "accept: application/json" -H "Authorization: $jwt"
 
-curl -X PUT "http://localhost:8081/organisation/subject/$idSubject1ALGO/course/$idCourse4ALGO" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/subject/$idSubject6FRAN/course/$idCourse4FRAN2" -H "accept: application/json" -H "Authorization: $jwt"
+
+curl -X PUT "http://localhost:8081/organisation/subject/$idSubject2BDON/course/$idCourse5BDON1" -H "accept: application/json" -H "Authorization: $jwt"
+
+curl -X PUT "http://localhost:8081/organisation/subject/$idSubject1ALGO/course/$idCourse6ALGO1" -H "accept: application/json" -H "Authorization: $jwt"
 
 echo -e "\nLink student to module -> also links student to subjects\n"
 
@@ -85,23 +89,29 @@ curl -X PUT "http://localhost:8081/organisation/module/$idModule2BRIT1/student/$
 
 echo -e "\nLink teacher to a course\n" 
 
-curl -X PUT "http://localhost:8081/organisation/course/$idCourse1FRAN1/teacher/$idTeacher1" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/course/$idCourse3FRAN1/teacher/$idTeacher1" -H "accept: application/json" -H "Authorization: $jwt"
 
-curl -X PUT "http://localhost:8081/organisation/course/$idCourse2FRAN2/teacher/$idTeacher1" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/course/$idCourse4FRAN2/teacher/$idTeacher1" -H "accept: application/json" -H "Authorization: $jwt"
 
-curl -X PUT "http://localhost:8081/organisation/course/$idCourse3BDON/teacher/$idTeacher2" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/course/$idCourse1MATH1/teacher/$idTeacher2" -H "accept: application/json" -H "Authorization: $jwt"
 
-curl -X PUT "http://localhost:8081/organisation/course/$idCourse4ALGO/teacher/$idTeacher3" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/course/$idCourse2ANGL1/teacher/$idTeacher3" -H "accept: application/json" -H "Authorization: $jwt"
+
+curl -X PUT "http://localhost:8081/organisation/course/$idCourse5BDON1/teacher/$idTeacher2" -H "accept: application/json" -H "Authorization: $jwt"
+
+curl -X PUT "http://localhost:8081/organisation/course/$idCourse6ALGO1/teacher/$idTeacher3" -H "accept: application/json" -H "Authorization: $jwt"
 
 echo -e "\nLink students to a class\n"
 
-echo -e "\nClass1 with all students\n"
+echo -e "\nClass1 students 1-2-3-4-5\n"
 
 curl -X PUT "http://localhost:8081/organisation/class/$idClass1/student/$idStudent1" -H "accept: application/json" -H "Authorization: $jwt"
 
 curl -X PUT "http://localhost:8081/organisation/class/$idClass1/student/$idStudent2" -H "accept: application/json" -H "Authorization: $jwt"
 
 curl -X PUT "http://localhost:8081/organisation/class/$idClass1/student/$idStudent3" -H "accept: application/json" -H "Authorization: $jwt"
+
+curl -X PUT "http://localhost:8081/organisation/class/$idClass1/student/$idStudent4" -H "accept: application/json" -H "Authorization: $jwt"
 
 curl -X PUT "http://localhost:8081/organisation/class/$idClass1/student/$idStudent5" -H "accept: application/json" -H "Authorization: $jwt"
 
@@ -119,31 +129,19 @@ curl -X PUT "http://localhost:8081/organisation/class/$idClass3/student/$idStude
 
 curl -X PUT "http://localhost:8081/organisation/class/$idClass3/student/$idStudent5" -H "accept: application/json" -H "Authorization: $jwt"
 
-echo -e "\nClass4 students 4\n"
-
-curl -X PUT "http://localhost:8081/organisation/class/$idClass4/student/$idStudent4" -H "accept: application/json" -H "Authorization: $jwt"
-
-echo -e "\nClass5 students 1-3-5\n"
-
-curl -X PUT "http://localhost:8081/organisation/class/$idClass5/student/$idStudent1" -H "accept: application/json" -H "Authorization: $jwt"
-
-curl -X PUT "http://localhost:8081/organisation/class/$idClass5/student/$idStudent3" -H "accept: application/json" -H "Authorization: $jwt"
-
-curl -X PUT "http://localhost:8081/organisation/class/$idClass5/student/$idStudent5" -H "accept: application/json" -H "Authorization: $jwt"
-
 echo -e "\nLink classes to courses\n"
 
-curl -X PUT "http://localhost:8081/organisation/course/$idCourse1FRAN1/class/$idClass2" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/course/$idCourse1MATH1/class/$idClass1" -H "accept: application/json" -H "Authorization: $jwt"
 
-curl -X PUT "http://localhost:8081/organisation/course/$idCourse2FRAN2/class/$idClass3" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/course/$idCourse2ANGL1/class/$idClass1" -H "accept: application/json" -H "Authorization: $jwt"
 
-curl -X PUT "http://localhost:8081/organisation/course/$idCourse3BDON/class/$idClass5" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/course/$idCourse3FRAN1/class/$idClass2" -H "accept: application/json" -H "Authorization: $jwt"
 
-curl -X PUT "http://localhost:8081/organisation/course/$idCourse3BDON/class/$idClass4" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/course/$idCourse4FRAN2/class/$idClass3" -H "accept: application/json" -H "Authorization: $jwt"
 
-curl -X PUT "http://localhost:8081/organisation/course/$idCourse4ALGO/class/$idClass1" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/course/$idCourse5BDON1/class/$idClass1" -H "accept: application/json" -H "Authorization: $jwt"
 
-curl -X PUT "http://localhost:8081/organisation/course/$idCourse4ALGO/class/$idClass4" -H "accept: application/json" -H "Authorization: $jwt"
+curl -X PUT "http://localhost:8081/organisation/course/$idCourse6ALGO1/class/$idClass1" -H "accept: application/json" -H "Authorization: $jwt"
 
 echo -e "\nlogout\n"
 

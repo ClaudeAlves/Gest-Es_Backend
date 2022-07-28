@@ -13,6 +13,10 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * this class is needed for security purpose we need a user implementation
+ * that implements UserDetails from springframework security module
+ */
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 

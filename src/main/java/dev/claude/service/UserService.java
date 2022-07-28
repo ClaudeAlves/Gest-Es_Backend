@@ -41,6 +41,9 @@ import java.util.Optional;
 @Service @Slf4j
 public class UserService implements UserDetailsService {
 
+    /**
+     * Admin user found in the file application.properties.
+     */
     @Component
     private static class AdminUser {
         @Value("${backend.admin.username}")
@@ -61,10 +64,8 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private AdminUser adminUser;
-
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -80,14 +81,22 @@ public class UserService implements UserDetailsService {
     private RoleService roleService;
     @Autowired
     private BlacklistTokenService blacklistTokenService;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * Encrypts ones password
+     * @param password password to encrypt
+     * @return a string of the encrypted password
+     */
     private String encryptPassword(String password) {
         return passwordEncoder.encode(password);
     }
 
+    /**
+     * Deletes a user the user calling this must be an admin.
+     * @param username username of the user to delete.
+     */
     public void deleteUser(String username) {
         Optional<AppUser> optUser = userRepository.findByUsername(username);
         String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -108,10 +117,10 @@ public class UserService implements UserDetailsService {
     }
     /**
      * Adds a role (that is valid with the DB) to a User. This is the ONLY
-     * ALLOWED WAY to add a role to an user. This does not save the user to DB !
+     * ALLOWED WAY to add a role to a user. This does not save the user to DB !
      *
-     * @param user
-     * @param roleName
+     * @param user user to add a role to
+     * @param roleName role to add to the suer
      * @return a new user instance with the role added
      */
     public AppUser addRole(AppUser user, EnumRole roleName) {
@@ -122,10 +131,10 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     *
-     * @param username
-     * @return
-     * @throws UsernameNotFoundException
+     * Loads a user for security purpose.
+     * @param username name of the user
+     * @return a user special for security
+     * @throws UsernameNotFoundException when the username isn't found in DB
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -139,6 +148,11 @@ public class UserService implements UserDetailsService {
         }
 
     }
+
+    /**
+     * Retrieves all the users
+     * @return a list of users
+     */
     public List<AppUser> getUsers() {
         return userRepository.findAll();
     }
@@ -147,9 +161,9 @@ public class UserService implements UserDetailsService {
      * Register a User if the parameters are correct.
      *
      * @param user the incomplete user without the role and with non encrypted
-     *                   password.
+     *                   password the roles are added after.
      * @throws EntityAlreadyExistException if the username or email is taken
-     * @throws InternalErrorException      If something bad happens.
+     * @throws InternalErrorException      when something bad happens
      */
     public void register(@NotNull AppUser user) throws EntityAlreadyExistException, InternalErrorException {
         if (userRepository.existsByUsername(user.getUsername())) {
@@ -186,6 +200,12 @@ public class UserService implements UserDetailsService {
             }
         }
     }
+
+    /**
+     * Retrieves the user from the database.
+     * @param username username of the user to retrieve
+     * @return the user retrieved
+     */
     public AppUser getUser(String username) {
         Optional<AppUser> optUser = userRepository.findByUsername(username);
         if( optUser.isPresent()) {
@@ -195,6 +215,11 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * This function updates a user.
+     * @param user user to update
+     * @return the modified user
+     */
     public AppUser updateUser(AppUser user) {
         String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
@@ -216,12 +241,12 @@ public class UserService implements UserDetailsService {
         }
     }
     /**
-     *
-     * @param usernameOrEmail
-     * @param password
-     * @return
-     * @throws WrongCredentialsException
-     * @throws InternalErrorException
+     *  This function tries to log a user given a username or email and a password.
+     * @param usernameOrEmail username or email used to try to connect
+     * @param password password used to try to connect
+     * @return the JSON web token
+     * @throws WrongCredentialsException when wrong credentials are given
+     * @throws InternalErrorException when something bad happens
      */
     public String login(String usernameOrEmail, String password)
             throws WrongCredentialsException, InternalErrorException {
@@ -272,7 +297,7 @@ public class UserService implements UserDetailsService {
      * Returns the current user of the request from the DB.
      *
      * @return the current user of the request.
-     * @throws EntityDoesNotExistException if something bad happens.
+     * @throws EntityDoesNotExistException when something bad happens
      */
     public AppUser getCurrentUser() throws EntityDoesNotExistException {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -284,7 +309,7 @@ public class UserService implements UserDetailsService {
      * Logs out a user by placing the JWT to the TokenBlacklist.
      *
      * //@param jwtHeader the header containing the Bearer JWT
-     * @throws InternalErrorException If something bad happens.
+     * @throws InternalErrorException when something bad happens
      */
     public void logout() throws InternalErrorException {
         try {
@@ -307,7 +332,8 @@ public class UserService implements UserDetailsService {
         }
     }
     /**
-     * Creates the main admin user with parameters from application.properties
+     * Creates the admin user stored in the application.properties file.
+     * @throws InternalErrorException when something bad happens
      */
     public void createAdminUser() throws InternalErrorException {
         try {
@@ -340,6 +366,10 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Get the courses of the user.
+     * @return a list of courses
+     */
     public List<Course> getCourses() {
         String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
@@ -360,6 +390,12 @@ public class UserService implements UserDetailsService {
             throw new RuntimeException("No context Holder");
         }
     }
+
+    /**
+     * Get the classes for the user.
+     * The classes returned depends on the user, it only returns the classes in link with the user.
+     * @return a list of classes
+     */
     public List<StudentGroup> getStudentGroups() {
         String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
@@ -380,6 +416,12 @@ public class UserService implements UserDetailsService {
             throw new RuntimeException("No context Holder");
         }
     }
+
+    /**
+     * Retrieves the students following a specific course.
+     * @param courseId course id
+     * @return a list of students
+     */
     public List<AppUser> getStudentsFromCourseId(Long courseId) {
         String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
@@ -394,6 +436,12 @@ public class UserService implements UserDetailsService {
         }
 
     }
+
+    /**
+     * Retrieves the classes that follow a specific course.
+     * @param idCourse course id
+     * @return a list of classes
+     */
     public List<StudentGroup> getClassFromCourse(Long idCourse) {
         String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
@@ -408,14 +456,17 @@ public class UserService implements UserDetailsService {
         }
 
     }
+
+    /**
+     * Gets the students for a specific test.
+     * @param idTest test id
+     * @return a list of students
+     */
     public List<AppUser> getStudentsFromTest(Long idTest) {
         String holderUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optHolder = userRepository.findByUsername(holderUsername);
-        logger.info("53");
         if(optHolder.isPresent()) {
-            logger.info("54");
             if(!optHolder.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {
-                logger.info(idTest.toString());
                 return userRepository.findAllByStudentGroups_Tests_IdTest(idTest);
             } else {
                 throw new UnauthorizedException("Students not allowed");

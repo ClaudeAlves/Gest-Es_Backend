@@ -41,6 +41,11 @@ public class OrganisationService {
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
 
+    /**
+     * Link a class and a student.
+     * @param idClass id of the class
+     * @param idStudent id of the student
+     */
     public void linkClassAndStudent(Long idClass, Long idStudent) {
         if(studentGroupRepository.existsById(idClass)) {
             // class exists
@@ -70,6 +75,12 @@ public class OrganisationService {
             throw new EntityDoesNotExistException("Class does not exist!");
         }
     }
+
+    /**
+     * Links a course and a class.
+     * @param idCourse id of the course
+     * @param idClass id of the class
+     */
     public void linkCourseAndClass(Long idCourse, Long idClass) {
         if(courseRepository.existsById(idCourse)) {
             // course exists
@@ -94,6 +105,12 @@ public class OrganisationService {
             throw new EntityDoesNotExistException("Course does not exist!");
         }
     }
+
+    /**
+     * Links a module and a student.
+     * @param idModule id of the module
+     * @param idStudent id of the student
+     */
     public void linkModuleAndStudent(Long idModule, Long idStudent) {
         if(moduleRepository.existsById(idModule)) {
             // module exists
@@ -122,6 +139,12 @@ public class OrganisationService {
             throw new EntityDoesNotExistException("Module does not exist!");
         }
     }
+
+    /**
+     * Links a subject and a course.
+     * @param idSubject id of the subject
+     * @param idCourse id of the course
+     */
     public void linkSubjectAndCourse(Long idSubject, Long idCourse) {
         if(subjectRepository.existsById(idSubject)) {
             // subject exists
@@ -143,6 +166,12 @@ public class OrganisationService {
             throw new EntityDoesNotExistException("Subject does not exist!");
         }
     }
+
+    /**
+     * Links a subject and a module.
+     * @param idSubject id of the subject
+     * @param idModule id of the module
+     */
     public void linkSubjectAndModule(Long idSubject, Long idModule) {
         if(subjectRepository.existsById(idSubject)) {
             // subject exists
@@ -164,6 +193,12 @@ public class OrganisationService {
             throw new EntityDoesNotExistException("Subject does not exist!");
         }
     }
+
+    /**
+     * Links a subject and a student.
+     * @param idSubject id of the subject
+     * @param idStudent id of the student
+     */
     public void linkSubjectAndStudent(Long idSubject, Long idStudent) {
         if(subjectRepository.existsById(idSubject)) {
             // subject exists
@@ -187,6 +222,12 @@ public class OrganisationService {
             throw new EntityDoesNotExistException("Subject does not exist!");
         }
     }
+
+    /**
+     * Links a teacher and a course.
+     * @param idCourse id of the course
+     * @param idTeacher id of the teacher
+     */
     public void linkTeacherAndCourse(Long idCourse, Long idTeacher) {
         if(courseRepository.existsById(idCourse)) {
             // course exists

@@ -1,11 +1,9 @@
 package dev.claude.controller;
 
-import dev.claude.api.ApiUtil;
 import dev.claude.api.EvaluationApi;
 import dev.claude.domain.evalutation.Mark;
 import dev.claude.domain.evalutation.Test;
 import dev.claude.domain.organisation.Module;
-import dev.claude.domain.user.AppUser;
 import dev.claude.dto.*;
 import dev.claude.mapper.calendar.PeriodMapper;
 import dev.claude.mapper.evaluation.MarkMapper;
@@ -14,21 +12,17 @@ import dev.claude.mapper.organisation.ModuleMapper;
 import dev.claude.repository.evaluation.MarkRepository;
 import dev.claude.service.EvaluationService;
 import dev.claude.service.UserService;
-import dev.claude.service.exception.IncompleteBodyException;
 import dev.claude.service.exception.InternalErrorException;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 @Api(tags = "evaluation")
 @RestController
@@ -50,7 +44,7 @@ public class EvaluationController implements EvaluationApi {
     private static final Logger logger = LoggerFactory.getLogger(EvaluationController.class);
 
     /**
-     * POST /evluation/test : create test
+     * POST /evaluation/test : create test
      * This endpoint is used to create a test
      *
      * @param testDTO  (optional)
@@ -65,12 +59,13 @@ public class EvaluationController implements EvaluationApi {
         }
         return ResponseEntity.ok(ApiHelper.created("Creation successful"));
     }
+
     /**
-     * GET /evaluation/grades/{idStudent}
+     * GET /evaluation/grades/{idStudent} : Get grades of a student.
      * Get the grades of a student.
      *
      * @param idStudent  (required)
-     * @return Get student test successfully. (status code 200)
+     * @return Get grades successfully. (status code 200)
      */
     @Override
     public ResponseEntity<List<GradeDTO>> getGrades(Long idStudent) {
@@ -83,10 +78,9 @@ public class EvaluationController implements EvaluationApi {
         return ResponseEntity.ok(grades);
     }
 
-
     /**
-     * GET /evaluation/marks/{idCourse}/student/{idStudent}
-     * Get the tests of a student for a specific course.
+     * GET /evaluation/marks/{idCourse}/student/{idStudent} : Get marks of a student in a course.
+     * Get the marks of a student for a specific course.
      *
      * @param idCourse  (required)
      * @param idStudent  (required)
@@ -102,8 +96,9 @@ public class EvaluationController implements EvaluationApi {
         }
         return ResponseEntity.ok(tests);
     }
+
     /**
-     * POST /evaluation/mark : Notes a student test.
+     * PUT /evaluation/mark : Notes a student test.
      * This endpoint is used to set a mark for a student on a specific test.
      *
      * @param markDTO  (optional)
@@ -119,6 +114,14 @@ public class EvaluationController implements EvaluationApi {
         }
         return ResponseEntity.ok(ApiHelper.created("Creation successful"));
     }
+
+    /**
+     * GET /evaluation/tests/user/{idUser} : Get the tests for a user.
+     * Get the tests for a specific user.
+     *
+     * @param idUser  (required)
+     * @return Get tests successfully. (status code 200)
+     */
     @Override
     public ResponseEntity<List<PeriodDTO>> getTests(Long idUser) {
         List<PeriodDTO> testsDTO = new LinkedList<>();
@@ -131,6 +134,13 @@ public class EvaluationController implements EvaluationApi {
         }
         return ResponseEntity.ok(testsDTO);
     }
+
+    /**
+     * GET /evaluation/tests : Get the tests for the user.
+     * Get the tests for the user.
+     *
+     * @return Get tests successfully. (status code 200)
+     */
     @Override
     public ResponseEntity<List<PeriodDTO>> getTestsUser() {
         List<PeriodDTO> testsDTO = new LinkedList<>();
@@ -143,6 +153,14 @@ public class EvaluationController implements EvaluationApi {
         }
         return ResponseEntity.ok(testsDTO);
     }
+
+    /**
+     * GET /evaluation/tests/classes/{idClass} : Get the tests of a class.
+     * Get the tests for a specific class.
+     *
+     * @param idClass  (required)
+     * @return Get tests successfully. (status code 200)
+     */
     @Override
     public ResponseEntity<List<PeriodDTO>> getClassTests(Long idClass) {
         List<PeriodDTO> testsDTO = new LinkedList<>();
@@ -157,8 +175,8 @@ public class EvaluationController implements EvaluationApi {
     }
 
     /**
-     * GET /evalutation/tests/info
-     * Get the tests informations for the user.
+     * GET /evalutation/tests/info : Get tests information for user.
+     * Get the tests' information for the user.
      *
      * @return Get tests infos successfully. (status code 200)
      */
@@ -173,8 +191,9 @@ public class EvaluationController implements EvaluationApi {
         }
         return ResponseEntity.ok(testInfoDTOS);
     }
+
     /**
-     * GET /evaluation/module/{idModule}/classes/{idClass}
+     * GET /evaluation/module/{idModule}/classes/{idClass} : Get infos about tests  in a module.
      * Get the marks and infos for each tests in a module.
      *
      * @param idModule  (required)
@@ -191,8 +210,9 @@ public class EvaluationController implements EvaluationApi {
         }
         return ResponseEntity.ok(moduleInfos);
     }
+
     /**
-     * GET /evaluation/modules/classes/{idClass}
+     * GET /evaluation/modules/classes/{idClass} : Get modules infos for selection.
      * Get the modules names and id for selection.
      *
      * @param idClass  (required)
@@ -210,8 +230,9 @@ public class EvaluationController implements EvaluationApi {
         }
         return ResponseEntity.ok(moduleDTOS);
     }
+
     /**
-     * GET /evaluation/grades/classes/{idClass}
+     * GET /evaluation/grades/classes/{idClass} : Get the synthesis of modules for a class.
      * Get the grades and infos for each module for a class.
      *
      * @param idClass  (required)
@@ -227,8 +248,9 @@ public class EvaluationController implements EvaluationApi {
         }
         return ResponseEntity.ok(gradeSynthesis);
     }
+
     /**
-     * GET /evaluation/grades
+     * GET /evaluation/grades : Get the synthesis of modules for the user.
      * Get the grades and infos for each module for the student using this endpoint.
      *
      * @return Get infos successfully. (status code 200)
@@ -245,7 +267,7 @@ public class EvaluationController implements EvaluationApi {
     }
 
     /**
-     * GET /evaluation/module/{idModule}
+     * GET /evaluation/module/{idModule} : get infos about tests in a module.
      * Get the marks and infos for each tests in a module for the student using this endpoint.
      *
      * @param idModule  (required)
@@ -261,8 +283,9 @@ public class EvaluationController implements EvaluationApi {
         }
         return ResponseEntity.ok(moduleInfos);
     }
+
     /**
-     * GET /evaluation/modules
+     * GET /evaluation/modules : Get modules infos.
      * Get the modules names and id of the current student for selection.
      *
      * @return Get modules successfully. (status code 200)

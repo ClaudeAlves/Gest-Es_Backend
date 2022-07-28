@@ -4,7 +4,6 @@ import dev.claude.domain.user.AppUser;
 import dev.claude.domain.user.Role;
 import dev.claude.dto.*;
 import dev.claude.mapper.Mapper;
-import dev.claude.mapper.user.RoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

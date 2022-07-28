@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
+/**
+ * configuration for time management with open api generator
+ */
 @Configuration
 public class JacksonConfig {
 

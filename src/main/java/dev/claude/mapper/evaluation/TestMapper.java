@@ -1,6 +1,5 @@
 package dev.claude.mapper.evaluation;
 
-import dev.claude.domain.calendar.Period;
 import dev.claude.domain.evalutation.Test;
 import dev.claude.dto.TestDTO;
 import dev.claude.mapper.Mapper;

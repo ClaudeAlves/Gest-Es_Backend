@@ -1,6 +1,5 @@
 package dev.claude.service;
 
-import dev.claude.controller.CreationController;
 import dev.claude.domain.calendar.Period;
 import dev.claude.utils.TimeUtils;
 import dev.claude.domain.calendar.Holiday;
@@ -53,6 +52,10 @@ public class CreationService {
     @Autowired
     CalendarService calendarService;
 
+    /**
+     * Creates a module if user is an admin.
+     * @param module module to save to DB
+     */
     public void createNewModule(Module module) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optUser = userRepository.findByUsername(username);
@@ -78,6 +81,11 @@ public class CreationService {
             }
         }
     }
+
+    /**
+     * Creates a subject if user is an admin.
+     * @param subject subject to save to DB
+     */
     public void createNewSubject(Subject subject) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optUser = userRepository.findByUsername(username);
@@ -99,6 +107,11 @@ public class CreationService {
             }
         }
     }
+
+    /**
+     * Creates a course if user is an admin.
+     * @param course course to save in DB
+     */
     public void createNewCourse(Course course) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optUser = userRepository.findByUsername(username);
@@ -119,6 +132,11 @@ public class CreationService {
             }
         }
     }
+
+    /**
+     * Creates a holiday if user is an admin.
+     * @param holiday holiday to save in DB
+     */
     public void createNewHoliday(Holiday holiday) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optUser = userRepository.findByUsername(username);
@@ -136,6 +154,11 @@ public class CreationService {
             }
         }
     }
+
+    /**
+     * Creates a student groups if user is an admin.
+     * @param studentGroup student group to save in DB
+     */
     public void createNewStudentGroup(StudentGroup studentGroup) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optUser = userRepository.findByUsername(username);
@@ -153,6 +176,11 @@ public class CreationService {
             }
         }
     }
+
+    /**
+     * Creates periods for a course.
+     * @param course course to create periods for
+     */
     public void createPeriodsForCourse(Course course) {
         for(Integer periodOfTheWeek : course.getPeriodsOfTheWeek()) { // for every period of the week from a course
             for (LocalDate date = course.getStart(); !course.getStart().isAfter(course.getEnd()) && !date.isAfter(course.getEnd()); date = date.plusDays(1)) { // iterate over every date during the course

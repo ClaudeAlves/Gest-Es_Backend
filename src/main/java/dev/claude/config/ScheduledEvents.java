@@ -10,6 +10,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * Configuration setup about periodical events and after startup actions
+ */
 @Configuration
 @EnableScheduling
 public class ScheduledEvents {

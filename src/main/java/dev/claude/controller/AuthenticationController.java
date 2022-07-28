@@ -26,10 +26,17 @@ import javax.validation.Valid;
 public class AuthenticationController implements AuthenticationApi {
     @Autowired
     private UserService userService;
-
     @Autowired
     private UserMapper userMapper;
 
+    /**
+     * POST /auth/register : Register a new user.
+     * This public endpoint is used to register a new user.
+     *
+     * @param registerDTO  (optional)
+     * @return Register successful. (status code 201)
+     *         or Username or Email Already taken. (status code 400)
+     */
     @Override
     public ResponseEntity<ApiMessageDTO> register(@Valid RegisterDTO registerDTO) {
         try {
@@ -53,6 +60,14 @@ public class AuthenticationController implements AuthenticationApi {
         return ResponseEntity.ok(ApiHelper.created("Register successful"));
     }
 
+    /**
+     * POST /auth/login : Login
+     * This public endpoint is used to login an existing user.
+     *
+     * @param loginRequestDTO  (optional)
+     * @return Login successful. (status code 200)
+     *         or Unauthorized (status code 401)
+     */
     @Override
     public ResponseEntity<LoginSuccessDTO> login(@Valid LoginRequestDTO loginRequestDTO) {
         String jwt = userService.login(loginRequestDTO.getUsernameOrEmail(), loginRequestDTO.getPassword());
@@ -63,6 +78,13 @@ public class AuthenticationController implements AuthenticationApi {
         return ResponseEntity.ok(loginSuccessDTO);
     }
 
+    /**
+     * POST /auth/logout : Logout.
+     * This private endpoint is used to logout a logged user.
+     *
+     * @return Logout successful. (status code 200)
+     *         or Unauthorized (status code 401)
+     */
     @Override
     public ResponseEntity<ApiMessageDTO> logout() {
         userService.logout();

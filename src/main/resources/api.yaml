@@ -377,6 +377,7 @@ paths:
       tags:
         - evaluation
       description: Get the marks of a student for a specific course.
+      summary: Get marks of a student in a course.
       operationId: getStudentTests
       parameters:
         - in: path
@@ -405,6 +406,7 @@ paths:
       tags:
         - evaluation
       description: Get the marks and infos for each tests in a module.
+      summary: Get infos about tests  in a module.
       operationId: getModuleInfosByClass
       parameters:
         - in: path
@@ -431,6 +433,7 @@ paths:
       tags:
         - evaluation
       description: Get the marks and infos for each tests in a module for the student using this endpoint.
+      summary: get infos about tests in a module.
       operationId: getSelfModuleInfos
       parameters:
         - in: path
@@ -451,6 +454,7 @@ paths:
       tags:
         - evaluation
       description: Get the modules names and id for selection.
+      summary: Get modules infos for selection.
       operationId: GetModulesByClass
       parameters:
         - in: path
@@ -473,6 +477,7 @@ paths:
       tags:
         - evaluation
       description: Get the modules names and id of the current student for selection.
+      summary: Get modules infos.
       operationId: GetSelfModules
       responses:
         '200':
@@ -488,6 +493,7 @@ paths:
       tags:
         - evaluation
       description: Get the grades of a student.
+      summary: Get grades of a student.
       operationId: getGrades
       parameters:
         - in: path
@@ -510,6 +516,7 @@ paths:
       tags:
         - evaluation
       description: Get the grades and infos for each module for a class.
+      summary: Get the synthesis of modules for a class.
       operationId: getSynthesisFromClass
       parameters:
         - in: path
@@ -530,6 +537,7 @@ paths:
       tags:
         - evaluation
       description: Get the grades and infos for each module for the student using this endpoint.
+      summary: Get the synthesis of modules for the user.
       operationId: getSelfSynthesis
       responses:
         '200':
@@ -543,6 +551,7 @@ paths:
       tags:
         - evaluation
       description: Get the tests for a specific class.
+      summary: Get the tests of a class.
       operationId: getClassTests
       parameters:
         - in: path
@@ -565,6 +574,7 @@ paths:
       tags:
         - evaluation
       description: Get the tests for a specific user.
+      summary: Get the tests for a user.
       operationId: getTests
       parameters:
         - in: path
@@ -587,6 +597,7 @@ paths:
       tags:
         - evaluation
       description: Get the tests for the user.
+      summary: Get the tests for the user.
       operationId: getTestsUser
       responses:
         '200':
@@ -602,6 +613,7 @@ paths:
       tags:
         - evaluation
       description: Get the tests information's for the user.
+      summary: Get tests information for user.
       operationId: getTestsInfoUser
       responses:
         '200':
@@ -618,6 +630,7 @@ paths:
       tags:
         - organisation
       description: Subs a student to a module.
+      summary: Subs student to module.
       operationId: moduleToStudent
       parameters:
         - in: path
@@ -650,6 +663,7 @@ paths:
       tags:
         - organisation
       description: Subs a student to a subject.
+      summary: Subs student to subject.
       operationId: subjectToStudent
       parameters:
         - in: path
@@ -682,6 +696,7 @@ paths:
       tags:
         - organisation
       description: Subs a student to a class.
+      summary: Subs student to class.
       operationId: classToStudent
       parameters:
         - in: path
@@ -714,6 +729,7 @@ paths:
       tags:
         - organisation
       description: Adds a subject to a module.
+      summary: Adds subject to module.
       operationId: subjectToModule
       parameters:
         - in: path
@@ -746,6 +762,7 @@ paths:
       tags:
         - organisation
       description: Adds a subject to a course.
+      summary: Adds subject to course.
       operationId: subjectToCourse
       parameters:
         - in: path
@@ -778,6 +795,7 @@ paths:
       tags:
         - organisation
       description: Subs a class to a course.
+      summary: Subs class to course.
       operationId: courseToClass
       parameters:
         - in: path
@@ -810,6 +828,7 @@ paths:
       tags:
         - organisation
       description: Adds a teacher to a course.
+      summary: Adds teacher to course.
       operationId: teacherToCourse
       parameters:
         - in: path

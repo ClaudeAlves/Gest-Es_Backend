@@ -1,7 +1,6 @@
 package dev.claude.repository.organisation;
 
 import dev.claude.domain.organisation.Course;
-import dev.claude.domain.user.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

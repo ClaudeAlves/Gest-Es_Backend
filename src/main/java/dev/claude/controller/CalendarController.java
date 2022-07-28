@@ -22,7 +22,13 @@ public class CalendarController implements CalendarApi {
     PeriodMapper periodMapper;
     private static final Logger logger = LoggerFactory.getLogger(CalendarController.class);
 
-
+    /**
+     * GET /calendar/user/{userId} : Get a specific user calendar.
+     * This endpoint is used to get the calendar of a user
+     *
+     * @param userId  (required)
+     * @return Get user calendar successfull. (status code 200)
+     */
     @Override
     public ResponseEntity<CalendarDTO> getCalendar(Long userId) {
         CalendarDTO calendarDTO = new CalendarDTO();
@@ -31,6 +37,13 @@ public class CalendarController implements CalendarApi {
         }
         return ResponseEntity.ok(calendarDTO);
     }
+
+    /**
+     * GET /calendar : Get a specific user calendar.
+     * This endpoint is used to get the calendar of the authenticated user
+     *
+     * @return Get users calendar successfully. (status code 200)
+     */
     @Override
     public ResponseEntity<CalendarDTO> getCalendarUser() {
         CalendarDTO calendarDTO = new CalendarDTO();
@@ -39,6 +52,14 @@ public class CalendarController implements CalendarApi {
         }
         return ResponseEntity.ok(calendarDTO);
     }
+
+    /**
+     * GET /calendar/class/{classId} : Get a class calendar.
+     * This endpoint is used to get the calendar of a class
+     *
+     * @param classId  (required)
+     * @return Get class calendar successfull. (status code 200)
+     */
     @Override
     public ResponseEntity<CalendarDTO> getClassCalendar(Long classId) {
         CalendarDTO calendarDTO = new CalendarDTO();

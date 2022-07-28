@@ -30,12 +30,19 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
+    /**
+     * Filters a request to check if it has a valid token.
+     * @param request request to check
+     * @param response response to chain
+     * @param filterChain chain filter to chain the filtering
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
             String jwt = jwtUtils.getTokenFromHeader(getAuthorizationHeader(request));
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+                // there is a token
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
                 UserDetails userDetails = userService.loadUserByUsername(username);
@@ -63,12 +70,21 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    /**
+     * function that returns true if a request url needs to be protected
+     * @param request http request that needs to be checked
+     * @return boolean
+     */
     private boolean protectedEndpoint(HttpServletRequest request) {
         return  request.getRequestURL().toString().contains("/logout") 		    ||
                 request.getRequestURL().toString().contains("/messages")        ||
                 request.getRequestURL().toString().contains("/organisation")    ||
                 request.getRequestURL().toString().contains("/creation") 	    ||
                 request.getRequestURL().toString().contains("/evaluation") 	    ||
+                request.getRequestURL().toString().contains("/teacher") 	    ||
+                request.getRequestURL().toString().contains("/user") 	    ||
+                request.getRequestURL().toString().contains("/users") 	    ||
+                request.getRequestURL().toString().contains("/admin") 	    ||
                 request.getRequestURL().toString().contains("/calendar");
     }
 

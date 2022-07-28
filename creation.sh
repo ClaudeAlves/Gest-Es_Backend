@@ -54,13 +54,17 @@ curl -X POST "http://localhost:8081/creation/holiday" -H "accept: application/js
 
 echo -e "creation of courses"
 
-curl -X POST "http://localhost:8081/creation/course" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"end\": \"2022-07-31\", \"name\": \"cours pour FRAN 1\", \"periodsOfTheWeek\": [ 2, 3, 38, 39 ], \"start\": \"2022-07-01\"}"
+curl -X POST "http://localhost:8081/creation/course" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"end\": \"2022-07-31\", \"name\": \"MATH 1\", \"periodsOfTheWeek\": [ 33, 34], \"start\": \"2022-07-01\"}"
 
-curl -X POST "http://localhost:8081/creation/course" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"end\": \"2022-07-31\", \"name\": \"cours pour FRAN 2\", \"periodsOfTheWeek\": [ 7, 8, 21, 22 ], \"start\": \"2022-07-01\"}"
+curl -X POST "http://localhost:8081/creation/course" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"end\": \"2022-07-31\", \"name\": \"ANGL 1\", \"periodsOfTheWeek\": [ 25, 26], \"start\": \"2022-07-01\"}"
 
-curl -X POST "http://localhost:8081/creation/course" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"end\": \"2022-07-31\", \"name\": \"cours pour BDON\", \"periodsOfTheWeek\": [ 11, 12, 13, 14 ], \"start\": \"2022-07-01\"}"
+curl -X POST "http://localhost:8081/creation/course" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"end\": \"2022-07-31\", \"name\": \"FRAN 1\", \"periodsOfTheWeek\": [ 2, 3, 38, 39 ], \"start\": \"2022-07-01\"}"
 
-curl -X POST "http://localhost:8081/creation/course" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"end\": \"2022-07-31\", \"name\": \"cours pour ALGO\", \"periodsOfTheWeek\": [ 17, 18, 19, 20 ], \"start\": \"2022-07-01\"}"
+curl -X POST "http://localhost:8081/creation/course" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"end\": \"2022-07-31\", \"name\": \"FRAN 2\", \"periodsOfTheWeek\": [ 7, 8, 21, 22 ], \"start\": \"2022-07-01\"}"
+
+curl -X POST "http://localhost:8081/creation/course" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"end\": \"2022-07-31\", \"name\": \"BDON 1\", \"periodsOfTheWeek\": [ 11, 12, 13, 14 ], \"start\": \"2022-07-01\"}"
+
+curl -X POST "http://localhost:8081/creation/course" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"end\": \"2022-07-31\", \"name\": \"ALGO 1\", \"periodsOfTheWeek\": [ 17, 18, 19, 20 ], \"start\": \"2022-07-01\"}"
 
 echo -e "\ncreation des groupes d'élèves/classes\n"
 
@@ -69,10 +73,6 @@ curl -X POST "http://localhost:8081/creation/class" -H "accept: application/json
 curl -X POST "http://localhost:8081/creation/class" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"comment\": \"commentaires classe 2\", \"name\": \"classe 2\"}"
 
 curl -X POST "http://localhost:8081/creation/class" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"comment\": \"commentaires classe 3\", \"name\": \"classe 3\"}"
-
-curl -X POST "http://localhost:8081/creation/class" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"comment\": \"commentaires classe 4\", \"name\": \"classe 4\"}"
-
-curl -X POST "http://localhost:8081/creation/class" -H "accept: application/json" -H "Authorization: $jwt" -H "Content-Type: application/json" -d "{ \"comment\": \"commentaires classe 5\", \"name\": \"classe 5\"}"
 
 echo -e "\nlogout\n"
 

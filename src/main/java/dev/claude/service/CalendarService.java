@@ -40,6 +40,10 @@ public class CalendarService {
     CourseRepository courseRepository;
     private static final Logger logger = LoggerFactory.getLogger(CalendarService.class);
 
+    /**
+     * Gets the periods for the current user.
+     * @return a list of periods
+     */
     public List<Period> getSelfPeriods() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optUser = userRepository.findByUsername(username);
@@ -49,6 +53,12 @@ public class CalendarService {
             throw new EntityDoesNotExistException("Context holder not found");
         }
     }
+
+    /**
+     * Gets the periods of a specific user.
+     * @param userId id of the user
+     * @return a list of periods
+     */
     public List<Period> getPeriods(Long userId) {
         Optional<AppUser> optUser = userRepository.findById(userId);
         if(optUser.isPresent()) {
@@ -57,6 +67,12 @@ public class CalendarService {
             throw new EntityDoesNotExistException("User doesn't exist in DB");
         }
     }
+
+    /**
+     * Gets the periods of a class
+     * @param studentGroupId id of the class
+     * @return a list of periods
+     */
     public List<Period> getStudentGroupPeriods(Long studentGroupId) {
         Optional<StudentGroup> optGroup = studentGroupRepository.findById(studentGroupId);
         if(optGroup.isPresent()) {
@@ -65,6 +81,12 @@ public class CalendarService {
             throw new EntityDoesNotExistException("Student group doesn't exist in DB");
         }
     }
+
+    /**
+     * Tests if a date is in any of the holidays
+     * @param date date to test
+     * @return boolean
+     */
     public boolean isInHolidays(LocalDate date) {
         for(Holiday holiday : holidayRepository.findAll()) {
             if((date.isAfter(holiday.getStart()) && date.isBefore(holiday.getEnd()))
@@ -75,6 +97,12 @@ public class CalendarService {
         return false;
     }
 
+    /**
+     * Gets the periods of a user.
+     * @param idUser id of the user
+     * @param optUser opt of the user
+     * @return a list of periods
+     */
     private List<Period> getPeriodsFromUserId(Long idUser, Optional<AppUser> optUser) {
         List<Period> periods;
         if(optUser.get().getRoles().contains(roleRepository.getById((long) EnumRole.ROLE_STUDENT.ordinal() + 1))) {

@@ -1,6 +1,5 @@
 package dev.claude.controller;
 
-import dev.claude.api.ApiUtil;
 import dev.claude.api.UserApi;
 import dev.claude.domain.organisation.Course;
 import dev.claude.domain.organisation.StudentGroup;
@@ -13,12 +12,9 @@ import dev.claude.service.UserService;
 import dev.claude.service.exception.InternalErrorException;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -190,7 +186,12 @@ public class UserController implements UserApi {
         return ResponseEntity.ok(user);
 
     }
-
+    /**
+     * GET /teacher/classes : Get Classes
+     * This endpoint serves a teacher to get his classes
+     *
+     * @return Get courses successful. (status code 200)
+     */
     @Override
     public ResponseEntity<List<ClassDTO>> getClasses() {
         List<ClassDTO> dtoClass = new LinkedList<>();

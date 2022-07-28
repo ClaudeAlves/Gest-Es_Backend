@@ -5,6 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 import java.time.*;
+
+/**
+ * This class helps with time management specifically with corresponding
+ * with the periodsOfTheWeek to build courses periods
+ */
 @Component
 public class TimeUtils {
     private static final String[] StartCorrespondences =

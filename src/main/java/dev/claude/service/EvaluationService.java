@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +55,11 @@ public class EvaluationService {
     UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(EvaluationService.class);
 
+    /**
+     * Creates a test, and saves it to the DB.
+     * @param test not completely filled test
+     * @param dto test DTO
+     */
     public void createTest(Test test, TestDTO dto) {
         Optional<Course> optCourse = courseRepository.findById(dto.getCourseId());
         if(optCourse.isPresent()) {
@@ -84,6 +88,12 @@ public class EvaluationService {
             throw new EntityDoesNotExistException("Course doesn't exist");
         }
     }
+
+    /**
+     * Get the grades of a student.
+     * @param idStudent id of the student
+     * @return a list of grade DTOs
+     */
     public List<GradeDTO> getGradesFromStudentId(Long idStudent) {
         List<Course> courses = courseRepository.findAllDistinctByStudentGroups_Students_IdUser(idStudent);
         List<GradeDTO> grades = new LinkedList<>();
@@ -101,6 +111,13 @@ public class EvaluationService {
         }
         return grades;
     }
+
+    /**
+     * Gets the tests of a courses for a specific student.
+     * @param idCourse id of the course
+     * @param idStudent id of the student
+     * @return a list of test DTOs
+     */
     public List<TestDTO> getCourseTestsFromStudentId(Long idCourse, Long idStudent) {
         List<TestDTO> tests = new LinkedList<>();
         Optional<Course> optCourse = courseRepository.findById(idCourse);
@@ -113,6 +130,13 @@ public class EvaluationService {
         }
         return tests;
     }
+
+    /**
+     * Notes a test.
+     * @param mark mark to set the value
+     * @param idStudent id of the student
+     * @param idTest id of the test
+     */
     public void noteStudent(Mark mark, Long idStudent, Long idTest) {
         Optional<AppUser> optStudent = userRepository.findById(idStudent);
         Optional<Test> optTest = testRepository.findById(idTest);
@@ -132,6 +156,11 @@ public class EvaluationService {
         }
 
     }
+
+    /**
+     * Get the tests of the current user.
+     * @return a list of tests
+     */
     public List<Test> getSelfTests() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<AppUser> optUser = userRepository.findByUsername(username);
@@ -146,6 +175,12 @@ public class EvaluationService {
             throw new EntityDoesNotExistException("Context holder not found");
         }
     }
+
+    /**
+     * Gets the tests of a specific user.
+     * @param idUser id of the user
+     * @return a list of tests
+     */
     public List<Test> getTests(Long idUser) {
         Optional<AppUser> optUser = userRepository.findById(idUser);
         if(optUser.isPresent()) {
@@ -155,6 +190,11 @@ public class EvaluationService {
         }
     }
 
+    /**
+     * Gets the tests of a specific class.
+     * @param idStudentGroup id of the class
+     * @return a list of tests
+     */
     public List<Test> getStudentGroupTests(Long idStudentGroup) {
         Optional<StudentGroup> optGroup = studentGroupRepository.findById(idStudentGroup);
         if(optGroup.isPresent()) {
@@ -181,6 +221,11 @@ public class EvaluationService {
             throw new InternalErrorException(e.getMessage());
         }
     }
+
+    /**
+     * Returns displayable test infos for the current user.
+     * @return DTO test infos
+     */
     public List<TestInfoDTO> getTestsInfoUsers() {
         List<TestInfoDTO> testInfoDTOS = new LinkedList<>();
         for(Test test : getSelfTests()) {
@@ -209,6 +254,13 @@ public class EvaluationService {
         }
         return testInfoDTOS;
     }
+
+    /**
+     * Gets displayable infos for a module for a specific class.
+     * @param idModule id of the module
+     * @param idStudentGroup id of the class
+     * @return module marks infos
+     */
     public ModuleMarkInfos getModuleInfosByClass(Long idModule, Long idStudentGroup) {
         ModuleMarkInfos moduleInfos = new ModuleMarkInfos();
         List<ModuleMarkInfosMarks> marksInfos = new LinkedList<>();
@@ -280,6 +332,12 @@ public class EvaluationService {
         }
         return moduleInfos;
     }
+
+    /**
+     * Gets the modules of a specific class.
+     * @param idClass id of the class to get the modules of
+     * @return a list of modules
+     */
     public List<Module> getModulesByClass(Long idClass) {
         List<Module> modules = new LinkedList<>();
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -298,6 +356,11 @@ public class EvaluationService {
         }
         return modules;
     }
+
+    /**
+     * Gets the modules for the current user.
+     * @return a list of modules
+     */
     public List<Module> getSelfModules() {
         List<Module> modules = new LinkedList<>();
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -316,6 +379,12 @@ public class EvaluationService {
         }
         return modules;
     }
+
+    /**
+     * Calculates the grades for a specific class.
+     * @param idStudentGroup id of the class to get the synthesis from
+     * @return returns a synthesis of the grades
+     */
     public GradeSynthesis getSynthesisByClass(Long idStudentGroup) {
         GradeSynthesis gradeSynthesis = new GradeSynthesis();
 
@@ -362,6 +431,12 @@ public class EvaluationService {
         }
         return gradeSynthesis;
     }
+
+    /**
+     * Gets displayable infos for a specific module of the current user.
+     * @param idModule id of the module to get infos of
+     * @return module marks infos
+     */
     public ModuleMarkInfos getSelfModuleInfos(Long idModule) {
         ModuleMarkInfos moduleInfos = new ModuleMarkInfos();
         List<ModuleMarkInfosMarks> marksInfos = new LinkedList<>();
@@ -429,6 +504,11 @@ public class EvaluationService {
         }
         return moduleInfos;
     }
+
+    /**
+     * Calculates the grades for the current student.
+     * @return a synthesis of the grades
+     */
     public GradeSynthesis getSelfSynthesis() {
         GradeSynthesis gradeSynthesis = new GradeSynthesis();
 
@@ -449,13 +529,11 @@ public class EvaluationService {
                for(Module module : optUser.get().getModules()) {
                    List<Mark> moduleMarks = markRepository.findAllDistinctByTest_Period_Course_Subject_Module_IdModuleAndStudent_IdUser(module.getIdModule(), optUser.get().getIdUser());
                    double meanToAdd = getGlobalMean(studentMarks, globalMean, moduleMarks);
-                   logger.info("450 : " + meanToAdd);
                    if ( meanToAdd == globalMean) {
                        modulesNotMarked++;
                    }
                    globalMean = meanToAdd;
                }
-               logger.info(globalMean + "/" + optUser.get().getModules().size() + "-" + modulesNotMarked);
                studentMarks.setGlobalMean(globalMean/(optUser.get().getModules().size()-modulesNotMarked));
                gradeSynthesis.addStudentMarksItem(studentMarks);
            } else {
@@ -466,6 +544,13 @@ public class EvaluationService {
         }
         return gradeSynthesis;
     }
+
+    /**
+     * Computes the mean of a module.
+     * @param marksInfos list of markInfo items to be added to
+     * @param markInfoToAdd markInfo to add to the markInfo list
+     * @param moduleMarks list of marks
+     */
     private void setModuleMean(List<ModuleMarkInfosMarks> marksInfos, ModuleMarkInfosMarks markInfoToAdd, List<Mark> moduleMarks) {
         double mean = 0.;
         int marksUnderMean = 0;
@@ -483,6 +568,14 @@ public class EvaluationService {
         markInfoToAdd.setMarksUnderMean(marksUnderMean + "/" + moduleMarks.size());
         marksInfos.add(markInfoToAdd);
     }
+
+    /**
+     * Modifies the global mean of a student with the marks of a module.
+     * @param studentMarks object of marks
+     * @param globalMean global mean to modify
+     * @param moduleMarks list of marks
+     * @return modified global mean
+     */
     private double getGlobalMean(GradeSynthesisStudentMarks studentMarks, double globalMean, List<Mark> moduleMarks) {
         GradeSynthesisMarks markToAdd = new GradeSynthesisMarks();
         double mean = 0.;

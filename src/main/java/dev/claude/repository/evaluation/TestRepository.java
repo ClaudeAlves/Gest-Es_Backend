@@ -1,8 +1,6 @@
 package dev.claude.repository.evaluation;
 
 import dev.claude.domain.evalutation.Test;
-import dev.claude.domain.organisation.Course;
-import dev.claude.domain.organisation.StudentGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

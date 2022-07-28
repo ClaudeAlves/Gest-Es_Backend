@@ -16,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * security configuration class
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
@@ -59,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/**").permitAll()
 
-                // Swagger authorization for DEV
+                // Swagger authorization for the ui display
                 .and().authorizeRequests().antMatchers("/swagger-resources/**").permitAll()
                 .and().authorizeRequests().antMatchers("/swagger-ui/**").permitAll()
                 .and().authorizeRequests().antMatchers("/v*/**").permitAll()
